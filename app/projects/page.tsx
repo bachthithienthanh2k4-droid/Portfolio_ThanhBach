@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import {
     Stethoscope,
     Brain,
@@ -16,19 +16,28 @@ import { GithubIcon } from '../components/icons';
 import Link from 'next/link';
 
 const Projects = () => {
-    const containerVariants = {
+
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.2 }
+            transition: {
+                staggerChildren: 0.2
+            }
         }
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { y: 30, opacity: 0 },
-        visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 0.6,
+                ease: "easeOut"
+            }
+        }
     };
-
     const projectList = [
         {
             year: "2025 - Hiện tại",
@@ -36,7 +45,7 @@ const Projects = () => {
             category: "Deep Learning / Healthcare",
             desc: "Dự án tâm huyết nhất, tập trung vào việc tối ưu hóa độ chính xác trong việc phát hiện các tổn thương phổi phức tạp bằng các kiến trúc mạng nơ-ron tiên tiến nhất.",
             icon: <Sparkles className="text-amber-600" />,
-            color: "bg-amber-50", 
+            color: "bg-amber-50",
             borderColor: "border-amber-200",
             size: "md:col-span-12", // Nổi bật nhất, chiếm trọn 1 hàng
             link: ""
@@ -174,8 +183,8 @@ const Projects = () => {
                                     </button>
                                 </div>
                                 <Link href={project.link}
-                                target="_blank"
-                                className="flex items-center gap-2 text-xs font-bold uppercase tracking-tighter bg-[#1a120e] text-white px-5 py-2.5 rounded-full hover:bg-rose-600 transition-all shadow-md">
+                                    target="_blank"
+                                    className="flex items-center gap-2 text-xs font-bold uppercase tracking-tighter bg-[#1a120e] text-white px-5 py-2.5 rounded-full hover:bg-rose-600 transition-all shadow-md">
                                     Xem chi tiết <ExternalLink size={14} />
                                 </Link>
                             </div>

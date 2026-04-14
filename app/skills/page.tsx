@@ -1,13 +1,13 @@
 "use client";
 
 import React from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { 
-  Layout, 
-  Terminal, 
-  Users, 
-  Zap, 
-  Coffee, 
+import { motion, useMotionValue, useSpring, useTransform, Variants } from 'framer-motion';
+import {
+  Layout,
+  Terminal,
+  Users,
+  Zap,
+  Coffee,
   Cpu,
   BrainCircuit,
   Microscope,
@@ -55,17 +55,26 @@ const SkillCard = ({ children, className }) => {
 };
 
 const Skills = () => {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 }
+      transition: {
+        staggerChildren: 0.15
+      }
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }
   };
   const skillGroups = [
     {
@@ -107,36 +116,36 @@ const Skills = () => {
   ];
 
   const softSkills = [
-  { name: "Giao tiếp & Thuyết trình", icon: <Presentation size={18} /> },
-  { name: "Làm việc nhóm", icon: <Users size={18} /> },
-  { name: "Tư duy logic & Giải thuật", icon: <Cpu size={18} /> },
-  { name: "Nghiên cứu khoa học", icon: <Microscope size={18} /> },
-  { name: "Kỹ năng tự học", icon: <BrainCircuit size={18} /> },
-  { name: "Kỹ năng giải quyết vấn đề", icon: <Lightbulb size={18} /> },
-  { name: "Kỹ năng quản lý thời gian", icon: <Clock size={18} /> },
-  { name: "Kỹ năng tư duy phản biện", icon: <Scale size={18} /> },
-  { name: "Thích nghi & quản lý cảm xúc", icon: <Smile size={18} /> }
-];
+    { name: "Giao tiếp & Thuyết trình", icon: <Presentation size={18} /> },
+    { name: "Làm việc nhóm", icon: <Users size={18} /> },
+    { name: "Tư duy logic & Giải thuật", icon: <Cpu size={18} /> },
+    { name: "Nghiên cứu khoa học", icon: <Microscope size={18} /> },
+    { name: "Kỹ năng tự học", icon: <BrainCircuit size={18} /> },
+    { name: "Kỹ năng giải quyết vấn đề", icon: <Lightbulb size={18} /> },
+    { name: "Kỹ năng quản lý thời gian", icon: <Clock size={18} /> },
+    { name: "Kỹ năng tư duy phản biện", icon: <Scale size={18} /> },
+    { name: "Thích nghi & quản lý cảm xúc", icon: <Smile size={18} /> }
+  ];
   return (
     <section className="py-25 lg:py-35 px-4 sm:px-8 bg-[#FAF9F6] min-h-screen selection:bg-rose-200 overflow-x-hidden">
       <div className="max-w-6xl mx-auto">
-        
+
         <div className="text-center mb-12 lg:mb-16">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="flex justify-center items-center gap-2 mb-4">
-             <span className="h-[1px] w-8 bg-rose-200"></span>
-             <span className="text-rose-500 font-bold tracking-[0.3em] uppercase text-[10px]">Technical Expertise</span>
-             <span className="h-[1px] w-8 bg-rose-200"></span>
+            <span className="h-[1px] w-8 bg-rose-200"></span>
+            <span className="text-rose-500 font-bold tracking-[0.3em] uppercase text-[10px]">Technical Expertise</span>
+            <span className="h-[1px] w-8 bg-rose-200"></span>
           </motion.div>
-          
-          <motion.h2 
+
+          <motion.h2
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#2D1E17] tracking-tight leading-tight"
           >
             KỸ NĂNG <span className="italic font-light text-rose-500">& CÔNG CỤ</span>
           </motion.h2>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -147,12 +156,12 @@ const Skills = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          
-            <div className="col-span-1 md:col-span-8 grid grid-cols-1 gap-6">
+
+          <div className="col-span-1 md:col-span-8 grid grid-cols-1 gap-6">
             {skillGroups.map((group, idx) => (
               <SkillCard key={idx} className="group relative bg-white border border-stone-100 rounded-[2.5rem] p-8 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
                 <div className={`absolute inset-0 bg-gradient-to-br ${group.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                
+
                 <div className="relative z-10">
                   <div className="flex justify-between items-start mb-10">
                     <div className="flex items-center gap-5">
@@ -175,7 +184,7 @@ const Skills = () => {
                           <span className="text-xs font-black text-rose-500">{skill.level}</span>
                         </div>
                         <div className="h-1.5 w-full bg-stone-100 rounded-full overflow-hidden">
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             whileInView={{ width: skill.level }}
                             transition={{ duration: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
@@ -193,8 +202,8 @@ const Skills = () => {
           </div>
 
           <div className="col-span-1 lg:col-span-4 flex flex-col gap-6">
-            <motion.div 
-              variants={itemVariants} 
+            <motion.div
+              variants={itemVariants}
               className="bg-[#2D1E17] p-6 lg:p-8 rounded-[1.5rem] lg:rounded-[2rem] text-white relative overflow-hidden shadow-lg"
             >
               <div className="absolute -right-4 -top-4 opacity-5 rotate-12 pointer-events-none">
@@ -206,7 +215,7 @@ const Skills = () => {
               </h3>
               <div className="space-y-3 relative z-10">
                 {softSkills.map((skill, idx) => (
-                  <motion.div 
+                  <motion.div
                     key={idx}
                     whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.08)" }}
                     className="flex items-center gap-4 p-3.5 bg-white/5 rounded-xl border border-white/5 transition-all"
@@ -218,7 +227,7 @@ const Skills = () => {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="bg-white p-6 lg:p-8 rounded-[1.5rem] lg:rounded-[2rem] border border-stone-100 shadow-sm"
             >
@@ -227,7 +236,7 @@ const Skills = () => {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {['Git', 'VS Code', 'Kaggle', 'Canva', 'Colab', 'Figma', 'Postman'].map((tool) => (
-                  <span 
+                  <span
                     key={tool}
                     className="px-3 py-1.5 bg-stone-50 rounded-lg text-[11px] font-bold text-stone-500 border border-stone-100 hover:text-rose-500 hover:bg-rose-50/30 transition-all cursor-default"
                   >
