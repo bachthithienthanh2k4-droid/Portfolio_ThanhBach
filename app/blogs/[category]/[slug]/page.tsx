@@ -6,8 +6,11 @@ import { motion, useInView, useScroll, useSpring, useTransform } from "framer-mo
 import { Clock, User, Quote, Sparkles, CheckCircle2, Calendar, Heart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-const BentoInfoItem = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => (
+const BentoInfoItem = ({ icon: Icon, label, value, delay }: { icon: any, label: string, value: string, delay?: number }) => (
     <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: delay, duration: 0.5 }} // Sử dụng delay ở đây nếu bạn muốn
         whileHover={{ y: -5, backgroundColor: "rgba(255, 255, 255, 0.15)" }}
         className="flex flex-col items-center p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 transition-colors"
     >
