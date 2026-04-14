@@ -66,9 +66,9 @@ const Projects = () => {
             title: "Nhận dạng vùng phổi & Chẩn đoán đa giai đoạn",
             category: "Computer Vision / Hybrid Model",
             desc: "Hệ thống kết hợp YOLOv8 (tách vùng), VGG16 (trích xuất đặc trưng) và Random Forest (phân loại) để tối ưu hóa độ chính xác trong chẩn đoán viêm phổi.",
-            icon: <Activity className="text-indigo-600" />, // Đổi icon sang Activity để thể hiện tính đa giai đoạn
-            color: "bg-indigo-50", // Màu Indigo tạo cảm giác kỹ thuật, hiện đại
-            borderColor: "border-indigo-200",
+            icon: <Activity className="text-white-600" />, 
+            color: "bg-white-50", 
+            borderColor: "border-white-200",
             size: "md:col-span-6", // Ghép cặp với dự án Nghiên cứu khoa học
             link: "https://drive.google.com/file/d/1rtOeo2ktcGgeMjkaiQt_DBfYSB-jkCsk/view"
         },
