@@ -17,7 +17,7 @@ const Footer = () => {
         { name: 'Dự án', href: '/projects' },
         { name: 'Kỹ năng', href: '/skills' },
         { name: 'Hành trình', href: '/journey' },
-        { name: 'Liên hệ', href: '/contact' },
+        { name: 'Liên hệ', href: '/connect' },
     ];
 
     return (
@@ -126,9 +126,9 @@ const Footer = () => {
                             <p className="text-[#2D1E17] font-black mb-10 uppercase text-[11px] tracking-[0.4em]">Gửi lời chào</p>
                             <div className="flex flex-wrap gap-4">
                                 {[
-                                    { icon: <GithubIcon />, link: "#", color: "hover:bg-stone-900" },
+                                    { icon: <GithubIcon />, link: "https://github.com/bachthithienthanh2k4-droid", color: "hover:bg-stone-900" },
                                     { icon: <LinkedinIcon />, link: "#", color: "hover:bg-[#0077b5]" },
-                                    { icon: <FacebookIcon />, link: "#", color: "hover:bg-[#1877f2]" },
+                                    { icon: <FacebookIcon />, link: "https://www.facebook.com/thanh.bach.395/", color: "hover:bg-[#1877f2]" },
                                     { icon: <YoutubeIcon />, link: "#", color: "hover:bg-[#ff0000]" },
                                     { icon: <Mail size={20} />, link: "mailto:your-email@example.com", color: "hover:bg-rose-500" },
                                 ].map((social, idx) => (
