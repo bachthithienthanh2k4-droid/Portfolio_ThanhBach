@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, Variants } from 'framer-motion';
 import { ExternalLink, Award, BookOpen, Zap, ArrowUpRight, Sparkles, Star, Quote, FileText, Mail, ArrowRight } from 'lucide-react';
 import { FacebookIcon, GithubIcon, LinkedinIcon, YoutubeIcon } from '../components/icons';
 import Link from 'next/link';
@@ -42,17 +42,28 @@ const About = () => {
             image: "/pictures/z7706777109007_23a5f5f8d29e646288fc635d8458cc7c.jpg"
         }
     ];
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.2, delayChildren: 0.3 }
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.3
+            }
         }
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
         hidden: { y: 30, opacity: 0 },
-        visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 0.8,
+                // Khi đã khai báo kiểu Variants, mảng số này sẽ được chấp nhận là Cubic Bezier
+                ease: [0.16, 1, 0.3, 1]
+            }
+        }
     };
 
     const socialLinks = [
@@ -112,9 +123,9 @@ const About = () => {
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: 0.8 + (i * 0.1), type: 'spring' }}
                                     whileHover={{ y: -10, scale: 1.15, rotate: 5 }}
-                                    href={item.href} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-14 h-14 flex items-center justify-center rounded-full border border-[#d6ccc2] bg-white transition-colors shadow-md group hover:border-rose-400 hover:bg-rose-50"
                                 >
                                     <div className="text-[#8d7b6d] group-hover:text-rose-500 transition-colors">
