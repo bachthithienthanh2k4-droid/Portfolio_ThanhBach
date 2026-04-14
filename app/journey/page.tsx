@@ -10,7 +10,6 @@ import {
   Eye
 } from 'lucide-react';
 import Link from 'next/link';
-import JourneyCheck from './check';
 import Image from 'next/image';
 
 const Journey = () => {
@@ -429,12 +428,6 @@ const Journey = () => {
         </div>
       </div>
 
-
-
-
-
-
-      {/* <JourneyCheck /> */}
 
     </section>
   );
