@@ -142,15 +142,22 @@ export default function ContactPage() {
     );
 }
 
-function ContactInfoItem({ icon, label, value, color }) {
+function ContactInfoItem({ icon, label, value, color }: { 
+    icon: any, 
+    label: string, 
+    value: string, 
+    color: 'rose' | 'fuchsia' // Giới hạn các màu bạn sử dụng
+}) {
     const colors = {
         rose: "bg-rose-50 text-rose-500 border-rose-100",
         fuchsia: "bg-fuchsia-50 text-fuchsia-500 border-fuchsia-100",
     };
+
     return (
         <div className="flex items-center gap-5 group p-2">
             <div className={`p-4 rounded-2xl border ${colors[color]} transition-transform group-hover:scale-110 flex-shrink-0`}>
-                {React.cloneElement(icon, { size: 24 })}
+                {/* Dùng any cho icon để tránh lỗi cloneElement */}
+                {React.cloneElement(icon as any, { size: 24 })}
             </div>
             <div className="min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5">{label}</p>
@@ -160,11 +167,16 @@ function ContactInfoItem({ icon, label, value, color }) {
     );
 }
 
-function CustomInput({ label, ...props }) {
+function CustomInput({ label, ...props }: { label: string } & any) {
     return (
         <div className="w-full">
-            <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">{label}</label>
-            <input {...props} className="w-full px-6 py-4 rounded-full bg-white border border-rose-100 focus:ring-4 focus:ring-rose-100 outline-none transition-all shadow-inner" />
+            <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">
+                {label}
+            </label>
+            <input 
+                {...props} 
+                className="w-full px-6 py-4 rounded-full bg-white border border-rose-100 focus:ring-4 focus:ring-rose-100 outline-none transition-all shadow-inner" 
+            />
         </div>
     );
 }
