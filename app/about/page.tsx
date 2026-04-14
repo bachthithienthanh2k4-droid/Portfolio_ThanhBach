@@ -55,6 +55,12 @@ const About = () => {
         visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
     };
 
+    const socialLinks = [
+        { Icon: FacebookIcon, href: "https://www.facebook.com/thanh.bach.395/" },
+        { Icon: YoutubeIcon, href: "https://youtube.com/yourchannel" },
+        { Icon: LinkedinIcon, href: "https://linkedin.com/in/yourprofile" },
+        { Icon: GithubIcon, href: "https://github.com/bachthithienthanh2k4-droid" },
+    ];
     return (
         <div ref={containerRef} className="bg-[#faf7f2] min-h-screen text-[#432818] selection:bg-rose-200 overflow-x-hidden">
             <motion.div
@@ -99,17 +105,21 @@ const About = () => {
                         </motion.p>
 
                         <div className="flex gap-6 justify-center lg:justify-start mt-12">
-                            {[FacebookIcon, YoutubeIcon, LinkedinIcon, GithubIcon].map((Icon, i) => (
+                            {socialLinks.map((item, i) => (
                                 <motion.a
                                     key={i}
                                     initial={{ opacity: 0, scale: 0 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: 0.8 + (i * 0.1), type: 'spring' }}
                                     whileHover={{ y: -10, scale: 1.15, rotate: 5 }}
-                                    href="#"
+                                    href={item.href} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
                                     className="w-14 h-14 flex items-center justify-center rounded-full border border-[#d6ccc2] bg-white transition-colors shadow-md group hover:border-rose-400 hover:bg-rose-50"
                                 >
-                                    <Icon size={22} className="text-[#8d7b6d] group-hover:text-rose-600 transition-colors" />
+                                    <div className="text-[#8d7b6d] group-hover:text-rose-500 transition-colors">
+                                        <item.Icon size={22} />
+                                    </div>
                                 </motion.a>
                             ))}
                         </div>
