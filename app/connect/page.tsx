@@ -17,8 +17,8 @@ export default function ContactPage() {
     const [showThankYou, setShowThankYou] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
         setIsSubmitting(true);
         setTimeout(() => {
             setIsSubmitting(false);
