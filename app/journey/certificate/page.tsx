@@ -258,7 +258,14 @@ function CertificateCard({ src, className = "", label }) {
     );
 }
 
-function FloatingIcon({ icon, top, left, right, bottom, delay }) {
+function FloatingIcon({ icon, top, left, right, bottom, delay }: { 
+    icon: any, 
+    delay: number,
+    top?: string | number, 
+    left?: string | number, 
+    right?: string | number, 
+    bottom?: string | number 
+}) {
     return (
         <motion.div
             initial={{ y: 0 }}
