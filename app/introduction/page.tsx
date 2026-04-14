@@ -313,7 +313,7 @@ const Introduction = () => {
                                     "Đôi khi quá cầu toàn trong chi tiết dẫn đến tốn thời gian. Đang học cách cân bằng giữa sự hoàn hảo và tiến độ dự án."
                                 </p>
                             </div>
-                            <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform bg-white/10 text-rose-100">
+                            <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform bg-white/10 text-rose-300">
                                 <Target size={120} />
                             </div>
                         </div>
@@ -322,7 +322,7 @@ const Introduction = () => {
                     {/* Cột phải: Đam mê & Lý do chọn ngành (Dạng Storytelling) */}
                     <motion.div
                         variants={itemVariants}
-                        className="md:col-span-7 bg-gradient-to-br from-orange-50 to-rose-50 rounded-[3rem] p-10 md:p-14 border border-orange-100 flex flex-col justify-center relative overflow-hidden"
+                        className="md:col-span-7 bg-gradient-to-br from-orange-50 to-rose-50 rounded-[3rem] p-10 md:p-14 border border-orange-200 flex flex-col justify-center relative overflow-hidden"
                     >
                         <div className="relative z-10">
                             <motion.div
