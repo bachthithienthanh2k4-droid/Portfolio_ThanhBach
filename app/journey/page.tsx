@@ -13,8 +13,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const Journey = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const timelineData = [
     {
       year: "2022",
@@ -143,7 +142,7 @@ const Journey = () => {
       ],
       images:
         [
-          "/pictures/mc.png", 
+          "/pictures/mc.png",
           "/pictures/Sinh viên 5 tốt_2024.jpg",
           "/pictures/spitfront-end.jpg",
           "/pictures/SV5T_2023.jpg",
@@ -190,7 +189,7 @@ const Journey = () => {
           "/pictures/hoithaoKH.jpg",
           "/pictures/NCKH_1.jpg",
           "/pictures/NCKH_2.jpg",
-          "/pictures/seminar_2.jpg" ,
+          "/pictures/seminar_2.jpg",
           "/pictures/VanNghe.jpg"
         ]
     },
