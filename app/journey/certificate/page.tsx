@@ -219,7 +219,7 @@ export default function Certificate() {
 
 /* --- CÁC COMPONENT TÁI SỬ DỤNG --- */
 
-function SectionHeader({ icon, title, subtitle }) {
+function SectionHeader({ icon, title, subtitle }: { icon: any, title: string, subtitle: string }) {
     return (
         <div className="flex flex-col items-center mb-20 text-center space-y-4">
             <motion.div
@@ -233,11 +233,10 @@ function SectionHeader({ icon, title, subtitle }) {
         </div>
     );
 }
-
-function CertificateCard({ src, className = "", label }) {
+function CertificateCard({ src, className = "", label }: { src: string, className?: string, label: string }) {
     return (
         <motion.div
-            variants={itemVariants}
+            variants={itemVariants as any}
             whileHover="hover"
             className={`group relative overflow-hidden rounded-[3.5rem] bg-white p-4 shadow-xl shadow-rose-200/20 border border-rose-50 cursor-crosshair ${className}`}
         >
@@ -248,7 +247,10 @@ function CertificateCard({ src, className = "", label }) {
                 }}
                 transition={{ duration: 0.8 }}
                 className="w-full h-full object-cover rounded-[2.8rem] ring-1 ring-black/5"
-                onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?q=80&w=1000'; }}
+                // Thêm React.SyntheticEvent để fix lỗi tham số 'e'
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => { 
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?q=80&w=1000'; 
+                }}
             />
 
             {/* Overlay */}
@@ -267,7 +269,6 @@ function CertificateCard({ src, className = "", label }) {
         </motion.div>
     );
 }
-
 function FloatingIcon({ icon, top, left, right, bottom, delay }: { 
     icon: any, 
     delay: number,
