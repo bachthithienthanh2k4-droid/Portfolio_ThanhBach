@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Trophy, Music, BookOpen, Users, Star,
   Briefcase, Medal, Microscope, Calendar,
@@ -223,213 +223,249 @@ const Journey = () => {
     }
   ];
   return (
-    <section id="journey" className="py-24 px-6 bg-[#fcfcfb] overflow-hidden">
-      <div className="max-w-6xl mx-auto">
-
-        {/* Header */}
-        <div className="mb-24">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <span className="w-16 h-[2px] bg-rose-500"></span>
-            <span className="text-rose-600 font-bold uppercase tracking-[0.2em] text-xs">My Life Journey</span>
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-6xl md:text-8xl font-black text-[#1a1a1a] tracking-tighter leading-tight"
-          >
-            HÀNH TRÌNH <br />
-            <span className="text-rose-500 italic font-light">Phát triển & Cống hiến.</span>
-          </motion.h2>
-        </div>
-
-        {/* Timeline */}
-        <div className="relative">
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-stone-200 via-stone-300 to-transparent -translate-x-1/2 hidden md:block" />
-
-          {timelineData.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7, delay: index * 0.1 }}
-              className={`relative mb-28 flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}
-            >
-              <div className="absolute left-8 md:left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
-                <motion.div
-                  whileHover={{ scale: 1.2, rotate: 90 }}
-                  className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center text-white shadow-xl mb-4 transition-transform`}
-                >
-                  <Calendar size={22} />
-                </motion.div>
-                <div className="bg-white px-4 py-1 rounded-full border border-stone-100 shadow-sm">
-                  <span className="font-black text-stone-800 text-lg">{item.year}</span>
-                </div>
-              </div>
-
-              <div className={`w-full md:w-[45%] ml-20 md:ml-0 ${index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'}`}>
-                <motion.div
-                  whileHover={{ y: -8 }}
-                  className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-stone-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all duration-500 group"
-                >
-                  <div className="mb-6">
-                    <h3 className="text-3xl font-black text-stone-800 group-hover:text-rose-500 transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-rose-400 font-medium text-sm mt-1 uppercase tracking-wide">{item.subtitle}</p>
-                  </div>
-
-                  <div className="space-y-6">
-                    {item.milestones.map((ms, msIdx) => (
-                      <div key={msIdx} className="relative">
-                        <div className="flex items-start gap-4">
-                          <div className="mt-1 p-2 bg-stone-50 rounded-xl group-hover:bg-rose-50 transition-colors shrink-0">
-                            {ms.icon}
-                          </div>
-                          <div>
-                            <p className="text-base font-bold text-stone-800 leading-tight mb-2">
-                              {ms.desc}
-                            </p>
-                            <div className="flex items-start gap-2 p-3 bg-stone-50/70 rounded-2xl border border-stone-100 group-hover:border-rose-100 transition-colors">
-                              <Lightbulb size={14} className="text-amber-500 mt-1 shrink-0" />
-                              <p className="text-[13px] text-stone-500 italic leading-relaxed">
-                                {ms.lesson}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-              <div className="relative w-full overflow-hidden py-4">
-
-                {/* Gradient */}
-                <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#fcfcfb] to-transparent z-20 pointer-events-none" />
-                <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#fcfcfb] to-transparent z-20 pointer-events-none" />
-
-                <motion.div
-                  className="flex gap-6 items-center w-max" // FIX 1: dùng w-max thay vì style
-                  animate={{ x: ["0%", "-50%"] }}
-                  transition={{
-                    duration: 25,
-                    ease: "linear",
-                    repeat: Infinity,
-                  }}
-                >
-                  {[...item.images, ...item.images].map((img, i) => (
-
-                    <motion.div
-                      key={i}
-                      className="flex-none w-[200px] md:w-[240px]" // FIX 2: ép width cho wrapper
-                      whileHover={{ y: -10, scale: 1.05 }}
-                      onClick={() => setSelectedImage(img)}
+     <section id="journey" className="py-24 px-6 bg-[#fcfcfb] overflow-hidden">
+           <div className="max-w-7xl mx-auto">
+                 {/* Header */}
+               <div className="mb-24">
+                  <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        className="flex items-center gap-3 mb-6"
                     >
-
-                      {/* Khung ảnh */}
-                      <div className="relative w-full h-[280px] md:h-[320px] rounded-[2rem] overflow-hidden shadow-xl border border-stone-100 bg-stone-200">
-
-                        {/* FIX 3: dùng fill chuẩn */}
-                        <Image
-                          src={img}
-                          alt="Activity"
-                          width={400}
-                          height={600}
-                          className="object-cover object-center"
-                          sizes="(max-width: 768px) 200px, 240px"
-                        />
-
-                        {/* Overlay */}
-                        <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition flex items-center justify-center z-10">
-                          <Eye className="text-white opacity-0 hover:opacity-100 transition-opacity" size={28} />
-                        </div>
-
-                      </div>
+                        <span className="w-16 h-[2px] bg-rose-500"></span>
+                        <span className="text-rose-600 font-bold uppercase tracking-[0.2em] text-xs">My Life Journey</span>
                     </motion.div>
 
-                  ))}
+                    <motion.h2
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        className="text-6xl md:text-8xl font-black text-[#1a1a1a] tracking-tighter leading-tight"
+                    >
+                        HÀNH TRÌNH <br />
+                        <span className="text-rose-500 italic font-light">Phát triển & Cống hiến.</span>
+                    </motion.h2>
+                </div>
+
+                {/* Timeline */}
+                <div className="relative">
+                    <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-stone-200 via-stone-300 to-transparent -translate-x-1/2 hidden md:block" />
+
+                    {timelineData.map((item, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.7, delay: index * 0.1 }}
+                            className={`relative mb-32 flex flex-col items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                        >
+                            {/* Timeline Center Point */}
+                            <div className="absolute left-8 md:left-1/2 -translate-x-1/2 flex flex-col items-center z-20 top-0 md:top-10">
+                                <motion.div
+                                    whileHover={{ scale: 1.2, rotate: 90 }}
+                                    className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center text-white shadow-xl mb-4 transition-transform`}
+                                >
+                                    <Calendar size={22} />
+                                </motion.div>
+                                <div className="bg-white px-4 py-1 rounded-full border border-stone-100 shadow-sm">
+                                    <span className="font-black text-stone-800 text-lg">{item.year}</span>
+                                </div>
+                            </div>
+
+                            {/* Content Card */}
+                            <div className={`w-full md:w-[45%] ml-20 md:ml-0 ${index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'}`}>
+                                <motion.div
+                                    whileHover={{ y: -8 }}
+                                    className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-stone-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all duration-500 group"
+                                >
+                                    <div className="mb-6">
+                                        <h3 className="text-3xl font-black text-stone-800 group-hover:text-rose-500 transition-colors">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-rose-400 font-medium text-sm mt-1 uppercase tracking-wide">{item.subtitle}</p>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        {item.milestones.map((ms, msIdx) => (
+                                            <div key={msIdx} className="relative">
+                                                <div className="flex items-start gap-4">
+                                                    <div className="mt-1 p-2 bg-stone-50 rounded-xl group-hover:bg-rose-50 transition-colors shrink-0">
+                                                        {ms.icon}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-base font-bold text-stone-800 leading-tight mb-2">
+                                                            {ms.desc}
+                                                        </p>
+                                                        <div className="flex items-start gap-2 p-3 bg-stone-50/70 rounded-2xl border border-stone-100 group-hover:border-rose-100 transition-colors">
+                                                            <Lightbulb size={14} className="text-amber-500 mt-1 shrink-0" />
+                                                            <p className="text-[13px] text-stone-500 italic leading-relaxed">
+                                                                {ms.lesson}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            </div>
+
+                            {/* Image Gallery Side */}
+                            <div className="relative w-full overflow-hidden py-4">
+
+                                {/* Gradient */}
+                                <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#fcfcfb] to-transparent z-20 pointer-events-none" />
+                                <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#fcfcfb] to-transparent z-20 pointer-events-none" />
+
+                                <motion.div
+                                    className="flex gap-6 items-center w-max" // FIX 1: dùng w-max thay vì style
+                                    animate={{ x: ["0%", "-50%"] }}
+                                    transition={{
+                                        duration: 25,
+                                        ease: "linear",
+                                        repeat: Infinity,
+                                    }}
+                                >
+                                    {[...item.images, ...item.images].map((img, i) => (
+
+                                        <motion.div
+                                            key={i}
+                                            className="flex-none w-[200px] md:w-[240px]" // FIX 2: ép width cho wrapper
+                                            whileHover={{ y: -10, scale: 1.05 }}
+                                            onClick={() => setSelectedImage(img)}
+                                        >
+
+                                            {/* Khung ảnh */}
+                                            <div className="relative w-full h-[280px] md:h-[320px] rounded-[2rem] overflow-hidden shadow-xl border border-stone-100 bg-stone-200">
+
+                                                {/* FIX 3: dùng fill chuẩn */}
+                                                <Image
+                                                    src={img}
+                                                    alt="Activity"
+                                                    width={400}
+                                                    height={600}
+                                                    className="object-cover object-center"
+                                                    sizes="(max-width: 768px) 200px, 240px"
+                                                />
+
+                                                {/* Overlay */}
+                                                <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition flex items-center justify-center z-10">
+                                                    <Eye className="text-white opacity-0 hover:opacity-100 transition-opacity" size={28} />
+                                                </div>
+
+                                            </div>
+                                        </motion.div>
+
+                                    ))}
+                                </motion.div>
+                            </div>
+
+                        </motion.div>
+                    ))}
+                </div>
+
+                {/* Footer */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    className="mt-20 text-center"
+                >
+                    <p className="text-stone-400 italic">"Hành trình vạn dặm bắt đầu từ những bước chân nhỏ bé."</p>
+                    <div className="mt-4 flex justify-center gap-4">
+                        <div className="w-2 h-2 rounded-full bg-rose-500"></div>
+                        <div className="w-2 h-2 rounded-full bg-stone-200"></div>
+                        <div className="w-2 h-2 rounded-full bg-stone-200"></div>
+                    </div>
                 </motion.div>
-              </div>
 
-            </motion.div>
-          ))}
-        </div>
+                {/* Gallery Section - Keep as is or remove if redundant */}
+                <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        className="group relative h-[350px] bg-stone-900 rounded-[3rem] overflow-hidden cursor-pointer shadow-2xl"
+                    >
+                        <Image
+                            src="/pictures/Hỗ_trợ_ICPC.jpg"
+                            fill
+                            className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700"
+                            alt="Hoạt động ngoại khóa"
+                            sizes="(max-w-768px) 100vw, 50vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-12 flex flex-col justify-end">
+                            <div className="bg-rose-500 w-12 h-12 rounded-full flex items-center justify-center mb-4 transform -rotate-12 group-hover:rotate-0 transition-transform">
+                                <Music className="text-white" size={20} />
+                            </div>
+                            <h4 className="text-3xl font-bold text-white mb-2">Khoảnh khắc Ngoại khóa</h4>
+                            <p className="text-stone-300">Văn nghệ, MC & Tình nguyện</p>
+                            <Link href="/journey/activities">
+                                <div className="mt-6 w-fit border-b-2 border-rose-500 pb-1 text-sm font-bold text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Khám phá Album
+                                </div>
+                            </Link>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="mt-20 text-center"
-        >
-          <p className="text-stone-400 italic">"Hành trình vạn dặm bắt đầu từ những bước chân nhỏ bé."</p>
-          <div className="mt-4 flex justify-center gap-4">
-            <div className="w-2 h-2 rounded-full bg-rose-500"></div>
-            <div className="w-2 h-2 rounded-full bg-stone-200"></div>
-            <div className="w-2 h-2 rounded-full bg-stone-200"></div>
-          </div>
-        </motion.div>
+                        </div>
+                    </motion.div>
 
-        {/* Gallery Section */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-10">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="group relative h-[350px] bg-stone-900 rounded-[3rem] overflow-hidden cursor-pointer shadow-2xl"
-          >
-            <img
-              src="/pictures/Hỗ_trợ_ICPC.jpg"
-              className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700"
-              alt="Hoạt động ngoại khóa"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-12 flex flex-col justify-end">
-              <div className="bg-rose-500 w-12 h-12 rounded-full flex items-center justify-center mb-4 transform -rotate-12 group-hover:rotate-0 transition-transform">
-                <Music className="text-white" size={20} />
-              </div>
-              <h4 className="text-3xl font-bold text-white mb-2">Khoảnh khắc Ngoại khóa</h4>
-              <p className="text-stone-300">Văn nghệ, MC & Tình nguyện</p>
-              <Link href="/journey/activities">
-                <div className="mt-6 w-fit border-b-2 border-rose-500 pb-1 text-sm font-bold text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                  Khám phá Album
+                    <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        className="group relative h-[350px] bg-rose-600 rounded-[3rem] overflow-hidden cursor-pointer shadow-2xl shadow-rose-200"
+                    >
+                        <Image
+                            src="/pictures/Sao tháng giêng-2024.jpg"
+                            fill
+                            className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 group-hover:scale-110 transition-all duration-700"
+                            alt="Thành tích"
+                            sizes="(max-w-768px) 100vw, 50vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/80 via-transparent to-transparent p-12 flex flex-col justify-end">
+                            <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mb-4 transform rotate-12 group-hover:rotate-0 transition-transform">
+                                <Trophy className="text-rose-600" size={20} />
+                            </div>
+                            <h4 className="text-3xl font-bold text-white mb-2">Bảng vàng Thành tích</h4>
+                            <p className="text-rose-100">Chứng nhận & Giải thưởng lập trình</p>
+                            <Link href="/journey/certificate">
+                                <div className="mt-6 w-fit border-b-2 border-white pb-1 text-sm font-bold text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Xem chi tiết
+                                </div>
+                            </Link>
+
+                        </div>
+                    </motion.div>
                 </div>
-              </Link>
-
             </div>
-          </motion.div>
 
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="group relative h-[350px] bg-rose-600 rounded-[3rem] overflow-hidden cursor-pointer shadow-2xl shadow-rose-200"
-          >
-            <img
-              src="/pictures/Sao tháng giêng-2024.jpg"
-              className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 group-hover:scale-110 transition-all duration-700"
-              alt="Thành tích"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-rose-900/80 via-transparent to-transparent p-12 flex flex-col justify-end">
-              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mb-4 transform rotate-12 group-hover:rotate-0 transition-transform">
-                <Trophy className="text-rose-600" size={20} />
-              </div>
-              <h4 className="text-3xl font-bold text-white mb-2">Bảng vàng Thành tích</h4>
-              <p className="text-rose-100">Chứng nhận & Giải thưởng lập trình</p>
-              <Link href="/journey/certificate">
-                <div className="mt-6 w-fit border-b-2 border-white pb-1 text-sm font-bold text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                  Xem chi tiết
-                </div>
-              </Link>
+            {/* Image Modal */}
+            <AnimatePresence>
+                {selectedImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm cursor-zoom-out"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0.9 }}
+                            className="relative max-w-5xl max-h-[90vh] aspect-auto"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <img src={selectedImage} alt="Full screen view" className="max-w-full max-h-[90vh] rounded-2xl object-contain" />
+                            <button
+                                onClick={() => setSelectedImage(null)}
+                                className="absolute top-4 right-4 bg-white/20 text-white rounded-full p-2 hover:bg-white/40 transition-colors"
+                            >
+                                &times;
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-
-    </section>
-  );
+        </section>
+    );
 };
+
 
 export default Journey;
