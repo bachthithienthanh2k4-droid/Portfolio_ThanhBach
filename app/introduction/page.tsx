@@ -301,7 +301,7 @@ const Introduction = () => {
                             </ul>
                         </div>
 
-                        <div className="bg-[#432818] text-stone-600 rounded-[3rem] p-10 shadow-xl relative overflow-hidden group">
+                        <div className="text-stone-600 rounded-[3rem] p-10 shadow-xl relative overflow-hidden group">
                             <div className="relative z-10">
                                 <div className="flex items-center gap-4 mb-8">
                                     <div className="p-3 bg-white/10 text-rose-400 rounded-2xl">
