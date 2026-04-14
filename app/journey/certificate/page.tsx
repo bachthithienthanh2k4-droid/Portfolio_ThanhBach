@@ -1,23 +1,33 @@
 "use client"
 import { Award, GraduationCap, Globe, Star, Sparkles, BookOpen, Heart, Medal, ArrowUpRight } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform , Variants} from 'framer-motion';
 import { useRef } from 'react';
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: { staggerChildren: 0.15 }
+        transition: { 
+            staggerChildren: 0.15 
+        }
     }
 };
 
-const itemVariants = {
-    hidden: { y: 40, opacity: 0, scale: 0.95 },
+const itemVariants: Variants = {
+    hidden: { 
+        y: 40, 
+        opacity: 0, 
+        scale: 0.95 
+    },
     visible: {
         y: 0,
         opacity: 1,
         scale: 1,
-        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+        transition: { 
+            duration: 0.8, 
+            // Khi có kiểu Variants, mảng Cubic Bezier này sẽ được chấp nhận
+            ease: [0.16, 1, 0.3, 1] 
+        }
     }
 };
 
