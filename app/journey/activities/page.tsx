@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Lightbulb, Users, Trophy, GraduationCap, Building2, Sparkles } from 'lucide-react';
 
 const activityData = [
@@ -59,23 +59,27 @@ const activityData = [
     }
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: { staggerChildren: 0.2 }
+        transition: {
+            staggerChildren: 0.2
+        }
     }
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
     hidden: { y: 30, opacity: 0 },
     visible: {
         y: 0,
         opacity: 1,
-        transition: { duration: 0.6, ease: "easeOut" }
+        transition: {
+            duration: 0.6,
+            ease: "easeOut"
+        }
     }
 };
-
 export default function Activities() {
     return (
         <div className="relative min-h-screen bg-[#fffafa] overflow-hidden py-24 px-4 sm:px-8 mt-10">
