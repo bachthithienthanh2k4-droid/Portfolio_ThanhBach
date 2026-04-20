@@ -14,6 +14,15 @@ const activityData = [
         images: ["/pictures/clb_@.jpg", "/pictures/clb.jpg", "/pictures/clb_2.jpg", "/pictures/hotro.jpg"]
     },
     {
+        title: "Câu lạc bộ Kỹ năng Lửa xanh",
+        subtitle: "Nơi khơi nguồn kỹ năng",
+        lesson: "Kỹ năng mềm, tổ chức hội nhóm và truyền lửa cộng đồng.",
+        icon: <Users className="text-pink-500" />,
+        color: "from-pink-500 to-rose-500",
+        images: [ "/pictures/490070218_1281060920546314_125788188183515812_n.jpg","/pictures/z7719744982821_bec8c1f05bd8453427cd4c0ecb84948f.jpg", "/pictures/z7719745005691_068e26110d4d7cda31bfa8e6f735029d.jpg", "/pictures/z7719745007812_d26bfd9a89756d51c9c90d2a50635886.jpg", 
+           , "/pictures/486508798_1262650255720714_581671144975890167_n.jpg"]
+    },
+    {
         title: "Cống hiến & Hỗ trợ Khoa",
         subtitle: "Gắn kết cộng đồng sinh viên",
         lesson: "Khả năng điều phối sự kiện quy mô lớn và quản lý nhân sự dưới áp lực.",

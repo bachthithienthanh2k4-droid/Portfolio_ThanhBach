@@ -190,7 +190,8 @@ const Journey = () => {
           "/pictures/NCKH_1.jpg",
           "/pictures/NCKH_2.jpg",
           "/pictures/seminar_2.jpg",
-          "/pictures/VanNghe.jpg"
+          "/pictures/VanNghe.jpg",
+          "/pictures/540969285_3282903675198879_8108306166079727059_n.jpg"
         ]
     },
     {
@@ -218,7 +219,10 @@ const Journey = () => {
       images:
         [
           "/pictures/z7719855323618_1f8a7ed679cce5d893cc0fc20921c8b6.jpg",
-          "/pictures/Hỗ_trợ_ICPC.jpg"
+          "/pictures/Hỗ_trợ_ICPC.jpg",
+          "/pictures/z7730228559954_46040e9a2f624256c5d3657257d1dbdd.jpg" ,
+          "/pictures/z7730228564663_3f56fed2640d2a344d7ae1231ef172b4.jpg" ,
+          "/pictures/z7730228545765_0f67337b4cd639a28c8f103ea4755689.jpg"
         ]
     }
   ];

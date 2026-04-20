@@ -83,9 +83,9 @@ const Skills = () => {
       icon: <BrainCircuit className="text-indigo-500" size={24} />,
       gradient: "from-indigo-50/50 to-white",
       skills: [
-        { name: "Deep Learning (CNNs, Vision)", level: "85%", color: "bg-indigo-600" },
-        { name: "Machine Learning (Scikit-learn)", level: "80%", color: "bg-blue-500" },
-        { name: "Computer Vision (OpenCV)", level: "75%", color: "bg-cyan-500" },
+        { name: "Deep Learning (CNNs, Vision)", level: "90%", color: "bg-indigo-600" },
+        { name: "Machine Learning (Scikit-learn)", level: "90%", color: "bg-blue-500" },
+        { name: "Computer Vision (OpenCV)", level: "85%", color: "bg-cyan-500" },
         { name: "Data Processing (Pandas/Numpy)", level: "90%", color: "bg-violet-500" },
       ]
     },
@@ -109,7 +109,7 @@ const Skills = () => {
       skills: [
         { name: "Python", level: "90%", color: "bg-blue-700" },
         { name: "Java / C++", level: "80%", color: "bg-red-500" },
-        { name: "SQL Server", level: "75%", color: "bg-slate-600" },
+        { name: "SQL Server", level: "80%", color: "bg-slate-600" },
         { name: "Git", level: "85%", color: "bg-orange-600" },
       ]
     }
