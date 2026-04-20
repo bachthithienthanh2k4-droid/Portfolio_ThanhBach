@@ -140,7 +140,27 @@ const Introduction = () => {
                     viewport={{ once: true, margin: "-100px" }}
                     className="grid grid-cols-1 md:grid-cols-12 gap-6"
                 >
-                    <motion.div variants={itemVariants} className="md:col-span-8 bg-white rounded-[3rem] p-10 shadow-sm border border-stone-100 flex flex-col justify-between group hover:shadow-xl transition-all duration-500">
+                    <motion.div variants={itemVariants}
+                        whileHover={{ y: -5 }} // Hiệu ứng nhấc nhẹ khi hover
+                        className="md:col-span-8 bg-white p-12 rounded-[3.5rem] border border-stone-100 shadow-[0_10px_50px_-10px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_-20px_rgba(244,63,94,0.08)] flex flex-col justify-between group transition-all duration-700 relative overflow-hidden">
+                        <motion.div
+                            animate={{
+                                y: [0, -15, 0],
+                                rotate: [0, 5, 0]
+                            }}
+                            transition={{
+                                duration: 6,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                            className="absolute -bottom-10 -right-20 z-0 pointer-events-none drop-shadow-[0_20px_40px_rgba(244,63,94,0.15)] opacity-50 group-hover:opacity-100 transition-opacity duration-700"
+                        >
+                            <img
+                                src="/pictures/Plane2.png"
+                                alt="Paper Plane Background"
+                                className="w-[380px] h-auto grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+                            />
+                        </motion.div>
                         <div>
                             <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 mb-8 group-hover:scale-110 transition-transform">
                                 <GraduationCap size={28} />
@@ -176,13 +196,18 @@ const Introduction = () => {
                         </div>
                     </motion.div>
 
-                    <motion.div variants={itemVariants} className="md:col-span-4 bg-rose-100 rounded-[3rem] overflow-hidden relative min-h-[400px] shadow-sm">
+                    <motion.div
+                        variants={itemVariants}
+                        className="md:col-span-4 bg-rose-100 rounded-[3rem] overflow-hidden relative aspect-[3/4] md:aspect-auto md:min-h-[500px] shadow-sm"
+                    >
                         <img
                             src="/pictures/Ảnh profile.jpg"
                             alt="Bạch Thanh"
-                            className="absolute inset-0 w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                            className="absolute inset-0 w-full h-full object-cover object-top grayscale-[20%] hover:grayscale-0 transition-all duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#2D1E17]/60 to-transparent" />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
                         <div className="absolute bottom-8 left-8 text-white">
                             <p className="font-bold text-xl tracking-tight">Thanh Bach</p>
                             <p className="text-[10px] opacity-70 uppercase tracking-widest font-medium">Developer & Leader</p>
