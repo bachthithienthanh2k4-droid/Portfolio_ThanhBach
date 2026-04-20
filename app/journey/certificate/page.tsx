@@ -177,14 +177,11 @@ export default function Certificate() {
                         viewport={{ once: true, margin: "-100px" }}
                         className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]"
                     >
-                        {/* Sử dụng row-span và col-span linh hoạt để tạo bố cục Bento 
-                    md:col-span-X: độ rộng | md:row-span-X: độ cao 
-                */}
 
                         {/* Card 1: Điểm nhấn chính */}
                         <CertificateCard
                             src="/pictures/z7743214265100_fd9d92a99885d09996fa7fb7bdd0b4b1.jpg"
-                            className="md:col-span-7 md:row-span-1"
+                            className="md:col-span-7 md:row-span-2"
                             label="Khen thưởng Sinh viên xuất sắc"
                         />
 
@@ -212,21 +209,21 @@ export default function Certificate() {
                         {/* Card 5: Nhỏ */}
                         <CertificateCard
                             src="/pictures/z7743214087031_71a7b2db6fb2968ca80a3fe155461f11.jpg"
-                            className="md:col-span-4 md:row-span-1"
+                            className="md:col-span-5 md:row-span-1"
                             label="Giải Nhì SPIT Front-end"
                         />
 
                         {/* Card 6: Nhỏ */}
                         <CertificateCard
                             src="/pictures/z7743213692794_d221bb932222336c19cc6f1838e6dfc9.jpg"
-                            className="md:col-span-4 md:row-span-1"
+                            className="md:col-span-5 md:row-span-1"
                             label="Tham gia ICPC cấp Khoa"
                         />
 
                         {/* Card 7: Nhỏ */}
                         <CertificateCard
                             src="/pictures/z7743214164539_e5c4664ce6718a90dfc87112e2c518a9.jpg"
-                            className="md:col-span-4 md:row-span-1"
+                            className="md:col-span-7 md:row-span-1"
                             label="Giải nhì MTCT cấp Tỉnh"
                         />
 
