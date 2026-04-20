@@ -499,7 +499,7 @@ const About = () => {
                             <motion.a
                                 whileHover={{ y: -5, boxShadow: "0 20px 40px rgba(244, 63, 94, 0.2)" }}
                                 whileTap={{ scale: 0.98 }}
-                                href="mailto:contact@yourname.com"
+                                href="/connect"
                                 className="group px-10 py-5 bg-[#2D1E17] text-white rounded-full font-bold text-sm uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl shadow-stone-200"
                             >
                                 <Mail size={18} strokeWidth={2.5} />

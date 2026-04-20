@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import JourneyRibbon from '../components/plane';
 
 const Journey = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -228,6 +229,7 @@ const Journey = () => {
   ];
   return (
     <section id="journey" className="py-24 px-6 bg-[#fcfcfb] overflow-hidden">
+      <JourneyRibbon /> 
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
