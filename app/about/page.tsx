@@ -246,7 +246,7 @@ const About = () => {
                             >
                                 <div className="flex flex-col gap-2">
                                     <div className="flex -space-x-2">
-                                        {[1, 2, 3].map((i) => (
+                                        {[1, 2, 3, 4, 5].map((i) => (
                                             <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-rose-100 flex items-center justify-center">
                                                 <Star size={12} className="text-rose-500" fill="currentColor" />
                                             </div>
