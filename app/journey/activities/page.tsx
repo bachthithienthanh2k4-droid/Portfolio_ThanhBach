@@ -55,7 +55,7 @@ const activityData = [
         lesson: "Hiểu về văn hóa doanh nghiệp, quy trình Agile và các tiêu chuẩn ngành IT.",
         icon: <Building2 className="text-emerald-500" />,
         color: "from-emerald-500 to-teal-600",
-        images: ["/pictures/rikkei.jpg", "/pictures/pokkadot.jpg", "/pictures/fpt.jpg"]
+        images: ["/pictures/z7730228559954_46040e9a2f624256c5d3657257d1dbdd.jpg","/pictures/540969285_3282903675198879_8108306166079727059_n.jpg","/pictures/rikkei.jpg", "/pictures/pokkadot.jpg", "/pictures/fpt.jpg"]
     }
 ];
 
@@ -205,7 +205,7 @@ export default function Activities() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    className="mt-40 text-center border-t border-gray-100 pt-20"
+                    className="mt-10 text-center border-t border-gray-100 pt-20"
                 >
                     <div className="inline-block p-4 rounded-full bg-gray-50 mb-8">
                         <Sparkles className="text-pink-400 animate-pulse" />

@@ -23,7 +23,7 @@ const FloatingParticle = ({ type }: { type: number }) => {
       initial={{ y: "110vh", x: `${randomX}vw`, opacity: 0 }}
       animate={{ 
         y: "-10vh", 
-        opacity: [0, 1, 1, 0],
+        opacity: [0, 0.5, 0.5, 0],
         x: `${randomX + (Math.random() * 10 - 5)}vw` 
       }}
       transition={{ duration, repeat: Infinity, delay: randomDelay, ease: "linear" }}

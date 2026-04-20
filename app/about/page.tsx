@@ -197,7 +197,7 @@ const About = () => {
                     viewport={{ once: true }}
                     className="max-w-6xl text-center relative z-10 px-8 py-16 border-y-2 border-rose-100"
                 >
-                    <h2 className="text-4xl md:text-7xl leading-tight text-[#432818]">
+                    <h2 className="text-3xl md:text-5xl leading-tight text-[#432818]">
                         Trưởng thành là hành trình được vun đắp bằng
                         <span className="block italic text-rose-500 mt-4 relative">
                             đôi tay và sự nỗ lực không ngừng

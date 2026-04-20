@@ -1,35 +1,65 @@
 "use client"
-import { Award, GraduationCap, Globe, Star, Sparkles, BookOpen, Heart, Medal, ArrowUpRight } from 'lucide-react';
-import { motion, useScroll, useTransform , Variants} from 'framer-motion';
+import { Award, GraduationCap, Globe, Star, Sparkles, BookOpen, Heart, Medal, ArrowUpRight, ExternalLink } from 'lucide-react';
+import { motion, useScroll, useTransform, Variants } from 'framer-motion';
 import { useRef } from 'react';
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: { 
-            staggerChildren: 0.15 
+        transition: {
+            staggerChildren: 0.1
         }
     }
 };
 
 const itemVariants: Variants = {
-    hidden: { 
-        y: 40, 
-        opacity: 0, 
-        scale: 0.95 
+    hidden: {
+        y: 30,
+        opacity: 0,
+        scale: 0.98
     },
     visible: {
         y: 0,
         opacity: 1,
         scale: 1,
-        transition: { 
-            duration: 0.8, 
-            // Khi có kiểu Variants, mảng Cubic Bezier này sẽ được chấp nhận
-            ease: [0.16, 1, 0.3, 1] 
+        transition: {
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1]
         }
     }
 };
+const certificates = [
+    "/pictures/z7743213938612_7a1ddc854c3137f37e8079429a889dc7.jpg",
+    "/pictures/z7743213661606_993b43851bdf39b8cc6d548e79376dfd.jpg",
+    "/pictures/z7743213870005_1197eedb94b6748d61d6a72a94295575.jpg",
+    "/pictures/z7743213969787_d2c3a9496a2509787db536edb1b7f9d9.jpg",
+    "/pictures/z7743213725222_5c841ed02d924d7a464bdc9f4853282f.jpg",
+    "/pictures/z7743213633477_1b2bd2424ac7f4512c5e87c752ad6f29.jpg",
+    "/pictures/(Tạo hàng loạt 1) GCN Thành viên tích cực.png"
+
+];
+
+// Nhân bản danh sách để tạo vòng lặp vô tận không vết nối
+const duplicatedCertificates = [...certificates, ...certificates];
+const SV = [
+    {
+        src: "/pictures/z7743213798963_872d4811161b1b73c8ec4d87316cc8e6.jpg",
+        title: "Sao tháng giêng ",
+        org: "2024"
+    },
+    {
+        src: "/pictures/z7743213760551_9f4f9b198121e45ec867c2be1e49e84e.jpg",
+        title: "Sinh viên 5 Tốt",
+        org: "2024"
+    },
+    {
+        src: "/pictures/z7743213834621_5491a473a526318c75745c7485a01d15.jpg",
+        title: "Sinh viên 5 Tốt",
+        org: "2023"
+    }
+
+];
 
 export default function Certificate() {
     const targetRef = useRef(null);
@@ -134,26 +164,78 @@ export default function Certificate() {
                 </header>
 
                 {/* --- SECTION 1: BENTO GALLERY (Cải tiến mạnh mẽ) --- */}
-                <section className='-mt-20'>
-                    <SectionHeader icon={<GraduationCap />} title="Học Tập Xuất Sắc" subtitle="Academic Excellence" />
+                <section className='-mt-30 px-4 max-w-7xl mx-auto'>
+                    <SectionHeader
+                        icon={<GraduationCap className="text-blue-500" />}
+                        title="Học Tập Xuất Sắc"
+                        subtitle="Academic Excellence"
+                    />
 
                     <motion.div
-                        variants={containerVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-100px" }}
-                        className="grid grid-cols-1 md:grid-cols-12 gap-8"
+                        className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]"
                     >
-                        <CertificateCard src="/pictures/bangkhen1.jpg" className="md:col-span-8 h-[500px]" label="Khen thưởng Sinh viên tiêu biểu" />
-                        <CertificateCard src="/pictures/bangkhen2.jpg" className="md:col-span-4 h-[500px]" label="Học bổng Khuyến khích" />
-                        <CertificateCard src="/pictures/bangkhen3.jpg" className="md:col-span-5 h-[400px]" label="Top 5 Đồ án xuất sắc" />
-                        <CertificateCard src="/pictures/bangkhen4.jpg" className="md:col-span-7 h-[400px]" label="Giải Nhất Olympic Tin học" />
+                        {/* Sử dụng row-span và col-span linh hoạt để tạo bố cục Bento 
+                    md:col-span-X: độ rộng | md:row-span-X: độ cao 
+                */}
+
+                        {/* Card 1: Điểm nhấn chính */}
+                        <CertificateCard
+                            src="/pictures/z7743214265100_fd9d92a99885d09996fa7fb7bdd0b4b1.jpg"
+                            className="md:col-span-7 md:row-span-1"
+                            label="Khen thưởng Sinh viên xuất sắc"
+                        />
+
+                        {/* Card 2: Dọc nhỏ */}
+                        <CertificateCard
+                            src="/pictures/z7743214224466_a78b97ceecfe028ae0785718a3436910.jpg"
+                            className="md:col-span-5 md:row-span-1"
+                            label="Khen thưởng Sinh viên xuất sắc"
+                        />
+
+                        {/* Card 3: Ngang */}
+                        <CertificateCard
+                            src="/pictures/z7743213907128_cef22fc148b680c99f231b16e73828e6.jpg"
+                            className="md:col-span-5 md:row-span-1"
+                            label="Khen thưởng Sinh viên xuất sắc"
+                        />
+
+                        {/* Card 4: Ngang lớn */}
+                        <CertificateCard
+                            src="/pictures/z7743214044134_87fda706a6a00f976fb20ee2447bb4ed.jpg"
+                            className="md:col-span-7 md:row-span-1"
+                            label="Tham gia kì thi Toán sinh viên"
+                        />
+
+                        {/* Card 5: Nhỏ */}
+                        <CertificateCard
+                            src="/pictures/z7743214087031_71a7b2db6fb2968ca80a3fe155461f11.jpg"
+                            className="md:col-span-4 md:row-span-1"
+                            label="Giải Nhì SPIT Front-end"
+                        />
+
+                        {/* Card 6: Nhỏ */}
+                        <CertificateCard
+                            src="/pictures/z7743213692794_d221bb932222336c19cc6f1838e6dfc9.jpg"
+                            className="md:col-span-4 md:row-span-1"
+                            label="Tham gia ICPC cấp Khoa"
+                        />
+
+                        {/* Card 7: Nhỏ */}
+                        <CertificateCard
+                            src="/pictures/z7743214164539_e5c4664ce6718a90dfc87112e2c518a9.jpg"
+                            className="md:col-span-4 md:row-span-1"
+                            label="Giải nhì MTCT cấp Tỉnh"
+                        />
+
                     </motion.div>
                 </section>
 
                 {/* --- SECTION 2: INFINITE CAROUSEL (Nâng cấp Glow) --- */}
                 <section className='-mt-30'>
-                    <SectionHeader icon={<Star />} title="Hoạt Động Cộng Đồng" subtitle="Social Contribution" />
+                    <SectionHeader icon={<Star />} title="Giấy chứng nhận Hoạt động Đoàn - Hội" subtitle="Social Contribution" />
 
                     <div className="relative -mx-4 md:-mx-10 overflow-hidden">
                         <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#fffafa] to-transparent z-10" />
@@ -164,15 +246,15 @@ export default function Certificate() {
                             transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                             className="flex gap-10 py-10 px-10 w-max"
                         >
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                                <div key={i} className="group relative w-[450px] aspect-video rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(244,63,94,0.15)] ring-1 ring-rose-100">
+                            {duplicatedCertificates.map((src, index) => (
+                                <div key={index} className="group relative w-[450px] aspect-video rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(244,63,94,0.15)] ring-1 ring-rose-100">
                                     <img
-                                        src={`/pictures/union${i}.jpg`}
+                                        src={src}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                         onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1000'; }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-rose-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-10">
-                                        <p className="text-white font-bold tracking-widest text-sm uppercase">Cống Hiến Đoàn Hội #{i}</p>
+                                        <p className="text-white font-bold tracking-widest text-sm uppercase">Cống Hiến Đoàn Hội</p>
                                     </div>
                                 </div>
                             ))}
@@ -181,37 +263,68 @@ export default function Certificate() {
                 </section>
 
                 {/* --- SECTION 3: NGOẠI KHÓA (Modern Stack Layout) --- */}
-                <section className='-mt-40'>
-                    <SectionHeader icon={<Globe />} title="Chứng Nhận Toàn Cầu" subtitle="Global Soft Skills" />
+                <section className='-mt-30 bg-slate-50/50'>
+                    <div className="container mx-auto px-6">
+                        <SectionHeader
+                            icon={<Globe className="text-indigo-600" />}
+                            title="Chứng nhận toàn trường"
+                            subtitle="Soft Skills"
+                        />
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16 px-4">
-                        {[1, 2, 3].map((i) => (
-                            <motion.div
-                                key={i}
-                                variants={itemVariants}
-                                whileHover={{ y: -15 }}
-                                className="relative bg-white rounded-[3rem] p-6 shadow-2xl shadow-rose-200/30 border border-white group"
-                            >
-                                <div className="absolute -top-6 -right-6 w-20 h-20 bg-rose-500 rounded-full flex items-center justify-center text-white rotate-12 group-hover:rotate-0 transition-transform shadow-lg">
-                                    <Award size={32} />
-                                </div>
-                                <div className="rounded-[2.2rem] overflow-hidden aspect-[3/4] mb-8 ring-1 ring-slate-100">
-                                    <img
-                                        src="/pictures/ngoaikhoa.jpg"
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000'; }}
-                                    />
-                                </div>
-                                <div className="space-y-3 px-2">
-                                    <h4 className="text-xl font-black text-slate-800 tracking-tight">Kỹ năng lãnh đạo #{i}</h4>
-                                    <p className="text-slate-400 text-sm font-medium uppercase tracking-widest">Global Talent Award</p>
-                                </div>
-                            </motion.div>
-                        ))}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
+                            {SV.map((item, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.2 }}
+                                    whileHover={{
+                                        y: -10,
+                                        transition: { duration: 0.3 }
+                                    }}
+                                    className="group relative bg-white rounded-[2.5rem] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 transition-all duration-500 hover:shadow-indigo-200/40"
+                                >
+                                    {/* Badge "Award" cách điệu gọn hơn */}
+                                    <div className="absolute -top-4 -right-4 w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-lg z-10 transform group-hover:rotate-12 transition-transform duration-500">
+                                        <Award size={24} />
+                                    </div>
+
+                                    {/* Khung ảnh thu nhỏ và bo góc sâu */}
+                                    <div className="relative rounded-[1.8rem] overflow-hidden aspect-[4/5] mb-6 ring-1 ring-slate-200/50">
+                                        <img
+                                            src={item.src}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                            onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000'; }}
+                                        />
+                                        {/* Overlay mờ khi hover */}
+                                        <div className="absolute inset-0 bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                            <div className="bg-white/90 backdrop-blur-sm p-3 rounded-full translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl">
+                                                <ExternalLink size={20} className="text-indigo-600" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Nội dung text tinh gọn */}
+                                    <div className="space-y-2 text-center pb-2">
+                                        <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em]">
+                                            {item.org}
+                                        </p>
+                                        <h4 className="text-lg font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
+                                            {item.title}
+                                        </h4>
+                                        <div className="flex justify-center pt-2">
+                                            <div className="h-1 w-8 bg-slate-100 rounded-full group-hover:w-16 group-hover:bg-indigo-400 transition-all duration-500" />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
-            
+
             </div>
         </div>
     );
@@ -248,8 +361,8 @@ function CertificateCard({ src, className = "", label }: { src: string, classNam
                 transition={{ duration: 0.8 }}
                 className="w-full h-full object-cover rounded-[2.8rem] ring-1 ring-black/5"
                 // Thêm React.SyntheticEvent để fix lỗi tham số 'e'
-                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => { 
-                    e.currentTarget.src = 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?q=80&w=1000'; 
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?q=80&w=1000';
                 }}
             />
 
@@ -269,13 +382,13 @@ function CertificateCard({ src, className = "", label }: { src: string, classNam
         </motion.div>
     );
 }
-function FloatingIcon({ icon, top, left, right, bottom, delay }: { 
-    icon: any, 
+function FloatingIcon({ icon, top, left, right, bottom, delay }: {
+    icon: any,
     delay: number,
-    top?: string | number, 
-    left?: string | number, 
-    right?: string | number, 
-    bottom?: string | number 
+    top?: string | number,
+    left?: string | number,
+    right?: string | number,
+    bottom?: string | number
 }) {
     return (
         <motion.div
