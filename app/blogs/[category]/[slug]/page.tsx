@@ -5,13 +5,17 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import Link from "next/link";
 import { DUMMY_POSTS, PostBlock } from "@/app/data/post";
 import { BlogCard } from "../../blogcard";
-import { imgSrc, readingTime } from "../../utils";
+import { useLang } from "@/app/i18n";
+import { imgSrc, localizePost, readingTime } from "../../utils";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function PostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
-    const post = DUMMY_POSTS.find((p) => p.slug === slug);
+    const { lang, t } = useLang();
+    const rawPost = DUMMY_POSTS.find((p) => p.slug === slug);
+    // Bản dịch giữ nguyên thứ tự block nên id mục lục (muc-<index>) đúng ở cả 2 ngôn ngữ
+    const post = rawPost ? localizePost(rawPost, lang) : undefined;
 
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
@@ -47,8 +51,8 @@ export default function PostDetailPage({ params }: { params: Promise<{ slug: str
     if (!post) {
         return (
             <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#fbf5f1] text-[#3a2420]">
-                <p className="italic text-[#a88a80]">Không tìm thấy bài viết.</p>
-                <Link href="/blogs" className="rounded-full bg-rose-500 px-6 py-3 text-sm font-bold text-white">Quay lại Blog</Link>
+                <p className="italic text-[#a88a80]">{t("Không tìm thấy bài viết.", "Article not found.")}</p>
+                <Link href="/blogs" className="rounded-full bg-rose-500 px-6 py-3 text-sm font-bold text-white">{t("Quay lại Blog", "Back to Blog")}</Link>
             </div>
         );
     }
@@ -81,7 +85,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ slug: str
                 </motion.p>
                 <div className="mt-8 flex flex-wrap items-center gap-3 text-xs font-bold text-[#6e5249]">
                     <span className="rounded-full bg-white px-4 py-2 shadow-sm">Bạch Thị Thiện Thanh</span>
-                    <span className="rounded-full bg-white px-4 py-2 shadow-sm">{readingTime(post)} phút đọc</span>
+                    <span className="rounded-full bg-white px-4 py-2 shadow-sm">{readingTime(post)} {t("phút đọc", "min read")}</span>
                     <span className="rounded-full bg-rose-50 px-4 py-2 text-rose-500">{post.category}</span>
                 </div>
 
@@ -102,7 +106,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ slug: str
                 {headings.length > 0 && (
                     <aside className="hidden lg:col-span-3 lg:block">
                         <div className="sticky top-28 flex max-h-[calc(100vh-9rem)] flex-col rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_20px_50px_-30px_rgba(190,80,100,0.45)] backdrop-blur">
-                            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.25em] text-rose-500">Mục lục</p>
+                            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.25em] text-rose-500">{t("Mục lục", "Contents")}</p>
                             <ul className="journey-scroll -mr-2 space-y-0.5 overflow-y-auto pr-2">
                                 {headings.map(({ block, index }) => {
                                     // Mục con dạng "4.1 ..." thì thụt lề
@@ -137,12 +141,14 @@ export default function PostDetailPage({ params }: { params: Promise<{ slug: str
                         <div>
                             <div className="mb-3 flex items-center gap-3">
                                 <span className="h-px w-10 bg-rose-300" />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Đọc tiếp</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Đọc tiếp", "Keep reading")}</span>
                             </div>
-                            <h2 className="text-3xl font-black tracking-tight md:text-4xl">Bài viết <span className="font-normal italic text-rose-500">liên quan</span></h2>
+                            <h2 className="text-3xl font-black tracking-tight md:text-4xl">
+                                {t("Bài viết", "Related")} <span className="font-normal italic text-rose-500">{t("liên quan", "articles")}</span>
+                            </h2>
                         </div>
                         <Link href="/blogs" className="hidden items-center gap-2 text-sm font-bold text-rose-500 hover:underline sm:flex">
-                            Tất cả bài viết →
+                            {t("Tất cả bài viết →", "All articles →")}
                         </Link>
                     </div>
                     <div className="grid grid-cols-1 gap-7 md:grid-cols-3">
@@ -155,6 +161,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ slug: str
 }
 
 function ContentBlock({ block, index }: { block: PostBlock; index: number }) {
+    const { t } = useLang();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -217,9 +224,9 @@ function ContentBlock({ block, index }: { block: PostBlock; index: number }) {
 
             {block.type === "end" && (
                 <div className="mt-12 border-t border-rose-100 pt-10 text-center">
-                    <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#a88a80]">Cảm ơn bạn đã đọc đến cuối</p>
+                    <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#a88a80]">{t("Cảm ơn bạn đã đọc đến cuối", "Thank you for reading to the end")}</p>
                     <Link href="/blogs" className="group inline-flex items-center gap-3 rounded-full bg-[#4a1f2a] px-7 py-3.5 text-sm font-bold text-white transition-colors hover:bg-rose-500">
-                        Quay lại Blog <span className="transition-transform group-hover:translate-x-1">→</span>
+                        {t("Quay lại Blog", "Back to Blog")} <span className="transition-transform group-hover:translate-x-1">→</span>
                     </Link>
                 </div>
             )}

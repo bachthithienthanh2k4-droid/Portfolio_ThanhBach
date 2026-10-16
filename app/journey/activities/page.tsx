@@ -8,29 +8,33 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLang, pick } from '../../i18n';
+
+// Nội dung song ngữ: { vi, en }
+type L = { vi: string; en: string };
 
 type Activity = {
-    title: string;
-    subtitle: string;
-    lesson: string;
+    title: L;
+    subtitle: L;
+    lesson: L;
     icon: React.ElementType;
     images: (string | undefined)[];
 };
 
 const rawActivities: Activity[] = [
     {
-        title: "Câu lạc bộ Hỗ trợ lập trình - SPIT",
-        subtitle: "Nơi khơi nguồn đam mê kỹ thuật",
-        lesson: "Kỹ năng sư phạm, làm việc nhóm và tư duy giải thuật hệ thống.",
+        title: { vi: "Câu lạc bộ Hỗ trợ lập trình - SPIT", en: "Programming Support Club - SPIT" },
+        subtitle: { vi: "Nơi khơi nguồn đam mê kỹ thuật", en: "Where my passion for tech took off" },
+        lesson: { vi: "Kỹ năng sư phạm, làm việc nhóm và tư duy giải thuật hệ thống.", en: "Teaching skills, teamwork and systematic algorithmic thinking." },
         icon: Users,
         images: ["/pictures/clb_@.jpg", "/pictures/clb.jpg", "/pictures/clb_2.jpg", "/pictures/hotro.jpg",
             "pictures/tapthespit.jpg", "pictures/giangdayspit.jpg", "pictures/hoatdongngoaikhoa.jpg"
         ]
     },
     {
-        title: "Câu lạc bộ Kỹ năng Lửa xanh",
-        subtitle: "Nơi khơi nguồn kỹ năng",
-        lesson: "Kỹ năng mềm, tổ chức hội nhóm và truyền lửa cộng đồng.",
+        title: { vi: "Câu lạc bộ Kỹ năng Lửa xanh", en: "Lửa Xanh (Blue Flame) Skills Club" },
+        subtitle: { vi: "Nơi khơi nguồn kỹ năng", en: "Where my soft skills took shape" },
+        lesson: { vi: "Kỹ năng mềm, tổ chức hội nhóm và truyền lửa cộng đồng.", en: "Soft skills, group organization and inspiring the community." },
         icon: Flame,
         images: [
             "/pictures/490070218_1281060920546314_125788188183515812_n.jpg",
@@ -41,9 +45,9 @@ const rawActivities: Activity[] = [
         ]
     },
     {
-        title: "Cống hiến & Hỗ trợ Khoa",
-        subtitle: "Gắn kết cộng đồng sinh viên",
-        lesson: "Khả năng điều phối sự kiện quy mô lớn và quản lý nhân sự dưới áp lực.",
+        title: { vi: "Cống hiến & Hỗ trợ Khoa", en: "Service & Faculty Support" },
+        subtitle: { vi: "Gắn kết cộng đồng sinh viên", en: "Bringing the student community together" },
+        lesson: { vi: "Khả năng điều phối sự kiện quy mô lớn và quản lý nhân sự dưới áp lực.", en: "Coordinating large-scale events and managing people under pressure." },
         icon: Trophy,
         images: [
             "/pictures/Hỗ_trợ_ICPC.jpg",
@@ -54,16 +58,16 @@ const rawActivities: Activity[] = [
         ]
     },
     {
-        title: "Hội thảo Khoa học & Seminar",
-        subtitle: "Cập nhật tri thức công nghệ mới",
-        lesson: "Tư duy phản biện, cách đặt vấn đề và nắm bắt xu hướng công nghệ tương lai.",
+        title: { vi: "Hội thảo Khoa học & Seminar", en: "Scientific Conferences & Seminars" },
+        subtitle: { vi: "Cập nhật tri thức công nghệ mới", en: "Staying current with new technology" },
+        lesson: { vi: "Tư duy phản biện, cách đặt vấn đề và nắm bắt xu hướng công nghệ tương lai.", en: "Critical thinking, framing the right questions and spotting where technology is heading." },
         icon: GraduationCap,
         images: ["/pictures/hoithaoKH.jpg", "/pictures/seminar.jpg", "/pictures/seminar_2.jpg", "/pictures/seminar_3.jpg", "/pictures/tapthehueict.jpg"]
     },
     {
-        title: "Văn nghệ & Nghệ thuật",
-        subtitle: "Tự tin tỏa sáng trên sân khấu",
-        lesson: "Sự tự tin trước đám đông và khả năng biểu đạt cảm xúc qua ngôn ngữ hình thể.",
+        title: { vi: "Văn nghệ & Nghệ thuật", en: "Performing Arts" },
+        subtitle: { vi: "Tự tin tỏa sáng trên sân khấu", en: "Shining with confidence on stage" },
+        lesson: { vi: "Sự tự tin trước đám đông và khả năng biểu đạt cảm xúc qua ngôn ngữ hình thể.", en: "Confidence in front of an audience and expressing emotion through body language." },
         icon: Music,
         images: [
             "/pictures/VanNghe.jpg",
@@ -79,9 +83,9 @@ const rawActivities: Activity[] = [
         ]
     },
     {
-        title: "Office Tour & Doanh nghiệp",
-        subtitle: "Tiếp cận môi trường làm việc thực tế",
-        lesson: "Hiểu về văn hóa doanh nghiệp, quy trình Agile và các tiêu chuẩn ngành IT.",
+        title: { vi: "Office Tour & Doanh nghiệp", en: "Office Tours & Industry Visits" },
+        subtitle: { vi: "Tiếp cận môi trường làm việc thực tế", en: "A first look at real workplaces" },
+        lesson: { vi: "Hiểu về văn hóa doanh nghiệp, quy trình Agile và các tiêu chuẩn ngành IT.", en: "Understanding company culture, Agile workflows and IT industry standards." },
         icon: Building2,
         images: ["/pictures/z7730228559954_46040e9a2f624256c5d3657257d1dbdd.jpg", 
             "/pictures/540969285_3282903675198879_8108306166079727059_n.jpg", 
@@ -188,40 +192,44 @@ const Corner = ({ className }: { className: string }) => (
 );
 
 // ============ ẢNH CHÍNH: KHUNG VIỀN GRADIENT, RÕ NÉT ============
-const FeaturedPhoto = ({ src, alt, onClick }: { src: string; alt: string; onClick: () => void }) => (
-    <div className="relative p-4">
-        <Corner className="left-0 top-0 border-l-2 border-t-2" />
-        <Corner className="right-0 top-0 rotate-90 border-l-2 border-t-2" />
-        <Corner className="bottom-0 right-0 rotate-180 border-l-2 border-t-2" />
-        <Corner className="bottom-0 left-0 -rotate-90 border-l-2 border-t-2" />
-        <motion.button
-            onClick={onClick}
-            whileHover={{ y: -6 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="group relative block w-full rounded-[2.25rem] bg-gradient-to-br from-rose-400 via-[#f6c9b8] to-pink-400 p-[3px] shadow-[0_40px_80px_-35px_rgba(150,50,70,0.6)]"
-            aria-label={`Xem ảnh lớn: ${alt}`}
-        >
-            <span className="relative block aspect-[3/2] w-full overflow-hidden rounded-[2.1rem] bg-white">
-                <Image
-                    src={src}
-                    alt={alt}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 720px"
-                    quality={90}
-                    className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
-                />
-                {/* Vệt sáng lướt qua khi rê chuột */}
-                <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-all duration-1000 group-hover:left-[130%]" />
-                <span className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-rose-500 shadow-md">
-                    <Images size={14} /> Xem album
+const FeaturedPhoto = ({ src, alt, onClick }: { src: string; alt: string; onClick: () => void }) => {
+    const { t } = useLang();
+    return (
+        <div className="relative p-4">
+            <Corner className="left-0 top-0 border-l-2 border-t-2" />
+            <Corner className="right-0 top-0 rotate-90 border-l-2 border-t-2" />
+            <Corner className="bottom-0 right-0 rotate-180 border-l-2 border-t-2" />
+            <Corner className="bottom-0 left-0 -rotate-90 border-l-2 border-t-2" />
+            <motion.button
+                onClick={onClick}
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                className="group relative block w-full rounded-[2.25rem] bg-gradient-to-br from-rose-400 via-[#f6c9b8] to-pink-400 p-[3px] shadow-[0_40px_80px_-35px_rgba(150,50,70,0.6)]"
+                aria-label={t(`Xem ảnh lớn: ${alt}`, `View full size: ${alt}`)}
+            >
+                <span className="relative block aspect-[3/2] w-full overflow-hidden rounded-[2.1rem] bg-white">
+                    <Image
+                        src={src}
+                        alt={alt}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 720px"
+                        quality={90}
+                        className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
+                    />
+                    {/* Vệt sáng lướt qua khi rê chuột */}
+                    <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-all duration-1000 group-hover:left-[130%]" />
+                    <span className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-rose-500 shadow-md">
+                        <Images size={14} /> {t("Xem album", "View album")}
+                    </span>
                 </span>
-            </span>
-        </motion.button>
-    </div>
-);
+            </motion.button>
+        </div>
+    );
+};
 
 // ============ DẢI ẢNH TỰ CHẠY ============
 const PhotoRibbon = ({ images, title, reverse, onOpen }: { images: string[]; title: string; reverse?: boolean; onOpen: OpenFn }) => {
+    const { t } = useLang();
     const trackRef = useRef<HTMLDivElement>(null);
     const x = useMotionValue(0);
     const paused = useRef(false);
@@ -257,9 +265,9 @@ const PhotoRibbon = ({ images, title, reverse, onOpen }: { images: string[]; tit
                                 whileHover={{ y: -8, scale: 1.03 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 className="group relative h-[220px] w-[300px] shrink-0 overflow-hidden rounded-[1.5rem] border-[5px] border-white bg-white shadow-[0_20px_40px_-20px_rgba(150,50,70,0.55)] md:h-[260px] md:w-[360px]"
-                                aria-label={`Xem ảnh ${idx + 1}: ${title}`}
+                                aria-label={t(`Xem ảnh ${idx + 1}: ${title}`, `View photo ${idx + 1}: ${title}`)}
                             >
-                                <Image src={img} alt={`${title} – ảnh ${idx + 1}`} fill sizes="380px" quality={85} className="object-cover" />
+                                <Image src={img} alt={t(`${title} – ảnh ${idx + 1}`, `${title} – photo ${idx + 1}`)} fill sizes="380px" quality={85} className="object-cover" />
                                 <span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-black text-rose-500 opacity-0 shadow transition-opacity duration-300 group-hover:opacity-100">
                                     {String(idx + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
                                 </span>
@@ -277,8 +285,10 @@ const PhotoRibbon = ({ images, title, reverse, onOpen }: { images: string[]; tit
 
 // ============ MỘT HOẠT ĐỘNG ============
 const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activityData)[number]; index: number; onOpen: OpenFn }) => {
+    const { lang, t } = useLang();
     const Icon = activity.icon;
     const reverse = index % 2 === 1;
+    const title = pick(activity.title, lang);
     return (
         <section id={`hoat-dong-${index + 1}`} className="relative scroll-mt-32">
             <SparkleField count={10} seed={index + 1} className="-inset-x-10 -inset-y-10" />
@@ -303,8 +313,8 @@ const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activi
                             <Icon size={26} />
                         </motion.div>
                     </div>
-                    <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight md:text-4xl">{activity.title}</h2>
-                    <p className="mt-2 italic text-[#a88a80]">{activity.subtitle}</p>
+                    <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight md:text-4xl">{title}</h2>
+                    <p className="mt-2 italic text-[#a88a80]">{pick(activity.subtitle, lang)}</p>
 
                     <div className="relative mt-7 overflow-hidden rounded-[1.75rem] border border-white bg-white/75 p-6 shadow-[0_25px_50px_-30px_rgba(190,80,100,0.5)] backdrop-blur">
                         <div className="pointer-events-none absolute inset-0 opacity-60" style={lacePattern} />
@@ -313,8 +323,8 @@ const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activi
                                 <Lightbulb size={20} />
                             </span>
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-400">Bài học rút ra</p>
-                                <p className="mt-1 font-semibold italic leading-relaxed text-[#6e5249]">&ldquo;{activity.lesson}&rdquo;</p>
+                                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-400">{t("Bài học rút ra", "Key takeaway")}</p>
+                                <p className="mt-1 font-semibold italic leading-relaxed text-[#6e5249]">&ldquo;{pick(activity.lesson, lang)}&rdquo;</p>
                             </div>
                         </div>
                     </div>
@@ -323,7 +333,7 @@ const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activi
                         onClick={() => onOpen(activity.images, 0)}
                         className="group mt-6 inline-flex items-center gap-3 rounded-full bg-[#4a1f2a] py-2 pl-5 pr-2 text-white shadow-lg transition-colors hover:bg-rose-500"
                     >
-                        <span className="text-[11px] font-black uppercase tracking-[0.2em]">{activity.images.length} khoảnh khắc</span>
+                        <span className="text-[11px] font-black uppercase tracking-[0.2em]">{activity.images.length} {t("khoảnh khắc", "moments")}</span>
                         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 group-hover:rotate-45">
                             <ArrowUpRight size={16} />
                         </span>
@@ -338,7 +348,7 @@ const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activi
                     transition={{ duration: 0.9, ease, delay: 0.1 }}
                     className={`lg:col-span-7 ${reverse ? "lg:order-1" : ""}`}
                 >
-                    {activity.images[0] && <FeaturedPhoto src={activity.images[0]} alt={activity.title} onClick={() => onOpen(activity.images, 0)} />}
+                    {activity.images[0] && <FeaturedPhoto src={activity.images[0]} alt={title} onClick={() => onOpen(activity.images, 0)} />}
                 </motion.div>
             </div>
 
@@ -351,7 +361,7 @@ const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activi
                     transition={{ duration: 0.8, ease }}
                     className="mt-10"
                 >
-                    <PhotoRibbon images={activity.images} title={activity.title} reverse={reverse} onOpen={onOpen} />
+                    <PhotoRibbon images={activity.images} title={title} reverse={reverse} onOpen={onOpen} />
                 </motion.div>
             )}
         </section>
@@ -359,6 +369,7 @@ const ActivitySection = ({ activity, index, onOpen }: { activity: (typeof activi
 };
 
 export default function Activities() {
+    const { lang, t } = useLang();
     const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
     const open: OpenFn = (images, index) => setLightbox({ images, index });
     const totalPhotos = activityData.reduce((n, a) => n + a.images.length, 0);
@@ -432,7 +443,7 @@ export default function Activities() {
                         animate={{ opacity: 1, y: 0 }}
                         className="relative mb-8 inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white/80 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-rose-500 shadow-sm backdrop-blur"
                     >
-                        <Sparkles size={14} className="animate-pulse" /> Hành trình & Hoạt động
+                        <Sparkles size={14} className="animate-pulse" /> {t("Hành trình & Hoạt động", "Journey & Activities")}
                     </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
@@ -440,8 +451,8 @@ export default function Activities() {
                         transition={{ duration: 0.9, ease }}
                         className="relative text-5xl font-black leading-[1.05] tracking-tighter md:text-8xl"
                     >
-                        Hoạt động <br />
-                        <ShimmerText className="font-normal italic">nổi bật</ShimmerText>
+                        {t("Hoạt động", "Featured")} <br />
+                        <ShimmerText className="font-normal italic">{t("nổi bật", "activities")}</ShimmerText>
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0 }}
@@ -449,7 +460,10 @@ export default function Activities() {
                         transition={{ delay: 0.3 }}
                         className="relative mx-auto mt-8 max-w-xl text-lg italic leading-relaxed text-[#6e5249]"
                     >
-                        Không chỉ là những tấm hình kỷ niệm, mỗi hành trình đều mang lại những bài học quý giá giúp mình hoàn thiện bản thân mỗi ngày.
+                        {t(
+                            "Không chỉ là những tấm hình kỷ niệm, mỗi hành trình đều mang lại những bài học quý giá giúp mình hoàn thiện bản thân mỗi ngày.",
+                            "More than just keepsake photos – every experience has taught me valuable lessons that help me grow a little more each day.",
+                        )}
                     </motion.p>
 
                     {/* Mục lục nhanh */}
@@ -463,25 +477,25 @@ export default function Activities() {
                             const Icon = a.icon;
                             return (
                                 <motion.a
-                                    key={a.title}
+                                    key={i}
                                     href={`#hoat-dong-${i + 1}`}
                                     whileHover={{ y: -4, scale: 1.04 }}
                                     className="flex items-center gap-2 rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-bold text-[#6e5249] shadow-sm backdrop-blur transition-colors hover:bg-rose-500 hover:text-white"
                                 >
-                                    <Icon size={14} /> {a.title.replace("Câu lạc bộ ", "CLB ")}
+                                    <Icon size={14} /> {lang === "en" ? a.title.en : a.title.vi.replace("Câu lạc bộ ", "CLB ")}
                                 </motion.a>
                             );
                         })}
                     </motion.div>
                     <p className="relative mt-6 text-xs font-bold uppercase tracking-[0.3em] text-[#a88a80]">
-                        {activityData.length} hoạt động · {totalPhotos} khoảnh khắc
+                        {activityData.length} {t("hoạt động", "activities")} · {totalPhotos} {t("khoảnh khắc", "moments")}
                     </p>
                 </div>
 
                 {/* ================= CÁC HOẠT ĐỘNG ================= */}
                 <div className="space-y-16">
                     {activityData.map((activity, idx) => (
-                        <React.Fragment key={activity.title}>
+                        <React.Fragment key={idx}>
                             {idx > 0 && <OrnamentDivider />}
                             <ActivitySection activity={activity} index={idx} onOpen={open} />
                         </React.Fragment>
@@ -506,13 +520,13 @@ export default function Activities() {
                         <Sparkles size={36} />
                     </motion.div>
                     <h3 className="relative text-2xl font-light italic text-rose-50 md:text-4xl">
-                        Sống hết mình với đam mê, <span className="text-rose-300">thành công sẽ theo đuổi bạn.</span>
+                        {t("Sống hết mình với đam mê,", "Live fully for your passion,")} <span className="text-rose-300">{t("thành công sẽ theo đuổi bạn.", "and success will follow you.")}</span>
                     </h3>
                     <Link
                         href="/journey/certificate"
                         className="group relative mt-10 inline-flex items-center gap-3 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-[#4a1f2a] transition-colors hover:bg-rose-500 hover:text-white"
                     >
-                        <Trophy size={16} /> Xem bảng vàng thành tích
+                        <Trophy size={16} /> {t("Xem bảng vàng thành tích", "View my Hall of Fame")}
                         <ArrowUpRight size={16} className="transition-transform group-hover:rotate-45" />
                     </Link>
                 </motion.div>
@@ -528,13 +542,13 @@ export default function Activities() {
                         className="fixed inset-0 z-[200] flex items-center justify-center bg-[#2a1216]/90 p-4 backdrop-blur-md"
                         onClick={() => setLightbox(null)}
                     >
-                        <button className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20" aria-label="Đóng">
+                        <button className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20" aria-label={t("Đóng", "Close")}>
                             <X size={22} />
                         </button>
                         <button
                             onClick={(e) => { e.stopPropagation(); step(-1); }}
                             className="absolute left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-rose-500"
-                            aria-label="Ảnh trước"
+                            aria-label={t("Ảnh trước", "Previous photo")}
                         >
                             <ChevronLeft size={24} />
                         </button>
@@ -546,12 +560,12 @@ export default function Activities() {
                             className="relative h-[75vh] w-full max-w-5xl"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <Image src={lightbox.images[lightbox.index]} alt="Khoảnh khắc" fill sizes="100vw" quality={90} className="object-contain" />
+                            <Image src={lightbox.images[lightbox.index]} alt={t("Khoảnh khắc", "Moment")} fill sizes="100vw" quality={90} className="object-contain" />
                         </motion.div>
                         <button
                             onClick={(e) => { e.stopPropagation(); step(1); }}
                             className="absolute right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-rose-500"
-                            aria-label="Ảnh tiếp theo"
+                            aria-label={t("Ảnh tiếp theo", "Next photo")}
                         >
                             <ChevronRight size={24} />
                         </button>

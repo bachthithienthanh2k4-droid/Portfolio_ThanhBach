@@ -3,9 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Post } from "../data/post";
-import { imgSrc, readingTime } from "./utils";
+import { useLang } from "../i18n";
+import { imgSrc, localizePost, readingTime } from "./utils";
 
-export const BlogCard = ({ post, index = 0 }: { post: Post; index?: number }) => {
+export const BlogCard = ({ post: rawPost, index = 0 }: { post: Post; index?: number }) => {
+  const { lang, t } = useLang();
+  const post = localizePost(rawPost, lang);
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -35,13 +38,13 @@ export const BlogCard = ({ post, index = 0 }: { post: Post; index?: number }) =>
 
         {/* Nội dung */}
         <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#a88a80]">{readingTime(post)} phút đọc</p>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#a88a80]">{readingTime(post)} {t("phút đọc", "min read")}</p>
           <h3 className="line-clamp-2 text-xl font-black leading-snug tracking-tight text-[#3a2420] transition-colors group-hover:text-rose-500">
             {post.title}
           </h3>
           <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-[#8a6f66]">{post.excerpt}</p>
           <div className="mt-5 flex items-center gap-2 border-t border-rose-100 pt-4 text-[11px] font-black uppercase tracking-[0.2em] text-[#4a1f2a] transition-colors group-hover:text-rose-500">
-            Đọc bài viết
+            {t("Đọc bài viết", "Read article")}
             <span className="h-px w-6 bg-current transition-all duration-500 group-hover:w-12" />
           </div>
         </div>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useAnimationFrame } from "fram
 import { Mail, Phone, MapPin, Send, Copy, Check, X } from "lucide-react";
 import Image from "next/image";
 import { FacebookIcon, GithubIcon } from "../components/icons";
+import { useLang, pick } from "../i18n";
 
 const EMAIL = "bachthithienthanh2k4@gmail.com";
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -14,7 +15,13 @@ const socials = [
     { Icon: GithubIcon, href: "https://github.com/bachthithienthanh2k4-droid", label: "GitHub", handle: "bachthithienthanh2k4-droid" },
 ];
 
-const topics = ["Hợp tác dự án", "Cơ hội việc làm", "Nghiên cứu AI", "Trò chuyện"];
+// Chủ đề: lưu theo id (không phụ thuộc ngôn ngữ), dịch khi hiển thị
+const topics = [
+    { id: "project", vi: "Hợp tác dự án", en: "Project collaboration" },
+    { id: "job", vi: "Cơ hội việc làm", en: "Job opportunities" },
+    { id: "ai", vi: "Nghiên cứu AI", en: "AI research" },
+    { id: "chat", vi: "Trò chuyện", en: "Just a chat" },
+];
 
 // Tỉ lệ thật (rộng / cao) của từng ảnh, để khung luôn khớp ảnh và không bị cắt
 const RATIO: Record<string, number> = {
@@ -32,24 +39,25 @@ const ratioOf = (src: string) => RATIO[src] ?? 4 / 3;
 
 // Ảnh của Thanh dùng trong trang
 const collage = [
-    { src: "/pictures/anhtotnghiep.jpg", caption: "Tốt nghiệp 2026", className: "-left-6 top-8 w-48 -rotate-6 md:-left-16", delay: 0 },
-    { src: "/pictures/anhhusc.jpg", caption: "HUSC", className: "-right-4 top-1/3 w-44 rotate-6 md:-right-14", delay: 0.8 },
-    { src: "/pictures/anhtotnghiep_2.jpg", caption: "Tốt nghiệp 2026", className: "-bottom-8 -left-4 w-28 rotate-3 md:-left-12", delay: 1.6 },
+    { src: "/pictures/anhtotnghiep.jpg", caption: { vi: "Tốt nghiệp 2026", en: "Class of 2026" }, className: "-left-6 top-8 w-48 -rotate-6 md:-left-16", delay: 0 },
+    { src: "/pictures/anhhusc.jpg", caption: { vi: "HUSC", en: "HUSC" }, className: "-right-4 top-1/3 w-44 rotate-6 md:-right-14", delay: 0.8 },
+    { src: "/pictures/anhtotnghiep_2.jpg", caption: { vi: "Tốt nghiệp 2026", en: "Class of 2026" }, className: "-bottom-8 -left-4 w-28 rotate-3 md:-left-12", delay: 1.6 },
 ];
 
 const moments = [
-    { src: "/pictures/Ảnh profile.jpg", caption: "Mùa Giáng sinh" },
-    { src: "/pictures/totnghiep.jpg", caption: "Lễ tốt nghiệp 2026" },
-    { src: "/pictures/Miss.jpg", caption: "Top 30 HUSC Miss & Mister" },
-    { src: "/pictures/hueict.jpg", caption: "Giải Nhì Hue-ICT 2026" },
-    { src: "/pictures/anhtotnghiep_2.jpg", caption: "Ngày ra trường" },
-    { src: "/pictures/anhtotnghiep.jpg", caption: "Khoảnh khắc tốt nghiệp" },
-    { src: "/pictures/anhhusc.jpg", caption: "Đại học Khoa học Huế" },
-    { src: "/pictures/mc.png", caption: "Dẫn chương trình" },
+    { src: "/pictures/Ảnh profile.jpg", caption: { vi: "Mùa Giáng sinh", en: "Christmas season" } },
+    { src: "/pictures/totnghiep.jpg", caption: { vi: "Lễ tốt nghiệp 2026", en: "Graduation ceremony 2026" } },
+    { src: "/pictures/Miss.jpg", caption: { vi: "Top 30 HUSC Miss & Mister", en: "Top 30 HUSC Miss & Mister" } },
+    { src: "/pictures/hueict.jpg", caption: { vi: "Giải Nhì Hue-ICT 2026", en: "Second Prize, Hue-ICT 2026" } },
+    { src: "/pictures/anhtotnghiep_2.jpg", caption: { vi: "Ngày ra trường", en: "Graduation day" } },
+    { src: "/pictures/anhtotnghiep.jpg", caption: { vi: "Khoảnh khắc tốt nghiệp", en: "A graduation moment" } },
+    { src: "/pictures/anhhusc.jpg", caption: { vi: "Đại học Khoa học Huế", en: "University of Sciences, Hue University" } },
+    { src: "/pictures/mc.png", caption: { vi: "Dẫn chương trình", en: "On stage as MC" } },
 ];
 
 // Dải ảnh tự chạy, rê chuột để dừng
 const MomentsRibbon = () => {
+    const { lang } = useLang();
     const trackRef = useRef<HTMLDivElement>(null);
     const x = useMotionValue(0);
     const paused = useRef(false);
@@ -68,9 +76,9 @@ const MomentsRibbon = () => {
                 {[...moments, ...moments].map((m, i) => (
                     <div key={i} className={`group relative shrink-0 rounded-2xl bg-white p-2 pb-9 shadow-[0_20px_40px_-20px_rgba(150,50,70,0.5)] transition-transform duration-500 hover:-translate-y-2 ${i % 2 ? "rotate-2" : "-rotate-2"}`}>
                         <div className="relative h-[220px] overflow-hidden rounded-xl md:h-[260px]" style={{ aspectRatio: ratioOf(m.src) }}>
-                            <Image src={m.src} alt={m.caption} fill sizes="460px" quality={85} className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                            <Image src={m.src} alt={pick(m.caption, lang)} fill sizes="460px" quality={85} className="object-cover transition-transform duration-700 group-hover:scale-105" />
                         </div>
-                        <p className="absolute bottom-2.5 left-0 right-0 text-center text-xs font-semibold italic text-[#8a6f66]">{m.caption}</p>
+                        <p className="absolute bottom-2.5 left-0 right-0 text-center text-xs font-semibold italic text-[#8a6f66]">{pick(m.caption, lang)}</p>
                     </div>
                 ))}
             </motion.div>
@@ -81,8 +89,10 @@ const MomentsRibbon = () => {
 };
 
 export default function ContactPage() {
+    const { lang, t } = useLang();
     const [copied, setCopied] = useState(false);
-    const [topic, setTopic] = useState(topics[0]);
+    const [topicId, setTopicId] = useState(topics[0].id);
+    const topic = topics.find((x) => x.id === topicId) ?? topics[0];
     const [form, setForm] = useState({ name: "", email: "", message: "", website: "" });
     const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
     const [errorMsg, setErrorMsg] = useState("");
@@ -107,23 +117,23 @@ export default function ContactPage() {
             const res = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...form, topic }),
+                body: JSON.stringify({ ...form, topic: pick(topic, lang), lang }),
             });
             const data = await res.json().catch(() => ({}));
-            if (!res.ok || !data.ok) throw new Error(data.error || "Chưa gửi được, vui lòng thử lại sau.");
+            if (!res.ok || !data.ok) throw new Error(data.error || t("Chưa gửi được, vui lòng thử lại sau.", "Your message couldn't be sent. Please try again later."));
             setStatus("idle");
             setForm({ name: "", email: "", message: "", website: "" });
             setShowThankYou(true);
         } catch (err) {
             setStatus("error");
-            setErrorMsg(err instanceof Error ? err.message : "Chưa gửi được, vui lòng thử lại sau.");
+            setErrorMsg(err instanceof Error ? err.message : t("Chưa gửi được, vui lòng thử lại sau.", "Your message couldn't be sent. Please try again later."));
         }
     };
 
     const infoCards = [
-        { icon: Mail, label: "Email", value: EMAIL, action: copyEmail, actionLabel: copied ? "Đã sao chép" : "Sao chép" },
-        { icon: Phone, label: "Điện thoại", value: "033.231.xxxx" },
-        { icon: MapPin, label: "Địa chỉ", value: "Thành phố Huế, Việt Nam" },
+        { id: "email", icon: Mail, label: "Email", value: EMAIL, action: copyEmail, actionLabel: copied ? t("Đã sao chép", "Copied") : t("Sao chép", "Copy") },
+        { id: "phone", icon: Phone, label: t("Điện thoại", "Phone"), value: "033.231.xxxx" },
+        { id: "address", icon: MapPin, label: t("Địa chỉ", "Address"), value: t("Thành phố Huế, Việt Nam", "Hue City, Vietnam") },
     ];
 
     return (
@@ -147,7 +157,7 @@ export default function ContactPage() {
                     <div className="order-2 lg:order-1 lg:col-span-7">
                         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
                             <span className="h-px w-10 bg-rose-300" />
-                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Liên hệ</span>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Liên hệ", "Contact")}</span>
                         </motion.div>
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
@@ -155,7 +165,7 @@ export default function ContactPage() {
                             transition={{ duration: 0.9, ease }}
                             className="text-5xl font-black leading-[0.95] tracking-tighter md:text-7xl"
                         >
-                            Kết nối <br />
+                            {t("Kết nối", "Get in touch")} <br />
                             <motion.span
                                 animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }}
                                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -165,7 +175,7 @@ export default function ContactPage() {
                                     backgroundSize: "200% 100%",
                                 }}
                             >
-                                với Thanh
+                                {t("với Thanh", "with Thanh")}
                             </motion.span>
                         </motion.h1>
                         <motion.p
@@ -174,7 +184,10 @@ export default function ContactPage() {
                             transition={{ duration: 0.8, ease, delay: 0.2 }}
                             className="mt-8 max-w-lg border-l-2 border-rose-300 pl-5 italic leading-relaxed text-[#6e5249]"
                         >
-                            Một lời hỏi thăm, một ý tưởng dự án hay một cơ hội hợp tác — mình luôn sẵn lòng lắng nghe và phản hồi trong vòng 24 giờ làm việc.
+                            {t(
+                                "Một lời hỏi thăm, một ý tưởng dự án hay một cơ hội hợp tác — mình luôn sẵn lòng lắng nghe và phản hồi trong vòng 24 giờ làm việc.",
+                                "A friendly hello, a project idea or a chance to collaborate — I'm always happy to listen, and I'll get back to you within 24 business hours."
+                            )}
                         </motion.p>
 
                         {/* Thẻ liên hệ */}
@@ -184,8 +197,8 @@ export default function ContactPage() {
                             transition={{ duration: 0.8, ease, delay: 0.35 }}
                             className="mt-10 space-y-3"
                         >
-                            {infoCards.map(({ icon: Icon, label, value, action, actionLabel }) => (
-                                <div key={label} className="group flex items-center gap-4 rounded-2xl border border-white bg-white/80 p-3 pr-4 shadow-[0_15px_40px_-25px_rgba(190,80,100,0.5)] backdrop-blur transition-colors hover:bg-white">
+                            {infoCards.map(({ id, icon: Icon, label, value, action, actionLabel }) => (
+                                <div key={id}className="group flex items-center gap-4 rounded-2xl border border-white bg-white/80 p-3 pr-4 shadow-[0_15px_40px_-25px_rgba(190,80,100,0.5)] backdrop-blur transition-colors hover:bg-white">
                                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-500 transition-colors group-hover:bg-rose-500 group-hover:text-white">
                                         <Icon size={20} />
                                     </span>
@@ -244,7 +257,7 @@ export default function ContactPage() {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/70 via-transparent to-transparent" />
                             <div className="absolute bottom-6 right-6 text-right text-white">
                                 <p className="text-2xl font-black">Thiện Thanh</p>
-                                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-rose-100/90">Huế · Việt Nam</p>
+                                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-rose-100/90">{t("Huế · Việt Nam", "Hue · Vietnam")}</p>
                             </div>
                         </div>
 
@@ -262,9 +275,9 @@ export default function ContactPage() {
                                 className={`absolute hidden rounded-2xl bg-white p-1.5 pb-7 shadow-[0_25px_50px_-20px_rgba(150,50,70,0.55)] sm:block ${c.className}`}
                             >
                                 <div className="relative overflow-hidden rounded-xl" style={{ aspectRatio: ratioOf(c.src) }}>
-                                    <Image src={c.src} alt={c.caption} fill sizes="200px" quality={85} className="object-cover" />
+                                    <Image src={c.src} alt={pick(c.caption, lang)} fill sizes="200px" quality={85} className="object-cover" />
                                 </div>
-                                <p className="absolute bottom-1.5 left-0 right-0 text-center text-[11px] font-semibold italic text-[#8a6f66]">{c.caption}</p>
+                                <p className="absolute bottom-1.5 left-0 right-0 text-center text-[11px] font-semibold italic text-[#8a6f66]">{pick(c.caption, lang)}</p>
                             </motion.div>
                         ))}
                     </motion.div>
@@ -281,15 +294,21 @@ export default function ContactPage() {
                     >
                         <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-rose-400/25 blur-[90px]" />
                         <div className="relative">
-                            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-300">Gửi lời nhắn</p>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-300">{t("Gửi lời nhắn", "Send a message")}</p>
                             <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight md:text-4xl">
-                                Bạn muốn <span className="font-normal italic text-rose-300">trò chuyện</span> về điều gì?
+                                {t(
+                                    <>Bạn muốn <span className="font-normal italic text-rose-300">trò chuyện</span> về điều gì?</>,
+                                    <>What would you like to <span className="font-normal italic text-rose-300">talk</span> about?</>
+                                )}
                             </h2>
                             <p className="mt-4 leading-relaxed text-rose-100/75">
-                                Điền vài dòng bên cạnh và bấm gửi, lời nhắn sẽ đến thẳng hộp thư của mình.
+                                {t(
+                                    "Điền vài dòng bên cạnh và bấm gửi, lời nhắn sẽ đến thẳng hộp thư của mình.",
+                                    "Write a few lines in the form and hit send — your message will land straight in my inbox."
+                                )}
                             </p>
                             <div className="relative mt-8 overflow-hidden rounded-[1.75rem] border-4 border-white/15" style={{ aspectRatio: ratioOf("/pictures/totnghiep.jpg") }}>
-                                <Image src="/pictures/totnghiep.jpg" alt="Lễ tốt nghiệp 2026" fill sizes="460px" quality={85} className="object-cover" />
+                                <Image src="/pictures/totnghiep.jpg" alt={t("Lễ tốt nghiệp 2026", "Graduation ceremony 2026")}fill sizes="460px" quality={85} className="object-cover" />
                             </div>
                         </div>
                     </motion.div>
@@ -302,17 +321,17 @@ export default function ContactPage() {
                         transition={{ duration: 0.8, ease, delay: 0.1 }}
                         className="relative overflow-hidden rounded-[2.5rem] border border-white bg-white/85 p-8 shadow-[0_30px_70px_-40px_rgba(190,80,100,0.55)] backdrop-blur md:p-10 lg:col-span-7"
                     >
-                        <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.25em] text-[#a88a80]">Chủ đề</p>
+                        <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.25em] text-[#a88a80]">{t("Chủ đề", "Topic")}</p>
                         <div className="mb-7 flex flex-wrap gap-2">
-                            {topics.map((t) => (
+                            {topics.map((tp) => (
                                 <button
                                     type="button"
-                                    key={t}
-                                    onClick={() => setTopic(t)}
-                                    className={`relative rounded-full px-4 py-2 text-xs font-bold transition-colors ${topic === t ? "text-white" : "bg-[#fff8f5] text-[#6e5249] ring-1 ring-rose-100 hover:text-rose-500"}`}
+                                    key={tp.id}
+                                    onClick={() => setTopicId(tp.id)}
+                                    className={`relative rounded-full px-4 py-2 text-xs font-bold transition-colors ${topicId === tp.id ? "text-white" : "bg-[#fff8f5] text-[#6e5249] ring-1 ring-rose-100 hover:text-rose-500"}`}
                                 >
-                                    {topic === t && <motion.span layoutId="topic" className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-500 to-pink-400" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
-                                    <span className="relative z-10">{t}</span>
+                                    {topicId === tp.id && <motion.span layoutId="topic" className="absolute inset-0 rounded-full bg-gradient-to-r from-rose-500 to-pink-400" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
+                                    <span className="relative z-10">{pick(tp, lang)}</span>
                                 </button>
                             ))}
                         </div>
@@ -327,28 +346,28 @@ export default function ContactPage() {
                             className="absolute left-[-9999px] h-0 w-0 opacity-0"
                         />
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                            <Field label="Họ tên" required value={form.name} onChange={(v) => setForm({ ...form, name: v })} placeholder="Nguyễn Văn A" />
-                            <Field label="Email của bạn" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} placeholder="ban@gmail.com" />
+                            <Field label={t("Họ tên", "Full name")} required value={form.name} onChange={(v) => setForm({ ...form, name: v })} placeholder={t("Nguyễn Văn A", "Jane Doe")} />
+                            <Field label={t("Email của bạn", "Your email")} type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} placeholder={t("ban@gmail.com", "you@gmail.com")} />
                         </div>
                         <label className="mt-5 block">
-                            <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.25em] text-[#a88a80]">Nội dung</span>
+                            <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.25em] text-[#a88a80]">{t("Nội dung", "Message")}</span>
                             <textarea
                                 rows={5}
                                 required
                                 value={form.message}
                                 onChange={(e) => setForm({ ...form, message: e.target.value })}
-                                placeholder="Nhập lời nhắn của bạn..."
+                                placeholder={t("Nhập lời nhắn của bạn...", "Write your message...")}
                                 className="w-full resize-none rounded-[1.5rem] border border-rose-100 bg-[#fffaf8] px-5 py-4 text-[#3a2420] outline-none transition-all placeholder:text-[#c4aaa2] focus:border-rose-300 focus:ring-4 focus:ring-rose-100"
                             />
                         </label>
                         {status === "error" && (
                             <div className="mt-5 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-3 text-sm text-rose-600">
-                                {errorMsg} Bạn cũng có thể gửi trực tiếp tới{" "}
+                                {errorMsg} {t("Bạn cũng có thể gửi trực tiếp tới", "You can also email me directly at")}{" "}
                                 <a href={`mailto:${EMAIL}`} className="font-bold underline">{EMAIL}</a>.
                             </div>
                         )}
                         <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <p className="text-xs italic text-[#a88a80]">Lời nhắn sẽ được gửi thẳng tới Gmail của Thanh.</p>
+                            <p className="text-xs italic text-[#a88a80]">{t("Lời nhắn sẽ được gửi thẳng tới Gmail của Thanh.", "Your message goes straight to Thanh's Gmail inbox.")}</p>
                             <motion.button
                                 type="submit"
                                 disabled={status === "sending"}
@@ -356,7 +375,7 @@ export default function ContactPage() {
                                 whileTap={{ scale: 0.98 }}
                                 className="flex items-center gap-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-400 px-8 py-4 text-sm font-black uppercase tracking-widest text-white shadow-lg shadow-rose-200 transition-colors hover:from-[#4a1f2a] hover:to-[#4a1f2a] disabled:cursor-wait disabled:opacity-60"
                             >
-                                {status === "sending" ? "Đang gửi…" : "Gửi lời nhắn"} <Send size={16} />
+                                {status === "sending" ? t("Đang gửi…", "Sending…") : t("Gửi lời nhắn", "Send message")} <Send size={16} />
                             </motion.button>
                         </div>
                     </motion.form>
@@ -368,13 +387,13 @@ export default function ContactPage() {
                         <div>
                             <div className="mb-3 flex items-center gap-3">
                                 <span className="h-px w-10 bg-rose-300" />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Khoảnh khắc</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Khoảnh khắc", "Moments")}</span>
                             </div>
                             <h2 className="text-3xl font-black tracking-tight md:text-4xl">
-                                Một chút <span className="font-normal italic text-rose-500">về Thanh</span>
+                                {t("Một chút", "A little")} <span className="font-normal italic text-rose-500">{t("về Thanh", "about Thanh")}</span>
                             </h2>
                         </div>
-                        <p className="hidden max-w-xs text-right text-sm italic text-[#a88a80] md:block">Rê chuột để dừng lại ngắm ảnh.</p>
+                        <p className="hidden max-w-xs text-right text-sm italic text-[#a88a80] md:block">{t("Rê chuột để dừng lại ngắm ảnh.", "Hover to pause and take a closer look.")}</p>
                     </div>
                 </section>
             </div>
@@ -392,15 +411,18 @@ export default function ContactPage() {
                             className="relative w-full max-w-md overflow-hidden rounded-[2.5rem] bg-[#fffaf8] p-10 text-center shadow-2xl"
                         >
                             <div className="absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r from-rose-400 to-pink-400" />
-                            <button onClick={() => setShowThankYou(false)} className="absolute right-5 top-5 rounded-full p-2 text-[#a88a80] hover:bg-rose-50" aria-label="Đóng"><X size={20} /></button>
+                            <button onClick={() => setShowThankYou(false)} className="absolute right-5 top-5 rounded-full p-2 text-[#a88a80] hover:bg-rose-50" aria-label={t("Đóng", "Close")}><X size={20} /></button>
                             <div className="relative mx-auto mb-6 h-20 w-20 overflow-hidden rounded-full border-4 border-white shadow-lg">
                                 <Image src="/pictures/Ảnh đại diện.jpg" alt="" fill sizes="80px" className="object-cover object-top" />
                             </div>
-                            <h2 className="text-3xl font-black tracking-tight">Cảm ơn bạn!</h2>
+                            <h2 className="text-3xl font-black tracking-tight">{t("Cảm ơn bạn!", "Thank you!")}</h2>
                             <p className="mt-3 leading-relaxed text-[#6e5249]">
-                                Lời nhắn của bạn đã được gửi tới Thanh. Mình sẽ phản hồi trong vòng 24 giờ làm việc nhé!
+                                {t(
+                                    "Lời nhắn của bạn đã được gửi tới Thanh. Mình sẽ phản hồi trong vòng 24 giờ làm việc nhé!",
+                                    "Your message is on its way to Thanh. I'll get back to you within 24 business hours!"
+                                )}
                             </p>
-                            <button onClick={() => setShowThankYou(false)} className="mt-8 w-full rounded-full bg-[#4a1f2a] py-3.5 font-bold text-white transition-colors hover:bg-rose-500">Đóng</button>
+                            <button onClick={() => setShowThankYou(false)} className="mt-8 w-full rounded-full bg-[#4a1f2a] py-3.5 font-bold text-white transition-colors hover:bg-rose-500">{t("Đóng", "Close")}</button>
                         </motion.div>
                     </motion.div>
                 )}

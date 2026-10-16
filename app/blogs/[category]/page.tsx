@@ -5,22 +5,27 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { DUMMY_POSTS } from "@/app/data/post";
 import { BlogCard } from "../blogcard";
-import { getCategories, readingTime } from "../utils";
+import { useLang } from "@/app/i18n";
+import { getCategories, localizePost, readingTime } from "../utils";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
     const resolvedParams = use(params);
+    const { lang, t } = useLang();
     // Giải mã URL, ví dụ "K%E1%BB%B9%20n%C4%83ng" -> "Kỹ năng"
     const categoryFromUrl = decodeURIComponent(resolvedParams.category);
 
-    // So sánh cả slug (không dấu) và tên (có dấu)
+    // So sánh cả slug (không dấu) và tên (có dấu, cả tiếng Việt lẫn tiếng Anh)
     const filteredPosts = DUMMY_POSTS.filter(
-        (post) => post.categorySlug === categoryFromUrl || post.category === categoryFromUrl
-    );
+        (post) =>
+            post.categorySlug === categoryFromUrl ||
+            post.category === categoryFromUrl ||
+            post.en?.category === categoryFromUrl
+    ).map((post) => localizePost(post, lang));
     const displayName = filteredPosts.length > 0 ? filteredPosts[0].category : categoryFromUrl.replace(/-/g, " ");
     const activeSlug = filteredPosts[0]?.categorySlug ?? categoryFromUrl;
-    const categories = getCategories();
+    const categories = getCategories(lang);
     const totalMinutes = filteredPosts.reduce((n, p) => n + readingTime(p), 0);
 
     return (
@@ -30,7 +35,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
 
             <div className="relative mx-auto max-w-6xl">
                 <Link href="/blogs" className="mb-10 inline-flex items-center gap-2 rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-bold text-[#6e5249] shadow-sm backdrop-blur transition-colors hover:text-rose-500">
-                    ← Tất cả bài viết
+                    ← {t("Tất cả bài viết", "All articles")}
                 </Link>
 
                 {/* Tiêu đề chuyên mục */}
@@ -43,19 +48,21 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                     <div>
                         <div className="mb-5 flex items-center gap-3">
                             <span className="h-px w-10 bg-rose-300" />
-                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Chuyên mục</span>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Chuyên mục", "Category")}</span>
                         </div>
                         <h1 className="text-5xl font-black capitalize leading-[0.95] tracking-tighter md:text-7xl">
                             <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text font-normal italic text-transparent">{displayName}</span>
                         </h1>
-                        <p className="mt-4 italic text-[#a88a80]">Tổng hợp những bài viết về chủ đề {displayName}.</p>
+                        <p className="mt-4 italic text-[#a88a80]">
+                            {t(`Tổng hợp những bài viết về chủ đề ${displayName}.`, `A collection of articles on ${displayName}.`)}
+                        </p>
                     </div>
                     <div className="flex gap-3">
                         <span className="rounded-2xl border border-white bg-white/80 px-4 py-3 text-sm font-bold shadow-sm">
-                            <span className="text-rose-500">{filteredPosts.length}</span> bài viết
+                            <span className="text-rose-500">{filteredPosts.length}</span> {t("bài viết", filteredPosts.length === 1 ? "article" : "articles")}
                         </span>
                         <span className="rounded-2xl border border-white bg-white/80 px-4 py-3 text-sm font-bold shadow-sm">
-                            <span className="text-rose-500">{totalMinutes}</span> phút đọc
+                            <span className="text-rose-500">{totalMinutes}</span> {t("phút đọc", "min read")}
                         </span>
                     </div>
                 </motion.header>
@@ -82,7 +89,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                 ) : (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[2rem] border border-white bg-white/80 py-20 text-center shadow-sm">
                         <p className="text-lg italic text-[#a88a80]">
-                            Hiện chưa có bài viết nào trong mục <span className="font-bold text-rose-400">&ldquo;{displayName}&rdquo;</span>
+                            {t("Hiện chưa có bài viết nào trong mục", "There are no articles in")} <span className="font-bold text-rose-400">&ldquo;{displayName}&rdquo;</span>
                         </p>
                     </motion.div>
                 )}

@@ -6,7 +6,8 @@ import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { DUMMY_POSTS } from "../data/post";
 import { BlogCard } from "./blogcard";
-import { getCategories, imgSrc, readingTime } from "./utils";
+import { useLang } from "../i18n";
+import { getCategories, imgSrc, localizePost, readingTime } from "./utils";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const POSTS_PER_PAGE = 6;
@@ -15,21 +16,23 @@ const POSTS_PER_PAGE = 6;
 const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase();
 
 export default function BlogPage() {
-  const categories = getCategories();
+  const { lang, t } = useLang();
+  const categories = getCategories(lang);
+  const posts = useMemo(() => DUMMY_POSTS.map((p) => localizePost(p, lang)), [lang]);
   const [active, setActive] = useState<string>("all");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
 
-  const featured = DUMMY_POSTS[0];
+  const featured = posts[0];
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
-    return DUMMY_POSTS.filter((p) => {
+    return posts.filter((p) => {
       const inCat = active === "all" || p.categorySlug === active;
       const inSearch = !q || normalize(`${p.title} ${p.excerpt} ${p.category}`).includes(q);
       return inCat && inSearch;
     });
-  }, [active, query]);
+  }, [active, query, posts]);
 
   // Khi xem "Tất cả" và không tìm kiếm, bài nổi bật đã hiện riêng ở trên
   const showFeatured = active === "all" && !query.trim();
@@ -63,7 +66,7 @@ export default function BlogPage() {
           <div className="lg:col-span-7">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
               <span className="h-px w-10 bg-rose-300" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Góc chia sẻ</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Góc chia sẻ", "Sharing corner")}</span>
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -71,7 +74,7 @@ export default function BlogPage() {
               transition={{ duration: 0.9, ease }}
               className="text-5xl font-black leading-[0.95] tracking-tighter md:text-7xl"
             >
-              Blog <br />
+              {t("Blog", "Thanh's")} <br />
               <motion.span
                 animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -81,7 +84,7 @@ export default function BlogPage() {
                   backgroundSize: "200% 100%",
                 }}
               >
-                của Thanh
+                {t("của Thanh", "Blog")}
               </motion.span>
             </motion.h1>
           </div>
@@ -92,13 +95,16 @@ export default function BlogPage() {
             className="lg:col-span-5"
           >
             <p className="border-l-2 border-rose-300 pl-5 italic leading-relaxed text-[#6e5249]">
-              Nơi chia sẻ bí kíp học tập, định hướng nghề nghiệp và những trải nghiệm về AI dành cho sinh viên IT.
+              {t(
+                "Nơi chia sẻ bí kíp học tập, định hướng nghề nghiệp và những trải nghiệm về AI dành cho sinh viên IT.",
+                "Study tips, career guidance and hands-on AI experiences for IT students."
+              )}
             </p>
             <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-[1.5rem] border border-rose-100 bg-rose-100">
               {[
-                { value: DUMMY_POSTS.length, label: "Bài viết" },
-                { value: categories.length, label: "Chuyên mục" },
-                { value: DUMMY_POSTS.reduce((n, p) => n + readingTime(p), 0), label: "Phút đọc" },
+                { value: posts.length, label: t("Bài viết", "Articles") },
+                { value: categories.length, label: t("Chuyên mục", "Categories") },
+                { value: posts.reduce((n, p) => n + readingTime(p), 0), label: t("Phút đọc", "Min read") },
               ].map((s) => (
                 <div key={s.label} className="bg-[#fffaf8] px-2 py-4 text-center">
                   <div className="text-2xl font-black text-rose-500">{s.value}</div>
@@ -121,17 +127,17 @@ export default function BlogPage() {
             <input
               value={query}
               onChange={(e) => { setQuery(e.target.value); setPage(1); }}
-              placeholder="Tìm bài viết… (ví dụ: teamwork, AI)"
+              placeholder={t("Tìm bài viết… (ví dụ: teamwork, AI)", "Search articles… (e.g. teamwork, AI)")}
               className="w-full bg-transparent text-sm text-[#3a2420] outline-none placeholder:text-[#c4aaa2]"
             />
             {query && (
-              <button onClick={() => { setQuery(""); setPage(1); }} aria-label="Xóa tìm kiếm" className="text-[#a88a80] hover:text-rose-500">
+              <button onClick={() => { setQuery(""); setPage(1); }} aria-label={t("Xóa tìm kiếm", "Clear search")} className="text-[#a88a80] hover:text-rose-500">
                 <X size={16} />
               </button>
             )}
           </div>
           <div className="flex flex-wrap gap-1">
-            {[{ slug: "all", name: "Tất cả", count: DUMMY_POSTS.length }, ...categories].map((c) => {
+            {[{ slug: "all", name: t("Tất cả", "All"), count: posts.length }, ...categories].map((c) => {
               const isActive = active === c.slug;
               return (
                 <button
@@ -169,7 +175,7 @@ export default function BlogPage() {
                   <img src={imgSrc(featured.image)} alt={featured.title} className="h-full min-h-[280px] w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#4a1f2a]/60" />
                   <span className="absolute left-5 top-5 rounded-full bg-white/95 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">
-                    Bài nổi bật
+                    {t("Bài nổi bật", "Featured")}
                   </span>
                 </div>
                 <div className="relative flex flex-col justify-center p-8 md:p-12 lg:col-span-5">
@@ -177,9 +183,9 @@ export default function BlogPage() {
                   <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight md:text-4xl">{featured.title}</h2>
                   <p className="mt-4 leading-relaxed text-rose-100/75">{featured.excerpt}</p>
                   <div className="mt-8 flex items-center justify-between border-t border-white/15 pt-5">
-                    <span className="text-xs text-rose-100/70">{readingTime(featured)} phút đọc</span>
+                    <span className="text-xs text-rose-100/70">{readingTime(featured)} {t("phút đọc", "min read")}</span>
                     <span className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-white transition-colors group-hover:text-rose-300">
-                      Đọc bài viết <span className="h-px w-6 bg-current transition-all duration-500 group-hover:w-12" />
+                      {t("Đọc bài viết", "Read article")} <span className="h-px w-6 bg-current transition-all duration-500 group-hover:w-12" />
                     </span>
                   </div>
                 </div>
@@ -192,11 +198,11 @@ export default function BlogPage() {
         <div id="danh-sach-bai" className="scroll-mt-32">
           <div className="mb-8 flex items-end justify-between">
             <h2 className="text-2xl font-black tracking-tight md:text-3xl">
-              {query.trim() ? "Kết quả tìm kiếm" : showFeatured ? "Bài viết mới" : categories.find((c) => c.slug === active)?.name}
+              {query.trim() ? t("Kết quả tìm kiếm", "Search results") : showFeatured ? t("Bài viết mới", "Latest articles") : categories.find((c) => c.slug === active)?.name}
               <span className="ml-2 text-rose-400">/ {list.length}</span>
             </h2>
             {active !== "all" && (
-              <Link href={`/blogs/${active}`} className="text-xs font-bold text-rose-500 hover:underline">Trang chuyên mục →</Link>
+              <Link href={`/blogs/${active}`} className="text-xs font-bold text-rose-500 hover:underline">{t("Trang chuyên mục →", "Category page →")}</Link>
             )}
           </div>
 
@@ -208,14 +214,16 @@ export default function BlogPage() {
             </div>
           ) : (
             <div className="rounded-[2rem] border border-white bg-white/80 py-20 text-center shadow-sm">
-              <p className="italic text-[#a88a80]">Không tìm thấy bài viết phù hợp với &ldquo;{query}&rdquo;.</p>
+              <p className="italic text-[#a88a80]">
+                {t("Không tìm thấy bài viết phù hợp với", "No articles found matching")} &ldquo;{query}&rdquo;.
+              </p>
             </div>
           )}
 
           {/* Phân trang */}
           {totalPages > 1 && (
             <div className="mt-14 flex items-center justify-center gap-2">
-              <button onClick={() => goTo(page - 1)} disabled={page === 1} className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#6e5249] shadow-sm transition-colors hover:bg-rose-50 disabled:opacity-30" aria-label="Trang trước">
+              <button onClick={() => goTo(page - 1)} disabled={page === 1} className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#6e5249] shadow-sm transition-colors hover:bg-rose-50 disabled:opacity-30" aria-label={t("Trang trước", "Previous page")}>
                 <ChevronLeft size={18} />
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
@@ -227,7 +235,7 @@ export default function BlogPage() {
                   {n}
                 </button>
               ))}
-              <button onClick={() => goTo(page + 1)} disabled={page === totalPages} className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#6e5249] shadow-sm transition-colors hover:bg-rose-50 disabled:opacity-30" aria-label="Trang sau">
+              <button onClick={() => goTo(page + 1)} disabled={page === totalPages} className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#6e5249] shadow-sm transition-colors hover:bg-rose-50 disabled:opacity-30" aria-label={t("Trang sau", "Next page")}>
                 <ChevronRight size={18} />
               </button>
             </div>

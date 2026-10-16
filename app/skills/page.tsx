@@ -20,6 +20,7 @@ import {
   Heart,
   CheckCircle2,
 } from 'lucide-react';
+import { useLang, pick, type Lang } from '../i18n';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -28,12 +29,16 @@ const itemVariants: Variants = {
   visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease } }
 };
 
-type Skill = { name: string; level: number };
+// Văn bản song ngữ; chuỗi thường dùng chung cho cả hai ngôn ngữ (tên riêng, thuật ngữ)
+type Text = string | { vi: string; en: string };
+const tx = (value: Text, lang: Lang) => (typeof value === "string" ? value : pick(value, lang));
+
+type Skill = { name: Text; level: number };
 type SkillGroup = {
   key: string;
-  title: string;
-  subtitle: string;
-  desc: string;
+  title: Text;
+  subtitle: Text;
+  desc: Text;
   icon: React.ElementType;
   skills: Skill[];
 };
@@ -41,22 +46,28 @@ type SkillGroup = {
 const skillGroups: SkillGroup[] = [
   {
     key: "ai",
-    title: "AI & Khoa học dữ liệu",
-    subtitle: "Nghiên cứu & Chuyên ngành",
-    desc: "Nền tảng cho các đề tài nghiên cứu chẩn đoán viêm phổi từ ảnh X-quang.",
+    title: { vi: "AI & Khoa học dữ liệu", en: "AI & Data Science" },
+    subtitle: { vi: "Nghiên cứu & Chuyên ngành", en: "Research & Specialization" },
+    desc: {
+      vi: "Nền tảng cho các đề tài nghiên cứu chẩn đoán viêm phổi từ ảnh X-quang.",
+      en: "The foundation of my research on diagnosing pneumonia from chest X-ray images.",
+    },
     icon: BrainCircuit,
     skills: [
       { name: "Deep Learning (CNNs, Vision)", level: 90 },
       { name: "Machine Learning (Scikit-learn)", level: 90 },
       { name: "Computer Vision (OpenCV)", level: 85 },
-      { name: "Xử lý dữ liệu (Pandas/NumPy)", level: 90 },
+      { name: { vi: "Xử lý dữ liệu (Pandas/NumPy)", en: "Data Processing (Pandas/NumPy)" }, level: 90 },
     ]
   },
   {
     key: "frontend",
-    title: "Phát triển Frontend",
-    subtitle: "Thế mạnh thực chiến & Trải nghiệm",
-    desc: "Xây dựng giao diện hiện đại, mượt mà và chú trọng trải nghiệm người dùng.",
+    title: { vi: "Phát triển Frontend", en: "Frontend Development" },
+    subtitle: { vi: "Thế mạnh thực chiến & Trải nghiệm", en: "Hands-on Strength & User Experience" },
+    desc: {
+      vi: "Xây dựng giao diện hiện đại, mượt mà và chú trọng trải nghiệm người dùng.",
+      en: "Building modern, smooth interfaces with a strong focus on user experience.",
+    },
     icon: Layout,
     skills: [
       { name: "Next.js / React", level: 90 },
@@ -67,9 +78,12 @@ const skillGroups: SkillGroup[] = [
   },
   {
     key: "backend",
-    title: "Backend & Hệ thống",
-    subtitle: "Nền tảng kỹ thuật & Giải thuật",
-    desc: "Ngôn ngữ, cơ sở dữ liệu và công cụ làm nền cho tư duy giải thuật.",
+    title: { vi: "Backend & Hệ thống", en: "Backend & Systems" },
+    subtitle: { vi: "Nền tảng kỹ thuật & Giải thuật", en: "Engineering Foundations & Algorithms" },
+    desc: {
+      vi: "Ngôn ngữ, cơ sở dữ liệu và công cụ làm nền cho tư duy giải thuật.",
+      en: "Languages, databases and tools that underpin my algorithmic thinking.",
+    },
     icon: Terminal,
     skills: [
       { name: "Python", level: 90 },
@@ -81,24 +95,25 @@ const skillGroups: SkillGroup[] = [
 ];
 
 // Công nghệ đã dùng trong công việc / thực tập
-const appliedTech = ["Flutter", "Dart", "Qwen3-VL", "Kiểm thử phần mềm", "UI/UX", "PyTorch", "YOLOv8"];
+const appliedTech: Text[] = ["Flutter", "Dart", "Qwen3-VL", { vi: "Kiểm thử phần mềm", en: "Software Testing" }, "UI/UX", "PyTorch", "YOLOv8"];
 
-const softSkills = [
-  { name: "Giao tiếp & Thuyết trình", icon: Presentation },
-  { name: "Làm việc nhóm", icon: Users },
-  { name: "Tư duy logic & Giải thuật", icon: Cpu },
-  { name: "Nghiên cứu khoa học", icon: Microscope },
-  { name: "Tự học", icon: BrainCircuit },
-  { name: "Giải quyết vấn đề", icon: Lightbulb },
-  { name: "Quản lý thời gian", icon: Clock },
-  { name: "Tư duy phản biện", icon: Scale },
-  { name: "Thích nghi & Quản lý cảm xúc", icon: Smile },
+const softSkills: { name: Text; icon: React.ElementType }[] = [
+  { name: { vi: "Giao tiếp & Thuyết trình", en: "Communication & Presentation" }, icon: Presentation },
+  { name: { vi: "Làm việc nhóm", en: "Teamwork" }, icon: Users },
+  { name: { vi: "Tư duy logic & Giải thuật", en: "Logical & Algorithmic Thinking" }, icon: Cpu },
+  { name: { vi: "Nghiên cứu khoa học", en: "Scientific Research" }, icon: Microscope },
+  { name: { vi: "Tự học", en: "Self-learning" }, icon: BrainCircuit },
+  { name: { vi: "Giải quyết vấn đề", en: "Problem Solving" }, icon: Lightbulb },
+  { name: { vi: "Quản lý thời gian", en: "Time Management" }, icon: Clock },
+  { name: { vi: "Tư duy phản biện", en: "Critical Thinking" }, icon: Scale },
+  { name: { vi: "Thích nghi & Quản lý cảm xúc", en: "Adaptability & Emotional Management" }, icon: Smile },
 ];
 
 const tools = ['Git', 'VS Code', 'Kaggle', 'Canva', 'Colab', 'Figma', 'Postman'];
 
 // Vòng tròn phần trăm
 const SkillRing = ({ skill, delay }: { skill: Skill; delay: number }) => {
+  const { lang } = useLang();
   const r = 42;
   const c = 2 * Math.PI * r;
   return (
@@ -127,22 +142,23 @@ const SkillRing = ({ skill, delay }: { skill: Skill; delay: number }) => {
           </span>
         </div>
       </div>
-      <p className="mt-4 text-sm font-bold leading-snug text-[#6e5249] transition-colors group-hover:text-rose-500">{skill.name}</p>
+      <p className="mt-4 text-sm font-bold leading-snug text-[#6e5249] transition-colors group-hover:text-rose-500">{tx(skill.name, lang)}</p>
     </motion.div>
   );
 };
 
 const Skills = () => {
+  const { lang, t } = useLang();
   const [active, setActive] = useState(skillGroups[0].key);
   const group = skillGroups.find((g) => g.key === active)!;
   const GroupIcon = group.icon;
   const totalTech = skillGroups.reduce((n, g) => n + g.skills.length, 0);
 
   const stats = [
-    { value: skillGroups.length, label: "Nhóm chuyên môn" },
-    { value: totalTech, label: "Kỹ năng kỹ thuật" },
-    { value: softSkills.length, label: "Kỹ năng mềm" },
-    { value: tools.length, label: "Công cụ" },
+    { key: "groups", value: skillGroups.length, label: t("Nhóm chuyên môn", "Expertise Areas") },
+    { key: "tech", value: totalTech, label: t("Kỹ năng kỹ thuật", "Technical Skills") },
+    { key: "soft", value: softSkills.length, label: t("Kỹ năng mềm", "Soft Skills") },
+    { key: "tools", value: tools.length, label: t("Công cụ", "Tools") },
   ];
 
   return (
@@ -176,7 +192,7 @@ const Skills = () => {
           <div className="lg:col-span-7">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
               <span className="h-px w-10 bg-rose-300" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Năng lực chuyên môn</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Năng lực chuyên môn", "Professional Expertise")}</span>
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -184,9 +200,9 @@ const Skills = () => {
               transition={{ duration: 0.9, ease }}
               className="text-5xl font-black leading-[0.95] tracking-tighter md:text-7xl"
             >
-              Kỹ năng <br />
+              {t("Kỹ năng", "Skills")} <br />
               <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text font-normal italic text-transparent">
-                & công cụ
+                {t("& công cụ", "& tools")}
               </span>
             </motion.h1>
           </div>
@@ -197,11 +213,14 @@ const Skills = () => {
             className="lg:col-span-5"
           >
             <p className="border-l-2 border-rose-300 pl-5 italic leading-relaxed text-[#6e5249]">
-              Sự kết hợp giữa tư duy toán học và sự tinh tế trong giao diện.
+              {t(
+                "Sự kết hợp giữa tư duy toán học và sự tinh tế trong giao diện.",
+                "Where mathematical thinking meets a refined eye for interface design."
+              )}
             </p>
             <div className="mt-6 grid grid-cols-4 gap-px overflow-hidden rounded-[1.5rem] border border-rose-100 bg-rose-100">
               {stats.map((s) => (
-                <div key={s.label} className="bg-[#fffaf8] px-2 py-4 text-center">
+                <div key={s.key} className="bg-[#fffaf8] px-2 py-4 text-center">
                   <div className="text-2xl font-black text-rose-500">{s.value}</div>
                   <div className="mt-1 text-[9px] font-bold uppercase leading-tight tracking-wider text-[#a88a80]">{s.label}</div>
                 </div>
@@ -239,8 +258,8 @@ const Skills = () => {
                     <Icon size={20} />
                   </span>
                   <span className="relative z-10">
-                    <span className="block font-black leading-tight">{g.title}</span>
-                    <span className={`block text-xs ${isActive ? "text-white/80" : "text-[#a88a80]"}`}>{g.subtitle}</span>
+                    <span className="block font-black leading-tight">{tx(g.title, lang)}</span>
+                    <span className={`block text-xs ${isActive ? "text-white/80" : "text-[#a88a80]"}`}>{tx(g.subtitle, lang)}</span>
                   </span>
                 </button>
               );
@@ -264,20 +283,20 @@ const Skills = () => {
                   <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-rose-200 ring-1 ring-white/15">
                     <GroupIcon size={26} />
                   </div>
-                  <h2 className="text-3xl font-black leading-tight tracking-tight">{group.title}</h2>
-                  <p className="mt-3 leading-relaxed text-rose-100/75">{group.desc}</p>
+                  <h2 className="text-3xl font-black leading-tight tracking-tight">{tx(group.title, lang)}</h2>
+                  <p className="mt-3 leading-relaxed text-rose-100/75">{tx(group.desc, lang)}</p>
                 </div>
                 <div className="relative mt-8 flex items-end gap-2">
                   <span className="text-5xl font-black text-rose-200">
                     {Math.round(group.skills.reduce((n, s) => n + s.level, 0) / group.skills.length)}%
                   </span>
-                  <span className="mb-2 text-xs font-bold uppercase tracking-widest text-rose-100/60">Trung bình</span>
+                  <span className="mb-2 text-xs font-bold uppercase tracking-widest text-rose-100/60">{t("Trung bình", "Average")}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 lg:col-span-8">
                 {group.skills.map((skill, i) => (
-                  <SkillRing key={skill.name} skill={skill} delay={i * 0.08} />
+                  <SkillRing key={tx(skill.name, "vi")} skill={skill} delay={i * 0.08} />
                 ))}
               </div>
             </motion.div>
@@ -297,14 +316,14 @@ const Skills = () => {
               <Rocket size={22} />
             </div>
             <div>
-              <p className="font-black">Đã ứng dụng thực tế</p>
-              <p className="text-xs text-[#a88a80]">Trong công việc, thực tập & nghiên cứu</p>
+              <p className="font-black">{t("Đã ứng dụng thực tế", "Applied in Practice")}</p>
+              <p className="text-xs text-[#a88a80]">{t("Trong công việc, thực tập & nghiên cứu", "At work, in internships & research")}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2 md:ml-auto md:justify-end">
-            {appliedTech.map((t) => (
-              <span key={t} className="flex items-center gap-1.5 rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-bold text-[#6e5249] shadow-sm">
-                <CheckCircle2 size={14} className="text-rose-400" /> {t}
+            {appliedTech.map((tech) => (
+              <span key={tx(tech, "vi")} className="flex items-center gap-1.5 rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-bold text-[#6e5249] shadow-sm">
+                <CheckCircle2 size={14} className="text-rose-400" /> {tx(tech, lang)}
               </span>
             ))}
           </div>
@@ -323,12 +342,12 @@ const Skills = () => {
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-100 to-[#fde4dc] text-rose-500">
                 <Heart size={22} />
               </div>
-              <h3 className="text-2xl font-black tracking-tight">Kỹ năng mềm</h3>
+              <h3 className="text-2xl font-black tracking-tight">{t("Kỹ năng mềm", "Soft Skills")}</h3>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {softSkills.map(({ name, icon: Icon }, i) => (
                 <motion.div
-                  key={name}
+                  key={tx(name, "vi")}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -339,7 +358,7 @@ const Skills = () => {
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-rose-500 shadow-sm">
                     <Icon size={17} />
                   </span>
-                  <span className="text-sm font-semibold text-[#6e5249] transition-colors group-hover:text-white">{name}</span>
+                  <span className="text-sm font-semibold text-[#6e5249] transition-colors group-hover:text-white">{tx(name, lang)}</span>
                 </motion.div>
               ))}
             </div>
@@ -358,7 +377,7 @@ const Skills = () => {
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 ring-1 ring-white/30 backdrop-blur">
                   <Wrench size={22} />
                 </div>
-                <h3 className="text-2xl font-black tracking-tight">Công cụ</h3>
+                <h3 className="text-2xl font-black tracking-tight">{t("Công cụ", "Tools")}</h3>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 {tools.map((tool) => (
@@ -384,7 +403,7 @@ const Skills = () => {
           viewport={{ once: true }}
           className="mt-14 flex items-center justify-center gap-2 text-center text-sm italic text-[#a88a80]"
         >
-          <Sparkles size={14} className="text-rose-400" /> Luôn học hỏi và cập nhật công nghệ mới mỗi ngày
+          <Sparkles size={14} className="text-rose-400" /> {t("Luôn học hỏi và cập nhật công nghệ mới mỗi ngày", "Always learning and keeping up with new technology every day")}
         </motion.p>
       </div>
     </section>

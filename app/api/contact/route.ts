@@ -26,19 +26,38 @@ const escapeHtml = (s: string) =>
 // Bỏ xuống dòng trong các trường dùng làm tiêu đề email
 const oneLine = (s: string) => s.replace(/[\r\n]+/g, " ").trim();
 
+// Thông báo lỗi theo ngôn ngữ người gửi chọn (mặc định tiếng Việt)
+const MESSAGES = {
+    notConfigured: { vi: "Máy chủ chưa được cấu hình gửi email.", en: "The server isn't set up to send email yet." },
+    invalidData: { vi: "Dữ liệu không hợp lệ.", en: "Invalid request data." },
+    missingFields: { vi: "Vui lòng nhập họ tên và nội dung.", en: "Please enter your name and a message." },
+    invalidEmail: { vi: "Email không hợp lệ.", en: "Please enter a valid email address." },
+    tooLong: { vi: "Nội dung quá dài.", en: "Your message is too long." },
+    tooMany: { vi: "Bạn gửi hơi nhiều, vui lòng thử lại sau ít phút.", en: "Too many messages sent. Please try again in a few minutes." },
+    sendFailed: { vi: "Chưa gửi được, vui lòng thử lại sau.", en: "Your message couldn't be sent. Please try again later." },
+};
+
 export async function POST(request: Request) {
+    // Đọc dữ liệu trước để biết ngôn ngữ, nhưng vẫn giữ thứ tự kiểm tra như cũ
+    let data: Record<string, unknown> | null = null;
+    try {
+        data = await request.json();
+    } catch {
+        data = null;
+    }
+    const lang: "vi" | "en" = data && typeof data === "object" && data.lang === "en" ? "en" : "vi";
+    const fail = (key: keyof typeof MESSAGES, status: number) =>
+        Response.json({ ok: false, error: MESSAGES[key][lang] }, { status });
+
     const user = process.env.GMAIL_USER;
     const pass = process.env.GMAIL_APP_PASSWORD;
     const to = process.env.CONTACT_TO || user;
     if (!user || !pass || !to) {
-        return Response.json({ ok: false, error: "Máy chủ chưa được cấu hình gửi email." }, { status: 500 });
+        return fail("notConfigured", 500);
     }
 
-    let data: Record<string, unknown>;
-    try {
-        data = await request.json();
-    } catch {
-        return Response.json({ ok: false, error: "Dữ liệu không hợp lệ." }, { status: 400 });
+    if (!data || typeof data !== "object") {
+        return fail("invalidData", 400);
     }
 
     // Ô ẩn chống bot: người thật không nhìn thấy nên luôn để trống
@@ -52,19 +71,20 @@ export async function POST(request: Request) {
     const message = String(data.message ?? "").trim();
 
     if (!name || !message) {
-        return Response.json({ ok: false, error: "Vui lòng nhập họ tên và nội dung." }, { status: 400 });
+        return fail("missingFields", 400);
     }
     if (email && !EMAIL_RE.test(email)) {
-        return Response.json({ ok: false, error: "Email không hợp lệ." }, { status: 400 });
+        return fail("invalidEmail", 400);
     }
     if (name.length > LIMITS.name || email.length > LIMITS.email || topic.length > LIMITS.topic || message.length > LIMITS.message) {
-        return Response.json({ ok: false, error: "Nội dung quá dài." }, { status: 400 });
+        return fail("tooLong", 400);
     }
 
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "local";
     if (tooMany(ip)) {
-        return Response.json({ ok: false, error: "Bạn gửi hơi nhiều, vui lòng thử lại sau ít phút." }, { status: 429 });
+        return fail("tooMany", 429);
     }
+    const langLabel = lang === "en" ? "English" : "Tiếng Việt";
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -77,7 +97,7 @@ export async function POST(request: Request) {
             to,
             ...(email ? { replyTo: `"${name}" <${email}>` } : {}),
             subject: `[Portfolio] ${topic} – ${name}`,
-            text: `Chủ đề: ${topic}\nHọ tên: ${name}\nEmail: ${email || "(không để lại)"}\n\n${message}`,
+            text: `Chủ đề: ${topic}\nHọ tên: ${name}\nEmail: ${email || "(không để lại)"}\nNgôn ngữ: ${langLabel}\n\n${message}`,
             html: `
                 <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;border:1px solid #fde4e4;border-radius:16px;overflow:hidden">
                     <div style="background:linear-gradient(90deg,#f43f5e,#f472b6);color:#fff;padding:18px 24px">
@@ -86,7 +106,8 @@ export async function POST(request: Request) {
                     </div>
                     <div style="padding:20px 24px;color:#3a2420">
                         <p style="margin:0 0 6px"><b>Họ tên:</b> ${escapeHtml(name)}</p>
-                        <p style="margin:0 0 16px"><b>Email:</b> ${email ? escapeHtml(email) : "<i>không để lại</i>"}</p>
+                        <p style="margin:0 0 6px"><b>Email:</b> ${email ? escapeHtml(email) : "<i>không để lại</i>"}</p>
+                        <p style="margin:0 0 16px"><b>Ngôn ngữ:</b> ${langLabel}</p>
                         <div style="background:#fff8f5;border-left:4px solid #fb7185;padding:14px 16px;border-radius:8px;white-space:pre-wrap;line-height:1.6">${escapeHtml(message)}</div>
                         <p style="margin:16px 0 0;font-size:12px;color:#a88a80">Bấm “Trả lời” để phản hồi trực tiếp cho người gửi.</p>
                     </div>
@@ -95,6 +116,6 @@ export async function POST(request: Request) {
         return Response.json({ ok: true });
     } catch (err) {
         console.error("[contact] Gửi email thất bại:", err);
-        return Response.json({ ok: false, error: "Chưa gửi được, vui lòng thử lại sau." }, { status: 502 });
+        return fail("sendFailed", 502);
     }
 }

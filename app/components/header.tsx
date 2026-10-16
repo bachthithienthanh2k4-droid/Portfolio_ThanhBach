@@ -3,10 +3,12 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, Download, Send, ChevronDown } from "lucide-react";
+import { X, Download, Send, ChevronDown } from "lucide-react";
+import { LanguageToggle, useLang } from "../i18n";
 
 export default function Header() {
     const pathname = usePathname();
+    const { t } = useLang();
     const { scrollY } = useScroll();
     const [hidden, setHidden] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -25,16 +27,16 @@ export default function Header() {
     });
 
     const navItems = [
-        { name: "Trang chủ", href: "/about" },
-        { name: "Giới thiệu", href: "/introduction" },
-        { name: "Kỹ năng", href: "/skills" },
-        { name: "Dự án", href: "/projects" },
+        { name: t("Trang chủ", "Home"), href: "/about" },
+        { name: t("Giới thiệu", "About"), href: "/introduction" },
+        { name: t("Kỹ năng", "Skills"), href: "/skills" },
+        { name: t("Dự án", "Projects"), href: "/projects" },
         {
-            name: "Hành trình",
+            name: t("Hành trình", "Journey"),
             href: "/journey",
             submenu: [
-                { name: "Hoạt động", href: "/journey/activities" },
-                { name: "Thành tích", href: "/journey/certificate" }
+                { name: t("Hoạt động", "Activities"), href: "/journey/activities" },
+                { name: t("Thành tích", "Achievements"), href: "/journey/certificate" }
             ]
         },
         { name: "Blog", href: "/blogs" },
@@ -74,9 +76,9 @@ export default function Header() {
 
                         return (
                             <div
-                                key={item.name}
+                                key={item.href}
                                 className="relative group"
-                                onMouseEnter={() => item.submenu && setActiveSubmenu(item.name)}
+                                onMouseEnter={() => item.submenu && setActiveSubmenu(item.href)}
                                 onMouseLeave={() => setActiveSubmenu(null)}
                             >
                                 <Link
@@ -93,13 +95,13 @@ export default function Header() {
                                         />
                                     )}
                                     {item.name}
-                                    {item.submenu && <ChevronDown size={14} className={`transition-transform duration-300 ${activeSubmenu === item.name ? "rotate-180" : ""} ${isActive ? "stroke-[3px]" : ""}`} />}
+                                    {item.submenu && <ChevronDown size={14} className={`transition-transform duration-300 ${activeSubmenu === item.href ? "rotate-180" : ""} ${isActive ? "stroke-[3px]" : ""}`} />}
                                 </Link>
 
                                 {/* Desktop Dropdown */}
                                 {item.submenu && (
                                     <AnimatePresence>
-                                        {activeSubmenu === item.name && (
+                                        {activeSubmenu === item.href && (
                                             <motion.div
                                                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -109,7 +111,7 @@ export default function Header() {
                                                 {item.submenu.map((sub) => {
                                                     const isSubActive = pathname === sub.href;
                                                     return (
-                                                        <Link key={sub.name} href={sub.href}>
+                                                        <Link key={sub.href} href={sub.href}>
                                                             <div className={`px-4 py-2.5 rounded-xl text-sm transition-all
                                                                 ${isSubActive ? "text-pink-600 bg-pink-50 font-bold" : "text-gray-600 font-medium hover:bg-pink-50/50 hover:text-pink-500"}
                                                             `}>
@@ -127,7 +129,8 @@ export default function Header() {
                     })}
                 </nav>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 lg:gap-4">
+                    <LanguageToggle className="relative z-50" />
                     <motion.button
                         whileHover={{ y: -2, color: "#db2777" }}
                         whileTap={{ scale: 0.95 }}
@@ -137,7 +140,7 @@ export default function Header() {
                        <Link 
                        target="_blank"
                        href="https://drive.google.com/file/d/1mnZTDMhEp757wSQL0N-xrcYFmgmIzGk0/view"
-                       ><span>Tải CV</span></Link> 
+                       ><span>{t("Tải CV", "Resume")}</span></Link> 
                     </motion.button>
                     <Link href="/connect">
                         <motion.button
@@ -150,7 +153,7 @@ export default function Header() {
                             className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-7 py-2.5 rounded-full text-sm font-black shadow-lg shadow-pink-200/50 transition-all duration-300"
                         >
                             <Send size={16} fill="currentColor" />
-                            <span>Kết nối</span>
+                            <span>{t("Kết nối", "Contact")}</span>
                         </motion.button>
                     </Link>
 
@@ -190,7 +193,7 @@ export default function Header() {
                                 const isActive = pathname === item.href || item.submenu?.some(sub => pathname === sub.href);
 
                                 return (
-                                    <div key={item.name} className="flex flex-col border-b border-pink-50/50">
+                                    <div key={item.href} className="flex flex-col border-b border-pink-50/50">
                                         <div className="flex items-center justify-between">
                                             <Link
                                                 href={item.href}
@@ -200,17 +203,17 @@ export default function Header() {
                                                 {item.name}
                                             </Link>
                                             {item.submenu && (
-                                                <button onClick={() => setActiveSubmenu(activeSubmenu === item.name ? null : item.name)} className="p-4">
-                                                    <ChevronDown size={24} className={`${activeSubmenu === item.name ? "rotate-180 text-pink-500" : "text-gray-400"} transition-transform`} />
+                                                <button onClick={() => setActiveSubmenu(activeSubmenu === item.href ? null : item.href)} className="p-4" aria-label={t("Mở menu con", "Open submenu")}>
+                                                    <ChevronDown size={24} className={`${activeSubmenu === item.href ? "rotate-180 text-pink-500" : "text-gray-400"} transition-transform`} />
                                                 </button>
                                             )}
                                         </div>
 
-                                        {item.submenu && activeSubmenu === item.name && (
+                                        {item.submenu && activeSubmenu === item.href && (
                                             <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} className="overflow-hidden flex flex-col pl-6 border-l-4 border-pink-200 ml-2 gap-5 mb-6 mt-2">
                                                 {item.submenu.map((sub) => (
                                                     <Link
-                                                        key={sub.name}
+                                                        key={sub.href}
                                                         href={sub.href}
                                                         onClick={() => setIsOpen(false)}
                                                         className={`text-xl transition-all ${pathname === sub.href ? "text-pink-600 font-extrabold" : "text-gray-500 font-bold"}`}
@@ -226,9 +229,9 @@ export default function Header() {
                         </div>
 
                         <div className="mt-auto mb-10 pt-8 flex flex-col gap-4">
-                            <button className="w-full bg-pink-500 text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl shadow-pink-100">
-                                <Send size={22} strokeWidth={3} /> Bắt đầu ngay
-                            </button>
+                            <Link href="/connect" onClick={() => setIsOpen(false)} className="w-full bg-pink-500 text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-2 shadow-xl shadow-pink-100">
+                                <Send size={22} strokeWidth={3} /> {t("Kết nối với Thanh", "Get in touch")}
+                            </Link>
                         </div>
                     </motion.div>
                 )}

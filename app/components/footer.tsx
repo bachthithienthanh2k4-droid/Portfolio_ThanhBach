@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // 1. Import hook nhận diện trang
 import { FacebookIcon, GithubIcon, LinkedinIcon, YoutubeIcon } from './icons';
 import Decor from './decor';
+import { useLang } from '../i18n';
 
 const Footer = () => {
+    const { t } = useLang();
     const pathname = usePathname(); // 2. Khởi tạo lấy path hiện tại
     // Sinh số ngẫu nhiên sau khi mount để HTML server và client khớp nhau (tránh lỗi hydration)
     const [stars, setStars] = useState<{ left: number; scale: number; x: number; duration: number; delay: number }[]>([]);
@@ -23,11 +25,11 @@ const Footer = () => {
 
     // 3. Định nghĩa mảng link với href chính xác (đổi tên để map cho chuẩn)
     const navLinks = [
-        { name: 'Giới thiệu', href: '/introduction' },
-        { name: 'Dự án', href: '/projects' },
-        { name: 'Kỹ năng', href: '/skills' },
-        { name: 'Hành trình', href: '/journey' },
-        { name: 'Liên hệ', href: '/connect' },
+        { name: t('Giới thiệu', 'About'), href: '/introduction' },
+        { name: t('Dự án', 'Projects'), href: '/projects' },
+        { name: t('Kỹ năng', 'Skills'), href: '/skills' },
+        { name: t('Hành trình', 'Journey'), href: '/journey' },
+        { name: t('Liên hệ', 'Contact'), href: '/connect' },
     ];
 
     return (
@@ -94,19 +96,22 @@ const Footer = () => {
                                 <span className="text-rose-500 italic font-serif font-light">Thiện Thanh</span>
                             </h3>
                             <p className="text-[#5D4D44] text-lg leading-relaxed max-w-md font-light">
-                                “Dòng code kể nên câu chuyện của phái đẹp, kỹ thuật dẫn lối cho những giá trị nhân văn.”
+                                {t(
+                                    "“Dòng code kể nên câu chuyện của phái đẹp, kỹ thuật dẫn lối cho những giá trị nhân văn.”",
+                                    "“Code that tells the stories of women, technology that lights the way to human values.”"
+                                )}
                             </p>
                         </div>
                     </div>
 
                     {/* CỘT GIỮA: Logic Active đã được sửa ở đây */}
                     <div className="lg:col-span-3 lg:pt-4">
-                        <p className="text-[#2D1E17] font-black mb-10 uppercase text-[11px] tracking-[0.4em]">Khám phá</p>
+                        <p className="text-[#2D1E17] font-black mb-10 uppercase text-[11px] tracking-[0.4em]">{t('Khám phá', 'Explore')}</p>
                         <ul className="grid grid-cols-1 gap-5">
                             {navLinks.map((item) => {
                                 const isActive = pathname === item.href; // Kiểm tra trang hiện tại
                                 return (
-                                    <li key={item.name}>
+                                    <li key={item.href}>
                                         <Link 
                                             href={item.href} 
                                             className={`group flex items-center gap-3 transition-all duration-300 ${
@@ -133,7 +138,7 @@ const Footer = () => {
                     {/* CỘT PHẢI */}
                     <div className="lg:col-span-4 lg:pt-4 space-y-10">
                         <div>
-                            <p className="text-[#2D1E17] font-black mb-10 uppercase text-[11px] tracking-[0.4em]">Gửi lời chào</p>
+                            <p className="text-[#2D1E17] font-black mb-10 uppercase text-[11px] tracking-[0.4em]">{t('Gửi lời chào', 'Say hello')}</p>
                             <div className="flex flex-wrap gap-4">
                                 {[
                                     { icon: <GithubIcon />, link: "https://github.com/bachthithienthanh2k4-droid", color: "hover:bg-stone-900" },
@@ -160,7 +165,10 @@ const Footer = () => {
                                 <Heart size={18} fill="currentColor" />
                             </div>
                             <p className="text-xs font-bold text-rose-700/70 tracking-tight leading-snug">
-                                Đang sẵn sàng cho các dự án <br /> sáng tạo mới vào năm 2026.
+                                {t(
+                                    <>Đang sẵn sàng cho các dự án <br /> sáng tạo mới vào năm 2026.</>,
+                                    <>Open to new creative <br /> projects in 2026.</>
+                                )}
                             </p>
                         </div>
                     </div>
@@ -170,16 +178,16 @@ const Footer = () => {
                 <div className="mt-12 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex flex-col gap-1">
                         <p className="text-[#2D1E17] text-[10px] font-black uppercase tracking-[0.3em]">
-                            Digital Portfolio © 2026
+                            {t('Portfolio cá nhân © 2026', 'Digital Portfolio © 2026')}
                         </p>
                         <p className="text-stone-400 text-[10px] font-medium tracking-wider">
-                            BẠCH THỊ THIỆN THANH • BUILT WITH LOVE
+                            {t('BẠCH THỊ THIỆN THANH • THỰC HIỆN BẰNG CẢ TRÁI TIM', 'BẠCH THỊ THIỆN THANH • BUILT WITH LOVE')}
                         </p>
                     </div>
                     <div className="h-10 w-[1px] bg-stone-200 hidden md:block" />
                     <div className="flex items-center gap-6">
-                        <span className="text-stone-400 text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:text-rose-500 transition-colors">Privacy Policy</span>
-                        <span className="text-stone-400 text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:text-rose-500 transition-colors">Terms of Service</span>
+                        <span className="text-stone-400 text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:text-rose-500 transition-colors">{t('Chính sách bảo mật', 'Privacy Policy')}</span>
+                        <span className="text-stone-400 text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:text-rose-500 transition-colors">{t('Điều khoản sử dụng', 'Terms of Service')}</span>
                     </div>
                 </div>
             </div>

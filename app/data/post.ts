@@ -14,6 +14,13 @@ export interface Post {
   excerpt: string;
   image: string;
   contentBlocks: PostBlock[];
+  // Bản tiếng Anh (giữ nguyên thứ tự & loại block để mục lục hoạt động ở cả 2 ngôn ngữ)
+  en?: {
+    title: string;
+    category: string;
+    excerpt: string;
+    contentBlocks: PostBlock[];
+  };
 }
 
 export const DUMMY_POSTS: Post[] = [
@@ -145,9 +152,138 @@ export const DUMMY_POSTS: Post[] = [
 
   { 
     type: "quote", 
-    text: "Không chỉ hoàn thành phần việc của mình, mà còn hỗ trợ đồng đội\nKhông chỉ quan tâm đúng – sai, mà hãy hướng đến kết quả chung\n\nBởi vì thành công của một team không nằm ở một cá nhân xuất sắc, mà nằm ở cách tất cả cùng phối hợp với nhau." 
+    text: "Không chỉ hoàn thành phần việc của mình, mà còn hỗ trợ đồng đội\nKhông chỉ quan tâm đúng – sai, mà hãy hướng đến kết quả chung\n\nBởi vì thành công của một team không nằm ở một cá nhân xuất sắc, mà nằm ở cách tất cả cùng phối hợp với nhau."
   }
-]
+],
+  en: {
+    title: "How to Make Teamwork Truly Effective",
+    category: "Skills",
+    excerpt: "Teamwork isn't just about working side by side — it's about how a group coordinates to grow together and reach a shared goal.",
+    contentBlocks: [
+      { type: "heading", text: "1. What is teamwork?" },
+      {
+        type: "paragraph",
+        text: "Teamwork is the process of several people coordinating to achieve a common goal. Each member takes on a role that fits their strengths, supporting and complementing one another to deliver the best possible result."
+      },
+
+      { type: "heading", text: "2. Why does teamwork matter?" },
+      {
+        type: "paragraph",
+        text: "In both study and work, teamwork improves efficiency, eases individual pressure and fosters a positive working environment. When many people contribute ideas, the outcome is usually more well-rounded and creative."
+      },
+      {
+        type: "list",
+        text: "Key benefits of teamwork:",
+        items: [
+          "Higher productivity",
+          "Stronger motivation and team spirit",
+          "Less pressure on any one person",
+          "More room for creative thinking",
+          "More opportunities to learn from each other"
+        ]
+      },
+
+      { type: "heading", text: "3. Common challenges in group work" },
+      {
+        type: "paragraph",
+        text: "Not every team runs smoothly. Some common issues can hurt the overall result if they aren't addressed in time."
+      },
+      {
+        type: "list",
+        text: "Common challenges:",
+        items: [
+          "Lack of accountability or over-reliance on others",
+          "Unbalanced distribution of work",
+          "Poor communication and infrequent progress updates",
+          "Disagreements over ideas and ways of working"
+        ]
+      },
+
+      { type: "heading", text: "4. How to make teamwork effective" },
+
+      { type: "heading", text: "4.1 Set clear goals" },
+      {
+        type: "paragraph",
+        text: "The whole team should agree on its goals from the very start. A clear, specific and time-bound goal keeps everyone heading in the same direction throughout the work."
+      },
+
+      { type: "heading", text: "4.2 Divide the work sensibly" },
+      {
+        type: "paragraph",
+        text: "Matching the right person to the right task makes the most of each member's strengths and avoids overlapping responsibilities."
+      },
+
+      { type: "heading", text: "4.3 Strengthen personal accountability" },
+      {
+        type: "paragraph",
+        text: "Every member should take initiative and own their part of the work. Meeting deadlines is key to keeping the whole team on schedule."
+      },
+
+      { type: "heading", text: "4.4 Communicate and share updates regularly" },
+      {
+        type: "paragraph",
+        text: "Ongoing communication keeps everyone aware of progress and makes it possible to help each other promptly when problems arise."
+      },
+
+      { type: "heading", text: "4.5 Listen to and respect every opinion" },
+      {
+        type: "paragraph",
+        text: "An effective team is one where every voice is heard and respected, even when opinions differ."
+      },
+
+      { type: "heading", text: "4.6 Know each other's strengths and weaknesses" },
+      {
+        type: "paragraph",
+        text: "When members understand one another's abilities, they can collaborate better and step in to help when needed."
+      },
+
+      { type: "heading", text: "4.7 Give constructive feedback" },
+      {
+        type: "paragraph",
+        text: "Feedback should focus on the issue, be clear and supportive, and help each other improve rather than criticize the person."
+      },
+
+      { type: "heading", text: "4.8 Recognize and motivate" },
+      {
+        type: "paragraph",
+        text: "Timely recognition lifts morale and encourages members to keep giving their best."
+      },
+
+      { type: "heading", text: "4.9 Use supporting tools" },
+      {
+        type: "paragraph",
+        text: "Task management and communication tools help the team work more efficiently and transparently, and make progress easier to track."
+      },
+
+      { type: "heading", text: "4.10 Build team bonds" },
+      {
+        type: "paragraph",
+        text: "Activities outside of work help members understand each other better and bring the team closer together."
+      },
+
+      { type: "heading", text: "4.11 The role of the leader" },
+      {
+        type: "paragraph",
+        text: "A leader sets the direction, assigns tasks and supports the team, making sure everything runs effectively and stays on track."
+      },
+
+      { type: "heading", text: "4.12 Growing as an individual within the team" },
+      {
+        type: "paragraph",
+        text: "A good team doesn't just reach its shared goal — it also creates room for each member to grow and become a better version of themselves."
+      },
+
+      {
+        type: "end",
+        text: "To me, teamwork isn't simply working together — it's a journey of growing together. Along the way, each of us learns how to communicate, take responsibility and adapt to our differences.\n\nNo team is perfect, but a team becomes effective when everyone works hard toward the same goal.\n\nRemember:\n"
+      },
+
+      {
+        type: "quote",
+        text: "Don't just finish your own part — support your teammates too.\nDon't just focus on who's right or wrong — aim for the shared result.\n\nBecause a team's success doesn't rest on one outstanding individual, but on how everyone works together."
+      }
+    ]
+  }
   },
   {
   title: "AI có thay thế lập trình viên không?",
@@ -262,7 +398,119 @@ export const DUMMY_POSTS: Post[] = [
       type: "quote",
       text: "AI không thay thế bạn.\nNgười biết dùng AI sẽ thay thế bạn."
     }
-  ]
+  ],
+  en: {
+    title: "Will AI Replace Programmers?",
+    category: "Career",
+    excerpt: "AI is advancing rapidly — but can it fully replace programmers? A realistic perspective and some direction for the future.",
+    contentBlocks: [
+      {
+        type: "heading",
+        text: "The rapid rise of AI"
+      },
+      {
+        type: "paragraph",
+        text: "In recent years, artificial intelligence (AI) has advanced at a remarkable pace. From helping write code and catching bugs to building entire software systems, AI is fast becoming an indispensable part of the tech industry."
+      },
+      {
+        type: "paragraph",
+        text: "This has led many people — especially programmers — to ask: could AI replace humans in the future?"
+      },
+
+      {
+        type: "heading",
+        text: "The concern is entirely valid"
+      },
+      {
+        type: "paragraph",
+        text: "Today's AI tools can generate code, suggest solutions and help with debugging remarkably well. This significantly cuts working time and boosts programmers' productivity."
+      },
+      {
+        type: "list",
+        text: "What AI does well:",
+        items: [
+          "Generating code quickly",
+          "Suggesting algorithms and solutions",
+          "Catching basic bugs",
+          "Automating repetitive tasks"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "But AI cannot fully replace humans"
+      },
+      {
+        type: "paragraph",
+        text: "Powerful as it is, AI still relies entirely on the data and models it was trained on. It can produce answers quickly, but they aren't always accurate or suited to a specific context."
+      },
+      {
+        type: "paragraph",
+        text: "Programming is more than writing code. It's also about analyzing problems, understanding user needs, designing systems and making strategic decisions — things that require human thinking and experience."
+      },
+      {
+        type: "list",
+        text: "Where AI still falls short:",
+        items: [
+          "Deeply understanding context and real-world requirements",
+          "Creative thinking and system design",
+          "Making strategic decisions",
+          "Taking responsibility for the product"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "AI is a tool, not a rival"
+      },
+      {
+        type: "paragraph",
+        text: "Rather than seeing AI as a threat, we should treat it as a powerful tool. AI helps programmers work faster, takes over repetitive work and frees them to focus on the problems that matter most."
+      },
+      {
+        type: "paragraph",
+        text: "With AI, programmers can spend more time on creativity, optimizing systems and raising product quality."
+      },
+
+      {
+        type: "heading",
+        text: "What matters is adapting"
+      },
+      {
+        type: "paragraph",
+        text: "In an era of constant technological change, the most important thing isn't to worry but to adapt. Programmers who know how to leverage AI will have a huge advantage in their work."
+      },
+      {
+        type: "list",
+        text: "What you should prepare:",
+        items: [
+          "A solid programming foundation",
+          "An understanding of how AI works",
+          "The ability to use AI as a supporting tool",
+          "A habit of keeping up with new technology"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Conclusion"
+      },
+      {
+        type: "paragraph",
+        text: "AI won't replace programmers — but programmers who know how to use AI will replace those who don't."
+      },
+
+      {
+        type: "end",
+        text: "Technology keeps changing, but human value lies in our ability to learn and adapt. Instead of being afraid, learn to work alongside AI and take your career further.\n\nWhat do you think about this?"
+      },
+
+      {
+        type: "quote",
+        text: "AI won't replace you.\nSomeone who knows how to use AI will."
+      }
+    ]
+  }
 },
 {
   title: "Vì sao accuracy cao nhưng thực tế vẫn fail?",
@@ -372,7 +620,114 @@ export const DUMMY_POSTS: Post[] = [
       type: "quote",
       text: "Accuracy cao không đảm bảo mô hình tốt.\nMetric phù hợp mới là thứ quyết định giá trị thực sự."
     }
-  ]
+  ],
+  en: {
+    title: "Why Do High-Accuracy Models Still Fail in Practice?",
+    category: "AI/Machine Learning",
+    excerpt: "High accuracy doesn't necessarily mean a good model. A practical look at choosing the right metrics in Machine Learning.",
+    contentBlocks: [
+      {
+        type: "heading",
+        text: "A familiar problem that's easy to misread"
+      },
+      {
+        type: "paragraph",
+        text: "When building a machine learning model, evaluating its performance is an essential step. Accuracy usually gets the most attention because it is intuitive and easy to understand."
+      },
+      {
+        type: "paragraph",
+        text: "Yet there are plenty of cases where a model achieves very high accuracy but performs poorly once deployed — or even fails completely."
+      },
+
+      {
+        type: "heading",
+        text: "High accuracy doesn't reflect true quality"
+      },
+      {
+        type: "paragraph",
+        text: "Accuracy is simply the proportion of correct predictions across the entire dataset. That makes it unreliable for problems with imbalanced data."
+      },
+      {
+        type: "list",
+        text: "Limitations of accuracy:",
+        items: [
+          "Doesn't reflect performance on each individual class",
+          "Easily misleading on imbalanced problems",
+          "Doesn't capture how serious each error is"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Choosing the wrong metric – the root cause"
+      },
+      {
+        type: "paragraph",
+        text: "Every problem has its own objective, so choosing the right metric matters more than maximizing a single number."
+      },
+      {
+        type: "list",
+        text: "Metrics worth paying attention to:",
+        items: [
+          "Precision – how accurate the positive predictions are",
+          "Recall – how completely the model detects positive cases",
+          "Specificity – how well the model correctly identifies negative cases",
+          "F1-score – the balance between precision and recall"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "A real-world example: medical diagnosis"
+      },
+      {
+        type: "paragraph",
+        text: "In pneumonia diagnosis, the key goal isn't just to be right overall, but also to avoid missing any patients who are actually sick."
+      },
+      {
+        type: "paragraph",
+        text: "A model can score high accuracy, but if its recall is low, many cases go undetected. That makes the model untrustworthy in practice."
+      },
+      {
+        type: "paragraph",
+        text: "Likewise, if specificity is low, the model may raise many false alarms, affecting both the system and its users."
+      },
+
+      {
+        type: "heading",
+        text: "Key takeaways"
+      },
+      {
+        type: "list",
+        text: "To build an effective model:",
+        items: [
+          "Don't focus on accuracy alone",
+          "Understand the problem's objective clearly",
+          "Choose metrics that fit the context",
+          "Evaluate the model across multiple metrics"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Conclusion"
+      },
+      {
+        type: "paragraph",
+        text: "A good model isn't the one with the highest accuracy, but the one that best fits the real-world objective."
+      },
+
+      {
+        type: "end",
+        text: "In Machine Learning, what matters isn't optimizing a single number, but truly understanding the problem and choosing the right way to evaluate it.\n\nDon't let accuracy fool you."
+      },
+
+      {
+        type: "quote",
+        text: "High accuracy doesn't guarantee a good model.\nThe right metric is what determines its real value."
+      }
+    ]
+  }
 },
 {
   title: "Sinh viên IT nên tập trung vào gì năm 3?",
@@ -485,7 +840,117 @@ export const DUMMY_POSTS: Post[] = [
       type: "quote",
       text: "Năm 3 không phải để chuẩn bị.\nNăm 3 là để bắt đầu."
     }
-  ]
+  ],
+  en: {
+    title: "What Should IT Students Focus on in Their Third Year?",
+    category: "Career",
+    excerpt: "The third year is a pivotal time for IT students to break through. So what should you focus on to be job-ready by graduation?",
+    contentBlocks: [
+      {
+        type: "heading",
+        text: "Year three – a turning point for IT students"
+      },
+      {
+        type: "paragraph",
+        text: "For every student, learning in the lecture hall is always important. But the third year marks a turning point — when you're not only gaining knowledge but also preparing for the career path ahead."
+      },
+      {
+        type: "paragraph",
+        text: "This is when you need to shift from 'learning to know' to 'learning to do'."
+      },
+
+      {
+        type: "heading",
+        text: "Focus on real-world projects"
+      },
+      {
+        type: "paragraph",
+        text: "By the end of year two, most students have a grasp of the fundamentals. Year three is the time to dive into real projects and apply what you've learned."
+      },
+      {
+        type: "list",
+        text: "You can start with:",
+        items: [
+          "Personal projects (portfolio)",
+          "Group projects with friends",
+          "Scientific research",
+          "Building a small but complete product"
+        ]
+      },
+      {
+        type: "paragraph",
+        text: "These projects not only deepen your understanding but also serve as the clearest proof of your abilities when you apply for jobs."
+      },
+
+      {
+        type: "heading",
+        text: "What do recruiters look for?"
+      },
+      {
+        type: "paragraph",
+        text: "In reality, recruiters don't just care about what you studied — what matters more is what you've actually built."
+      },
+      {
+        type: "paragraph",
+        text: "A CV with clear projects and concrete products always makes a stronger impression than a simple list of courses or grades."
+      },
+
+      {
+        type: "heading",
+        text: "Develop your soft skills"
+      },
+      {
+        type: "paragraph",
+        text: "Alongside technical expertise, soft skills are essential for adapting to a real working environment."
+      },
+      {
+        type: "list",
+        text: "Skills worth focusing on:",
+        items: [
+          "Presentation skills",
+          "Communication skills",
+          "Teamwork skills",
+          "Time management"
+        ]
+      },
+      {
+        type: "paragraph",
+        text: "A great programmer doesn't just write good code — they also know how to present ideas and collaborate effectively with the team."
+      },
+
+      {
+        type: "heading",
+        text: "Get internship experience early"
+      },
+      {
+        type: "paragraph",
+        text: "If you have the chance, try an internship in your third year. It's the fastest way to experience a real workplace and learn from experienced people."
+      },
+      {
+        type: "paragraph",
+        text: "An internship not only sharpens your skills but also helps you figure out which area of IT suits you best."
+      },
+
+      {
+        type: "heading",
+        text: "Conclusion"
+      },
+      {
+        type: "paragraph",
+        text: "Year three isn't the time to spread yourself thin — it's the time to focus, find your direction and break through."
+      },
+
+      {
+        type: "end",
+        text: "Invest in projects, skills and hands-on experience. What you do in your third year will have a huge impact on your career opportunities after graduation.\n\nDon't wait until your fourth year to get started."
+      },
+
+      {
+        type: "quote",
+        text: "Year three isn't for getting ready.\nYear three is for getting started."
+      }
+    ]
+  }
 },
 {
   title: "Những sai lầm khi học Machine Learning",
@@ -612,7 +1077,131 @@ export const DUMMY_POSTS: Post[] = [
       type: "quote",
       text: "Đừng học Machine Learning để thuộc.\nHãy học để hiểu và làm được."
     }
-  ]
+  ],
+  en: {
+    title: "Common Mistakes When Learning Machine Learning",
+    category: "AI/Machine Learning",
+    excerpt: "Machine Learning isn't hard to learn, but learning it the wrong way can keep you from ever truly grasping how it works. Here are the most common mistakes and how to fix them.",
+    contentBlocks: [
+      {
+        type: "heading",
+        text: "Machine Learning matters – but learning it the right way matters even more"
+      },
+      {
+        type: "paragraph",
+        text: "Machine Learning is one of the core fields of Computer Science. However, how you study and absorb it is what ultimately determines whether you truly understand it and can put it to use."
+      },
+      {
+        type: "paragraph",
+        text: "Many students spend a great deal of time studying yet still feel lost. The cause usually lies in a few common mistakes made along the way."
+      },
+
+      {
+        type: "heading",
+        text: "Common mistakes"
+      },
+
+      {
+        type: "heading",
+        text: "1. Rote, mechanical learning"
+      },
+      {
+        type: "paragraph",
+        text: "You might memorize plenty of theory, formulas and algorithms, yet not know how to apply them to real problems. This is one of the most serious mistakes."
+      },
+      {
+        type: "paragraph",
+        text: "Machine Learning isn't a subject to memorize — it's a subject to understand and apply."
+      },
+
+      {
+        type: "heading",
+        text: "2. Only learning in class"
+      },
+      {
+        type: "paragraph",
+        text: "What's taught in lectures is usually just the foundation. If you don't study further on your own, you'll only see the 'tip of the iceberg' without grasping what lies beneath."
+      },
+      {
+        type: "paragraph",
+        text: "This makes it hard to apply your knowledge to real problems or projects."
+      },
+
+      {
+        type: "heading",
+        text: "3. Only studying before exams"
+      },
+      {
+        type: "paragraph",
+        text: "Studying for exams is completely different from studying to understand. If you only start studying when exams are near, you'll learn just enough to answer the questions instead of understanding the essence of the problem."
+      },
+      {
+        type: "paragraph",
+        text: "Machine Learning requires steady accumulation and continuous practice — it can't be crammed into a short period of time."
+      },
+
+      {
+        type: "heading",
+        text: "4. Weak fundamentals"
+      },
+      {
+        type: "paragraph",
+        text: "Many students start learning Machine Learning without a firm grasp of fundamentals such as Python programming, probability and statistics, or linear algebra."
+      },
+      {
+        type: "paragraph",
+        text: "This makes learning difficult and discouraging, because you can't understand what's really happening behind the algorithms."
+      },
+
+      {
+        type: "heading",
+        text: "5. Learning without practice"
+      },
+      {
+        type: "paragraph",
+        text: "Only reading documents or watching videos without practicing means you'll quickly forget what you've learned and won't be able to apply it."
+      },
+      {
+        type: "paragraph",
+        text: "Machine Learning is a 'learning by doing' field — you have to build things yourself to truly understand it."
+      },
+
+      {
+        type: "heading",
+        text: "How to avoid these mistakes"
+      },
+      {
+        type: "list",
+        text: "A few tips to help you learn more effectively:",
+        items: [
+          "Build a clear learning roadmap",
+          "Master the fundamentals (Python, math)",
+          "Combine theory with practice",
+          "Work on personal projects or join research",
+          "Study consistently instead of cramming before exams"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Conclusion"
+      },
+      {
+        type: "paragraph",
+        text: "Mistakes in learning are inevitable — what matters is recognizing them and adjusting in time."
+      },
+
+      {
+        type: "end",
+        text: "Machine Learning isn't hard if you're heading in the right direction. Focus on understanding the fundamentals, practice continuously and build a solid foundation.\n\nSlow and steady beats fast and wrong."
+      },
+
+      {
+        type: "quote",
+        text: "Don't learn Machine Learning just to memorize it.\nLearn it to understand it — and to build with it."
+      }
+    ]
+  }
 },
 {
   title: "Làm sao để cân bằng giữa thời gian học và thời gian hoạt động?",
@@ -800,6 +1389,191 @@ export const DUMMY_POSTS: Post[] = [
       type: "quote",
       text: "Bận rộn không phải là hiệu quả.\nBiết ưu tiên mới là chìa khóa của thành công."
     }
-  ]
+  ],
+  en: {
+    title: "How to Balance Study Time and Extracurricular Activities",
+    category: "Skills",
+    excerpt: "Balancing academics and extracurricular activities is a tough challenge for students. Here are some lessons to help you manage your time effectively.",
+    contentBlocks: [
+      {
+        type: "heading",
+        text: "A familiar challenge for students"
+      },
+      {
+        type: "paragraph",
+        text: "As a student, you don't just attend lectures — you also take part in extracurricular activities, clubs and student unions. This helps you grow in a well-rounded way, but it also raises a big question: how do you balance studying and activities?"
+      },
+      {
+        type: "paragraph",
+        text: "Many students believe that 'the busier, the better', but in reality, pouring all your energy into one side can throw you off balance and lower your overall effectiveness."
+      },
+
+      {
+        type: "heading",
+        text: "Why does balance matter?"
+      },
+      {
+        type: "list",
+        text: "Finding balance helps you:",
+        items: [
+          "Study more effectively",
+          "Avoid prolonged stress",
+          "Gain real-world experience",
+          "Maintain your physical and mental health",
+          "Develop soft skills and social connections"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Effective time management strategies"
+      },
+
+      {
+        type: "heading",
+        text: "1. Make a clear plan"
+      },
+      {
+        type: "paragraph",
+        text: "Start by planning your studies by the week, month or semester. This keeps you in control of your time and stops you from being caught off guard."
+      },
+
+      {
+        type: "heading",
+        text: "2. Apply the Eisenhower Matrix"
+      },
+      {
+        type: "paragraph",
+        text: "Sorting tasks by importance and urgency helps you prioritize what really needs to be done."
+      },
+      {
+        type: "list",
+        text: "The 4 task groups:",
+        items: [
+          "Important & urgent",
+          "Important & not urgent",
+          "Not important & urgent",
+          "Not important & not urgent"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "3. Use the Pomodoro Technique"
+      },
+      {
+        type: "paragraph",
+        text: "Working with full focus for 25 minutes and then taking a 5-minute break helps you stay focused and avoid burnout."
+      },
+
+      {
+        type: "heading",
+        text: "4. Learn to say no"
+      },
+      {
+        type: "paragraph",
+        text: "You don't have to join every activity. Have the courage to say 'no' to things that aren't truly necessary."
+      },
+
+      {
+        type: "heading",
+        text: "5. Stop procrastinating and limit distractions"
+      },
+      {
+        type: "paragraph",
+        text: "Tackle the hardest tasks first, and limit your use of your phone and social media while studying."
+      },
+
+      {
+        type: "heading",
+        text: "6. Rest wisely"
+      },
+      {
+        type: "paragraph",
+        text: "Rest isn't a waste of time — it's what keeps you performing well over the long run."
+      },
+
+      {
+        type: "heading",
+        text: "Set goals and priorities"
+      },
+      {
+        type: "paragraph",
+        text: "Define long-term goals such as your target GPA or internship opportunities, then break them down into short-term goals that are easier to achieve."
+      },
+
+      {
+        type: "heading",
+        text: "Take care of your overall well-being"
+      },
+      {
+        type: "list",
+        text: "Physical health:",
+        items: [
+          "Get 7–9 hours of sleep every night",
+          "Eat healthily",
+          "Exercise regularly"
+        ]
+      },
+      {
+        type: "list",
+        text: "Mental health:",
+        items: [
+          "Meditate or find ways to relax",
+          "Keep up your personal hobbies",
+          "Open up to friends and family"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Build healthy relationships"
+      },
+      {
+        type: "list",
+        text: "A few suggestions:",
+        items: [
+          "Prioritize quality over quantity",
+          "Join clubs or volunteer activities",
+          "Stay away from toxic relationships",
+          "Make time for your family"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Time management tools"
+      },
+      {
+        type: "list",
+        text: "Some useful tools:",
+        items: [
+          "Google Calendar, Notion – planning",
+          "Forest – staying focused",
+          "Todoist, Trello – task management",
+          "Focus Booster – Pomodoro"
+        ]
+      },
+
+      {
+        type: "heading",
+        text: "Conclusion"
+      },
+      {
+        type: "paragraph",
+        text: "Balance doesn't mean splitting your time equally — it means allocating it wisely according to your goals at each stage."
+      },
+
+      {
+        type: "end",
+        text: "Manage your time wisely so you can do well in your studies while growing as a well-rounded person.\n\nYou don't need to do everything — just the things that truly matter."
+      },
+
+      {
+        type: "quote",
+        text: "Being busy isn't the same as being productive.\nKnowing how to prioritize is the key to success."
+      }
+    ]
+  }
 }
 ];

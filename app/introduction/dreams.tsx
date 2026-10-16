@@ -10,8 +10,11 @@ import {
   Globe, 
   Code2
 } from "lucide-react";
+import { useLang } from '../i18n';
 
 const FutureVision = () => {
+  const { t } = useLang();
+
   // Sinh số ngẫu nhiên sau khi mount để HTML server và client khớp nhau (tránh lỗi hydration)
   const [petals, setPetals] = useState<{ left: number; duration: number; delay: number }[]>([]);
   useEffect(() => {
@@ -113,14 +116,14 @@ const FutureVision = () => {
             <div>
               <div className="flex items-center gap-3">
                 <span className="h-px w-10 bg-rose-300" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Tầm nhìn</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Tầm nhìn", "Vision")}</span>
               </div>
               <h2 className="mt-3 text-3xl font-black tracking-tighter text-[#3a2420] md:text-5xl">
-                Vượt qua <span className="font-normal italic text-rose-500">giới hạn</span>
+                {t("Vượt qua", "Beyond the")} <span className="font-normal italic text-rose-500">{t("giới hạn", "limits")}</span>
               </h2>
             </div>
           </div>
-          <p className="max-w-sm italic text-[#a88a80] md:text-right">Định hướng và khát vọng cho chặng đường phía trước.</p>
+          <p className="max-w-sm italic text-[#a88a80] md:text-right">{t("Định hướng và khát vọng cho chặng đường phía trước.", "My direction and aspirations for the road ahead.")}</p>
         </motion.div>
 
         {/* BENTO GRID */}
@@ -135,13 +138,19 @@ const FutureVision = () => {
               <div className="bg-rose-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 border border-rose-100 text-rose-500 shadow-inner">
                 <Cpu size={32} />
               </div>
-              <h3 className="text-4xl font-bold mb-6 text-[#2d1b22]">Kiến trúc & <br />Kỹ thuật AI</h3>
+              <h3 className="text-4xl font-bold mb-6 text-[#2d1b22]">{t("Kiến trúc &", "AI Architecture")} <br />{t("Kỹ thuật AI", "& Engineering")}</h3>
               <div className="grid md:grid-cols-2 gap-8 text-stone-600 leading-relaxed font-medium">
                 <p>
-                  Mình hướng tới việc đưa AI thoát khỏi những server cồng kềnh để hiện diện mượt mà trên trình duyệt. Biến AI thành một phần DNA của sản phẩm chứ không chỉ là công cụ hỗ trợ.
+                  {t(
+                    "Mình hướng tới việc đưa AI thoát khỏi những server cồng kềnh để hiện diện mượt mà trên trình duyệt. Biến AI thành một phần DNA của sản phẩm chứ không chỉ là công cụ hỗ trợ.",
+                    "I want to free AI from heavyweight servers and let it run smoothly right in the browser — making AI part of a product's DNA, not just a supporting tool."
+                  )}
                 </p>
                 <p>
-                  Trong 5 năm tới, mục tiêu là làm chủ các công nghệ tối ưu hóa tài nguyên, giúp người dùng phổ thông tiếp cận được trí tuệ nhân tạo đỉnh cao mà không cần phần cứng đắt đỏ.
+                  {t(
+                    "Trong 5 năm tới, mục tiêu là làm chủ các công nghệ tối ưu hóa tài nguyên, giúp người dùng phổ thông tiếp cận được trí tuệ nhân tạo đỉnh cao mà không cần phần cứng đắt đỏ.",
+                    "Over the next five years, my goal is to master resource-optimization techniques so everyday users can access cutting-edge AI without expensive hardware."
+                  )}
                 </p>
               </div>
             </div>
@@ -161,9 +170,12 @@ const FutureVision = () => {
               <ArrowUpRight size={24} />
             </div>
             <div className="relative z-10">
-              <h4 className="text-3xl font-black mb-4 tracking-tight">AI cho mọi người</h4>
+              <h4 className="text-3xl font-black mb-4 tracking-tight">{t("AI cho mọi người", "AI for everyone")}</h4>
               <p className="text-white/90 text-sm font-medium leading-relaxed">
-                Khao khát của mình là xóa nhòa ranh giới công nghệ. Mang AI đến với y tế và giáo dục tại những vùng sâu vùng xa qua những thiết bị giá rẻ.
+                {t(
+                  "Khao khát của mình là xóa nhòa ranh giới công nghệ. Mang AI đến với y tế và giáo dục tại những vùng sâu vùng xa qua những thiết bị giá rẻ.",
+                  "My aspiration is to close the technology gap — bringing AI to healthcare and education in remote areas through affordable devices."
+                )}
               </p>
             </div>
           </motion.div>
@@ -177,13 +189,19 @@ const FutureVision = () => {
               <div className="flex-1 space-y-6 text-[#2d1b22]">
                 <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-600 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
                   <Heart size={14} fill="currentColor" />
-                  <span>Tâm hồn trong công nghệ</span>
+                  <span>{t("Tâm hồn trong công nghệ", "The soul of technology")}</span>
                 </div>
                 <h3 className="text-4xl md:text-6xl font-serif italic leading-[1.1] text-[#3a2420]">
-                  &ldquo;Công nghệ chỉ là xác, cảm xúc mới là <span className="text-rose-500">linh hồn</span>.&rdquo;
+                  &ldquo;{t(
+                    <>Công nghệ chỉ là xác, cảm xúc mới là <span className="text-rose-500">linh hồn</span>.</>,
+                    <>Technology is the body; emotion is the <span className="text-rose-500">soul</span>.</>
+                  )}&rdquo;
                 </h3>
                 <p className="text-stone-500 text-lg max-w-xl leading-relaxed font-medium">
-                  Thiện Thanh tin rằng một sản phẩm AI tốt phải khiến người dùng cảm thấy được thấu hiểu chứ không phải bị điều khiển.
+                  {t(
+                    "Thiện Thanh tin rằng một sản phẩm AI tốt phải khiến người dùng cảm thấy được thấu hiểu chứ không phải bị điều khiển.",
+                    "Thiện Thanh believes a great AI product should make people feel understood, not controlled."
+                  )}
                 </p>
               </div>
               
@@ -195,6 +213,7 @@ const FutureVision = () => {
               >
                 <img 
                   src="/pictures/anhhusc.jpg"
+                  alt={t("Trường Đại học Khoa học Huế", "University of Sciences, Hue University")}
                   className="w-full h-full object-cover"
                 />
               </motion.div>

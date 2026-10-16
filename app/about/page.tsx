@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { FacebookIcon, GithubIcon, LinkedinIcon, YoutubeIcon } from '../components/icons';
 import Link from 'next/link';
+import { useLang } from '../i18n';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -59,6 +60,7 @@ const About = () => {
     const { scrollYProgress } = useScroll();
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
     const yImage = useTransform(smoothProgress, [0, 0.3], [0, 60]);
+    const { t } = useLang();
 
     const socialLinks = [
         { Icon: FacebookIcon, href: "https://www.facebook.com/thanh.bach.395/", label: "Facebook" },
@@ -69,45 +71,54 @@ const About = () => {
 
     const quickStats = [
         { value: "3.83", label: "GPA / 4.0" },
-        { value: "Á khoa", label: "Khoa CNTT" },
-        { value: "03", label: "Kinh nghiệm" },
-        { value: "02", label: "Giải Nhì" },
+        { value: t("Á khoa", "Runner-up"), label: t("Khoa CNTT", "Valedictorian, IT") },
+        { value: "03", label: t("Kinh nghiệm", "Experiences") },
+        { value: "02", label: t("Giải Nhì", "Second Prizes") },
     ];
 
     const focusAreas = [
-        { icon: Brain, title: "Trí tuệ nhân tạo", desc: "Deep Learning cho ảnh y tế" },
-        { icon: Code, title: "Phát triển Web", desc: "Next.js, giao diện UI/UX" },
-        { icon: Smartphone, title: "Ứng dụng di động", desc: "Flutter & Dart đa nền tảng" },
-        { icon: Bug, title: "Kiểm thử phần mềm", desc: "Test case, kiểm thử hồi quy" },
+        { icon: Brain, title: t("Trí tuệ nhân tạo", "Artificial Intelligence"), desc: t("Deep Learning cho ảnh y tế", "Deep learning for medical imaging") },
+        { icon: Code, title: t("Phát triển Web", "Web Development"), desc: t("Next.js, giao diện UI/UX", "Next.js & UI/UX design") },
+        { icon: Smartphone, title: t("Ứng dụng di động", "Mobile Apps"), desc: t("Flutter & Dart đa nền tảng", "Cross-platform with Flutter & Dart") },
+        { icon: Bug, title: t("Kiểm thử phần mềm", "Software Testing"), desc: t("Test case, kiểm thử hồi quy", "Test cases & regression testing") },
     ];
 
     const activities = [
-        { icon: Users, label: "Đoàn – Hội" },
-        { icon: Code, label: "Câu lạc bộ" },
-        { icon: Brain, label: "Nghiên cứu khoa học" },
-        { icon: Sparkles, label: "Văn nghệ" },
+        { icon: Users, label: t("Đoàn – Hội", "Youth Union & Student Association") },
+        { icon: Code, label: t("Câu lạc bộ", "Clubs") },
+        { icon: Brain, label: t("Nghiên cứu khoa học", "Scientific Research") },
+        { icon: Sparkles, label: t("Văn nghệ", "Performing Arts") },
     ];
 
     // Xếp theo trình tự thời gian
     const achievements = [
         {
-            title: "Sinh viên 5 Tốt",
-            desc: "Đạt danh hiệu liên tiếp 2023 – 2024, toàn diện về đạo đức, học tập, thể lực, tình nguyện và hội nhập.",
+            title: t("Sinh viên 5 Tốt", "Five-Merit Student"),
+            desc: t(
+                "Đạt danh hiệu liên tiếp 2023 – 2024, toàn diện về đạo đức, học tập, thể lực, tình nguyện và hội nhập.",
+                "Earned the title in consecutive years (2023 – 2024) for all-round excellence in ethics, academics, fitness, volunteering and global integration."
+            ),
             date: "2023 – 2024",
             icon: Zap,
             image: "/pictures/SV5T_2023_2.jpg"
         },
         {
-            title: "Sao Tháng Giêng",
-            desc: "Giải thưởng dành cho cán bộ Hội Sinh viên có thành tích xuất sắc trong học tập và rèn luyện.",
+            title: t("Sao Tháng Giêng", "January Star Award"),
+            desc: t(
+                "Giải thưởng dành cho cán bộ Hội Sinh viên có thành tích xuất sắc trong học tập và rèn luyện.",
+                "An award honoring Student Association officers for outstanding achievement in academics and personal development."
+            ),
             date: "2024",
             icon: Star,
             image: "/pictures/Sao tháng giêng-2024.jpg"
         },
         {
-            title: "Sinh viên Xuất sắc",
-            desc: "Duy trì phong độ học tập xuất sắc trong suốt 4 năm đại học.",
-            date: "4 năm",
+            title: t("Sinh viên Xuất sắc", "Excellent Student"),
+            desc: t(
+                "Duy trì phong độ học tập xuất sắc trong suốt 4 năm đại học.",
+                "Maintained outstanding academic performance throughout four years of university."
+            ),
+            date: t("4 năm", "4 years"),
             icon: Award,
             image: "/pictures/z7706777109007_23a5f5f8d29e646288fc635d8458cc7c.jpg"
         }
@@ -143,7 +154,7 @@ const About = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="mb-8 inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white/80 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-rose-500 shadow-sm backdrop-blur"
                         >
-                            <Sparkles size={14} className="animate-pulse" /> Hồ sơ cá nhân 2026
+                            <Sparkles size={14} className="animate-pulse" /> {t("Hồ sơ cá nhân 2026", "Personal Portfolio 2026")}
                         </motion.div>
 
                         <motion.h1
@@ -164,11 +175,11 @@ const About = () => {
                             transition={{ delay: 0.3 }}
                             className="mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm font-bold uppercase tracking-[0.2em] text-[#a88a80] lg:justify-start"
                         >
-                            <span>Khoa học Máy tính</span>
+                            <span>{t("Khoa học Máy tính", "Computer Science")}</span>
                             <span className="h-1 w-1 rounded-full bg-rose-300" />
-                            <span className="text-rose-500">Á khoa CNTT</span>
+                            <span className="text-rose-500">{t("Á khoa CNTT", "IT Runner-up Valedictorian")}</span>
                             <span className="h-1 w-1 rounded-full bg-rose-300" />
-                            <span>ĐH Khoa học Huế</span>
+                            <span>{t("ĐH Khoa học Huế", "University of Sciences, Hue University")}</span>
                         </motion.p>
 
                         <motion.div
@@ -179,7 +190,10 @@ const About = () => {
                         >
                             <Quote size={24} className="absolute left-5 top-7 text-rose-300" />
                             <p className="text-lg italic leading-relaxed text-[#6e5249]">
-                                Nơi những dòng code không chỉ là logic, mà còn là câu chuyện mang đậm dấu ấn của riêng mình.
+                                {t(
+                                    "Nơi những dòng code không chỉ là logic, mà còn là câu chuyện mang đậm dấu ấn của riêng mình.",
+                                    "Where lines of code are more than logic — they tell a story that is unmistakably my own."
+                                )}
                             </p>
                         </motion.div>
 
@@ -231,8 +245,8 @@ const About = () => {
                                 <Crown size={20} />
                             </div>
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-rose-500">Tốt nghiệp</p>
-                                <p className="font-black text-[#3a2420]">Á khoa CNTT</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-rose-500">{t("Tốt nghiệp", "Graduated")}</p>
+                                <p className="font-black text-[#3a2420]">{t("Á khoa CNTT", "IT Runner-up Valedictorian")}</p>
                             </div>
                         </motion.div>
                         <motion.div
@@ -259,9 +273,17 @@ const About = () => {
                     <div className="pointer-events-none absolute -bottom-24 -right-10 h-72 w-72 rounded-full bg-pink-300/15 blur-[100px]" />
                     <Quote size={48} className="mx-auto mb-6 text-rose-300/60" />
                     <h2 className="relative text-2xl font-light leading-snug text-rose-50 md:text-4xl">
-                        Trưởng thành là hành trình được vun đắp bằng{" "}
-                        <span className="font-normal italic text-rose-300">đôi tay và sự nỗ lực không ngừng</span>{" "}
-                        của chính mình.
+                        {t(
+                            <>
+                                Trưởng thành là hành trình được vun đắp bằng{" "}
+                                <span className="font-normal italic text-rose-300">đôi tay và sự nỗ lực không ngừng</span>{" "}
+                                của chính mình.
+                            </>,
+                            <>
+                                Growth is a journey shaped by{" "}
+                                <span className="font-normal italic text-rose-300">my own hands and unwavering effort</span>.
+                            </>
+                        )}
                     </h2>
                 </motion.div>
             </section>
@@ -270,10 +292,10 @@ const About = () => {
             <section className="relative z-10 mx-auto max-w-6xl px-6 py-16">
                 <SectionHeader
                     number="01"
-                    eyebrow="Câu chuyện"
-                    title="Kỹ thuật, tâm hồn"
-                    accent="& sự cống hiến"
-                    subtitle="Mình là ai, mình làm gì và điều gì thúc đẩy mình."
+                    eyebrow={t("Câu chuyện", "My Story")}
+                    title={t("Kỹ thuật, tâm hồn", "Craft, soul")}
+                    accent={t("& sự cống hiến", "& dedication")}
+                    subtitle={t("Mình là ai, mình làm gì và điều gì thúc đẩy mình.", "Who I am, what I do, and what drives me.")}
                 />
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -287,13 +309,13 @@ const About = () => {
                     >
                         <img
                             src={encodeURI("/pictures/Ảnh profile.jpg")}
-                            alt="Chân dung Thiện Thanh"
+                            alt={t("Chân dung Thiện Thanh", "Portrait of Thiện Thanh")}
                             className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/85 via-[#4a1f2a]/10 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
                             <div className="mb-3 flex items-center gap-2 text-xs text-rose-100/90">
-                                <MapPin size={14} /> Huế, Việt Nam
+                                <MapPin size={14} /> {t("Huế, Việt Nam", "Hue, Vietnam")}
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {activities.map(({ icon: Icon, label }) => (
@@ -318,17 +340,31 @@ const About = () => {
                                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-100 to-[#fde4dc] text-rose-500">
                                     <GraduationCap size={22} />
                                 </div>
-                                <h3 className="text-2xl font-black tracking-tight">Xin chào, mình là Thanh</h3>
+                                <h3 className="text-2xl font-black tracking-tight">{t("Xin chào, mình là Thanh", "Hi, I'm Thanh")}</h3>
                             </div>
                             <div className="space-y-4 leading-relaxed text-[#6e5249]">
-                                <p>
-                                    Mình là <strong className="text-[#3a2420]">Bạch Thị Thiện Thanh</strong>, tốt nghiệp chuyên ngành Khoa học Máy tính với danh hiệu{" "}
-                                    <strong className="text-rose-500">Á khoa Khoa Công nghệ Thông tin</strong>, Trường Đại học Khoa học – Đại học Huế.
-                                </p>
-                                <p>
-                                    Với mình, code không chỉ là những dòng lệnh khô khan, mà là công cụ để giải quyết các vấn đề của xã hội. Dự án tâm huyết nhất là nghiên cứu{" "}
-                                    <strong className="text-[#3a2420]">Deep Learning chẩn đoán viêm phổi từ ảnh X-quang</strong> – hành trình từ thuật toán đến giá trị cộng đồng.
-                                </p>
+                                {t(
+                                    <>
+                                        <p>
+                                            Mình là <strong className="text-[#3a2420]">Bạch Thị Thiện Thanh</strong>, tốt nghiệp chuyên ngành Khoa học Máy tính với danh hiệu{" "}
+                                            <strong className="text-rose-500">Á khoa Khoa Công nghệ Thông tin</strong>, Trường Đại học Khoa học – Đại học Huế.
+                                        </p>
+                                        <p>
+                                            Với mình, code không chỉ là những dòng lệnh khô khan, mà là công cụ để giải quyết các vấn đề của xã hội. Dự án tâm huyết nhất là nghiên cứu{" "}
+                                            <strong className="text-[#3a2420]">Deep Learning chẩn đoán viêm phổi từ ảnh X-quang</strong> – hành trình từ thuật toán đến giá trị cộng đồng.
+                                        </p>
+                                    </>,
+                                    <>
+                                        <p>
+                                            I&apos;m <strong className="text-[#3a2420]">Bạch Thị Thiện Thanh</strong>, a Computer Science graduate honored as the{" "}
+                                            <strong className="text-rose-500">Runner-up Valedictorian of the Faculty of Information Technology</strong>, University of Sciences, Hue University.
+                                        </p>
+                                        <p>
+                                            To me, code is more than dry lines of instructions — it is a tool for solving real problems in society. My most meaningful project is my research on{" "}
+                                            <strong className="text-[#3a2420]">deep learning for pneumonia diagnosis from chest X-rays</strong> – a journey from algorithms to real value for the community.
+                                        </p>
+                                    </>
+                                )}
                             </div>
 
                             <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[1.5rem] border border-rose-100 bg-rose-100 sm:grid-cols-4">
@@ -365,7 +401,7 @@ const About = () => {
                                 href="/introduction"
                                 className="group inline-flex items-center gap-4 rounded-full bg-[#4a1f2a] py-2 pl-6 pr-2 text-white shadow-lg transition-all duration-300 hover:bg-rose-500 hover:shadow-rose-200"
                             >
-                                <span className="text-[11px] font-black uppercase tracking-[0.2em]">Đọc giới thiệu chi tiết</span>
+                                <span className="text-[11px] font-black uppercase tracking-[0.2em]">{t("Đọc giới thiệu chi tiết", "Read the full introduction")}</span>
                                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 group-hover:rotate-45">
                                     <ArrowUpRight size={18} />
                                 </span>
@@ -379,10 +415,10 @@ const About = () => {
             <section className="relative z-10 mx-auto max-w-6xl px-6 py-16">
                 <SectionHeader
                     number="02"
-                    eyebrow="Dấu ấn"
-                    title="Danh hiệu"
-                    accent="& thành tựu"
-                    subtitle="Lưu giữ những khoảnh khắc nỗ lực và những cột mốc đáng tự hào."
+                    eyebrow={t("Dấu ấn", "Milestones")}
+                    title={t("Danh hiệu", "Honors")}
+                    accent={t("& thành tựu", "& achievements")}
+                    subtitle={t("Lưu giữ những khoảnh khắc nỗ lực và những cột mốc đáng tự hào.", "Capturing moments of hard work and the milestones I'm proud of.")}
                 />
 
                 {/* Danh hiệu nổi bật nhất */}
@@ -398,13 +434,13 @@ const About = () => {
                         <GraduationCap size={38} />
                     </div>
                     <div className="relative text-center md:text-left">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-rose-100">Danh hiệu tốt nghiệp</p>
-                        <h3 className="mt-1 text-3xl font-black tracking-tight md:text-4xl">Á khoa Khoa Công nghệ Thông tin</h3>
-                        <p className="mt-2 text-white/85">Thành quả của 4 năm bền bỉ học tập và rèn luyện, GPA 3.83/4.0.</p>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-rose-100">{t("Danh hiệu tốt nghiệp", "Graduation Honor")}</p>
+                        <h3 className="mt-1 text-3xl font-black tracking-tight md:text-4xl">{t("Á khoa Khoa Công nghệ Thông tin", "Runner-up Valedictorian, Faculty of Information Technology")}</h3>
+                        <p className="mt-2 text-white/85">{t("Thành quả của 4 năm bền bỉ học tập và rèn luyện, GPA 3.83/4.0.", "The result of four years of persistent study and personal growth, with a GPA of 3.83/4.0.")}</p>
                     </div>
                     <div className="relative flex shrink-0 gap-3 md:ml-auto">
                         <span className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-xs font-bold backdrop-blur">
-                            <Trophy size={14} /> 2 giải Nhì
+                            <Trophy size={14} /> {t("2 giải Nhì", "2 Second Prizes")}
                         </span>
                     </div>
                 </motion.div>
@@ -412,7 +448,7 @@ const About = () => {
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     {achievements.map((item, index) => (
                         <motion.div
-                            key={item.title}
+                            key={item.image}
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.15, duration: 0.8, ease }}
@@ -454,7 +490,7 @@ const About = () => {
                         >
                             <Sparkles size={18} className="text-rose-400" />
                             <span className="font-bold text-[#3a2420] transition-colors group-hover:text-rose-500 md:text-lg">
-                                Khám phá toàn bộ hành trình
+                                {t("Khám phá toàn bộ hành trình", "Explore my full journey")}
                             </span>
                             <ArrowRight className="text-rose-500 transition-transform duration-300 group-hover:translate-x-1" size={20} />
                         </motion.div>
@@ -478,11 +514,11 @@ const About = () => {
 
                     <div className="relative z-10 flex flex-col items-center">
                         <div className="mb-6 flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-rose-500 shadow-sm">
-                            <Sparkles size={14} /> Sẵn sàng cho những ý tưởng mới
+                            <Sparkles size={14} /> {t("Sẵn sàng cho những ý tưởng mới", "Open to new ideas")}
                         </div>
                         <h2 className="mb-10 text-4xl font-black leading-[1.1] tracking-tight text-[#3a2420] md:text-6xl">
-                            Cùng tạo nên những <br />
-                            <span className="font-normal italic text-rose-500">điều tuyệt vời nhé?</span>
+                            {t("Cùng tạo nên những", "Shall we build something")} <br />
+                            <span className="font-normal italic text-rose-500">{t("điều tuyệt vời nhé?", "wonderful together?")}</span>
                         </h2>
 
                         <div className="flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
@@ -490,7 +526,7 @@ const About = () => {
                                 href="/connect"
                                 className="group flex items-center gap-3 rounded-full bg-rose-500 px-9 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-xl shadow-rose-300/50 transition-all duration-300 hover:bg-[#4a1f2a]"
                             >
-                                <Mail size={18} /> Gửi tin nhắn
+                                <Mail size={18} /> {t("Gửi tin nhắn", "Send a message")}
                                 <ArrowUpRight size={18} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                             </Link>
                             <a
@@ -499,11 +535,11 @@ const About = () => {
                                 href="https://drive.google.com/file/d/1mnZTDMhEp757wSQL0N-xrcYFmgmIzGk0/view"
                                 className="flex items-center gap-3 rounded-full border border-white bg-white/80 px-9 py-4 text-sm font-bold uppercase tracking-widest text-[#6e5249] backdrop-blur transition-all duration-300 hover:bg-white hover:text-rose-500"
                             >
-                                <FileText size={18} /> Tải CV chi tiết
+                                <FileText size={18} /> {t("Tải CV chi tiết", "Download full CV")}
                             </a>
                         </div>
 
-                        <p className="mt-10 text-sm italic text-[#a88a80]">Luôn phản hồi trong vòng 24 giờ làm việc</p>
+                        <p className="mt-10 text-sm italic text-[#a88a80]">{t("Luôn phản hồi trong vòng 24 giờ làm việc", "I always reply within 24 business hours")}</p>
                     </div>
                 </motion.div>
             </section>

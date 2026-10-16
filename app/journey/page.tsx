@@ -13,22 +13,41 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useLang, pick, type Lang } from '../i18n';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-type Milestone = { desc: string; lesson: string; icon: React.ElementType; highlight?: boolean };
-type Chapter = { year: string; title: string; subtitle: string; milestones: Milestone[]; images: string[] };
+// Nội dung song ngữ: { vi, en }
+type L = { vi: string; en: string };
+type Milestone = { desc: L; lesson: L; icon: React.ElementType; highlight?: boolean };
+type Chapter = { year: string; title: L; subtitle: L; milestones: Milestone[]; images: string[] };
 
 const rawTimeline: Chapter[] = [
   {
     year: "2022",
-    title: "Khởi đầu ấn tượng",
-    subtitle: "Xây dựng nền tảng & Khẳng định bản thân",
+    title: { vi: "Khởi đầu ấn tượng", en: "An Impressive Start" },
+    subtitle: { vi: "Xây dựng nền tảng & Khẳng định bản thân", en: "Building Foundations & Proving Myself" },
     milestones: [
-      { desc: "Giải Nhì Máy tính cầm tay cấp Tỉnh tại THPT.", lesson: "Hình thành tư duy toán học thuật toán và khả năng tối ưu hóa quy trình giải quyết vấn đề dưới áp lực thời gian.", icon: Trophy },
-      { desc: "Á khoa đầu vào Khoa CNTT (Xét học bạ 27.75 điểm).", lesson: "Chứng minh sự chuẩn bị nghiêm túc và nền tảng kiến thức vững chắc là bệ phóng cho lộ trình học thuật chuyên sâu.", icon: Star, highlight: true },
-      { desc: "Tích cực tham gia văn nghệ cấp Khoa/Trường.", lesson: "Rèn luyện sự tự tin, kỹ năng làm chủ sân khấu và khả năng biểu đạt cảm xúc trước đám đông.", icon: Music },
-      { desc: "Tham gia câu lạc bộ Kỹ năng Lửa xanh.", lesson: "Phát triển kỹ năng giao tiếp, tư duy phản biện và khả năng làm việc nhóm hiệu quả thông qua các hoạt động thực tiễn.", icon: Sparkles },
+      {
+        desc: { vi: "Giải Nhì Máy tính cầm tay cấp Tỉnh tại THPT.", en: "Second Prize, Provincial Casio Calculator Competition in high school." },
+        lesson: { vi: "Hình thành tư duy toán học thuật toán và khả năng tối ưu hóa quy trình giải quyết vấn đề dưới áp lực thời gian.", en: "Developed algorithmic, mathematical thinking and the ability to streamline problem-solving under time pressure." },
+        icon: Trophy,
+      },
+      {
+        desc: { vi: "Á khoa đầu vào Khoa CNTT (Xét học bạ 27.75 điểm).", en: "Runner-up Valedictorian on entry to the Faculty of Information Technology (27.75 academic-record score)." },
+        lesson: { vi: "Chứng minh sự chuẩn bị nghiêm túc và nền tảng kiến thức vững chắc là bệ phóng cho lộ trình học thuật chuyên sâu.", en: "Proved that serious preparation and solid fundamentals are the launchpad for an in-depth academic path." },
+        icon: Star, highlight: true,
+      },
+      {
+        desc: { vi: "Tích cực tham gia văn nghệ cấp Khoa/Trường.", en: "Actively performed in faculty and university arts events." },
+        lesson: { vi: "Rèn luyện sự tự tin, kỹ năng làm chủ sân khấu và khả năng biểu đạt cảm xúc trước đám đông.", en: "Built confidence, stage presence and the ability to express emotion in front of an audience." },
+        icon: Music,
+      },
+      {
+        desc: { vi: "Tham gia câu lạc bộ Kỹ năng Lửa xanh.", en: "Joined the Lửa Xanh (Blue Flame) Skills Club." },
+        lesson: { vi: "Phát triển kỹ năng giao tiếp, tư duy phản biện và khả năng làm việc nhóm hiệu quả thông qua các hoạt động thực tiễn.", en: "Strengthened communication, critical thinking and teamwork through hands-on activities." },
+        icon: Sparkles,
+      },
     ],
     images: [
       "/pictures/z7719744982508_564d083d767425a02db0df0f3a09e223.jpg",
@@ -40,15 +59,39 @@ const rawTimeline: Chapter[] = [
   },
   {
     year: "2023",
-    title: "Rèn luyện & Cống hiến",
-    subtitle: "Mở rộng kết nối & Chia sẻ giá trị",
+    title: { vi: "Rèn luyện & Cống hiến", en: "Growing & Giving Back" },
+    subtitle: { vi: "Mở rộng kết nối & Chia sẻ giá trị", en: "Expanding Connections & Sharing Value" },
     milestones: [
-      { desc: "Gia nhập CLB Hỗ trợ lập trình (SPIT).", lesson: "Học cách làm việc nhóm chuyên nghiệp và kỹ năng sư phạm khi hỗ trợ giải đáp kỹ thuật cho các thành viên khác.", icon: Users },
-      { desc: "Sinh viên Xuất sắc năm học 2022-2023.", lesson: "Xác lập kỷ luật bản thân và kỹ năng quản lý thời gian để duy trì thành tích học tập dẫn đầu.", icon: Medal },
-      { desc: "Tình nguyện viên IT Campus & Chào tân sinh viên.", lesson: "Xây dựng tinh thần trách nhiệm với tập thể và kỹ năng điều phối nhân sự trong các sự kiện quy mô lớn.", icon: HeartHandshake },
-      { desc: "Danh hiệu Sinh viên 5 Tốt cấp Trường.", lesson: "Hoàn thiện bộ tiêu chuẩn toàn diện về Đạo đức, Học tập, Thể lực, Tình nguyện và Hội nhập quốc tế.", icon: Medal, highlight: true },
-      { desc: "Giấy khen xuất sắc trong công tác Hội và phong trào.", lesson: "Rèn luyện kỹ năng lãnh đạo phong trào và khả năng kết nối nguồn lực giữa các tổ chức đoàn thể.", icon: Medal },
-      { desc: "Tham gia văn nghệ & các hội thảo.", lesson: "Mở rộng tư duy đa ngành và xây dựng mạng lưới quan hệ với các chuyên gia và bạn bè cùng chí hướng.", icon: Music },
+      {
+        desc: { vi: "Gia nhập CLB Hỗ trợ lập trình (SPIT).", en: "Joined the Programming Support Club (SPIT)." },
+        lesson: { vi: "Học cách làm việc nhóm chuyên nghiệp và kỹ năng sư phạm khi hỗ trợ giải đáp kỹ thuật cho các thành viên khác.", en: "Learned professional teamwork and teaching skills while helping fellow members with technical questions." },
+        icon: Users,
+      },
+      {
+        desc: { vi: "Sinh viên Xuất sắc năm học 2022-2023.", en: "Excellent Student, academic year 2022–2023." },
+        lesson: { vi: "Xác lập kỷ luật bản thân và kỹ năng quản lý thời gian để duy trì thành tích học tập dẫn đầu.", en: "Built self-discipline and time management to stay at the top of my class." },
+        icon: Medal,
+      },
+      {
+        desc: { vi: "Tình nguyện viên IT Campus & Chào tân sinh viên.", en: "Volunteer at IT Campus & Freshman Welcome events." },
+        lesson: { vi: "Xây dựng tinh thần trách nhiệm với tập thể và kỹ năng điều phối nhân sự trong các sự kiện quy mô lớn.", en: "Developed a strong sense of responsibility to the community and coordinated teams at large-scale events." },
+        icon: HeartHandshake,
+      },
+      {
+        desc: { vi: "Danh hiệu Sinh viên 5 Tốt cấp Trường.", en: "University-level Five-Merit Student title." },
+        lesson: { vi: "Hoàn thiện bộ tiêu chuẩn toàn diện về Đạo đức, Học tập, Thể lực, Tình nguyện và Hội nhập quốc tế.", en: "Met the all-round standards of ethics, academics, fitness, volunteering and international integration." },
+        icon: Medal, highlight: true,
+      },
+      {
+        desc: { vi: "Giấy khen xuất sắc trong công tác Hội và phong trào.", en: "Certificate of Merit for outstanding Student Association work." },
+        lesson: { vi: "Rèn luyện kỹ năng lãnh đạo phong trào và khả năng kết nối nguồn lực giữa các tổ chức đoàn thể.", en: "Honed leadership in student initiatives and the ability to connect resources across organizations." },
+        icon: Medal,
+      },
+      {
+        desc: { vi: "Tham gia văn nghệ & các hội thảo.", en: "Performed in arts events & attended workshops." },
+        lesson: { vi: "Mở rộng tư duy đa ngành và xây dựng mạng lưới quan hệ với các chuyên gia và bạn bè cùng chí hướng.", en: "Broadened my interdisciplinary thinking and built a network of experts and like-minded peers." },
+        icon: Music,
+      },
     ],
     images: [
       "/pictures/z7706777127210_2b4de4ae5c6cf9333d50750e6a50d47d.jpg",
@@ -60,16 +103,44 @@ const rawTimeline: Chapter[] = [
   },
   {
     year: "2024",
-    title: "Bứt phá thành tích",
-    subtitle: "Thử thách giới hạn & Chuyên sâu kỹ thuật",
+    title: { vi: "Bứt phá thành tích", en: "Breaking Through" },
+    subtitle: { vi: "Thử thách giới hạn & Chuyên sâu kỹ thuật", en: "Pushing Limits & Deepening Technical Skills" },
     milestones: [
-      { desc: "Giải Nhì cuộc thi SPIT Front-end 2024.", lesson: "Nâng cấp tư duy UI/UX chuyên sâu, kết hợp giữa tính thẩm mỹ và hiệu năng kỹ thuật trong phát triển ứng dụng.", icon: Terminal, highlight: true },
-      { desc: "Danh hiệu Sao tháng Giêng cấp Trường.", lesson: "Khẳng định bản lĩnh của một cán bộ Đoàn - Hội xuất sắc, biết dung hòa giữa học thuật và công tác xã hội.", icon: Star, highlight: true },
-      { desc: "Danh hiệu Sinh viên 5 Tốt cấp Trường (Năm 2).", lesson: "Duy trì sự bền bỉ trong việc rèn luyện các tiêu chí toàn diện, không ngừng nâng cao chuẩn mực của bản thân.", icon: Medal },
-      { desc: "Tham gia Olympic Toán học Sinh viên toàn quốc.", lesson: "Mài giũa khả năng phân tích toán học logic - nền tảng để giải quyết những thách thức phức tạp trong ngành IT.", icon: BookOpen },
-      { desc: "MC IT Cup 2024 & Office Tour.", lesson: "Phát triển kỹ năng dẫn chương trình linh hoạt và tìm hiểu văn hóa doanh nghiệp tại các tập đoàn công nghệ lớn.", icon: Sparkles },
-      { desc: "Giấy khen xuất sắc trong công tác Hội và phong trào.", lesson: "Đúc kết kinh nghiệm tổ chức các hoạt động quy mô lớn và kỹ năng truyền cảm hứng cho cộng đồng sinh viên.", icon: Medal },
-      { desc: "Tham gia các seminar và hội thảo.", lesson: "Cập nhật những xu hướng công nghệ mới nhất và rèn luyện kỹ năng đặt câu hỏi phản biện khoa học.", icon: Lightbulb },
+      {
+        desc: { vi: "Giải Nhì cuộc thi SPIT Front-end 2024.", en: "Second Prize, SPIT Front-end Contest 2024." },
+        lesson: { vi: "Nâng cấp tư duy UI/UX chuyên sâu, kết hợp giữa tính thẩm mỹ và hiệu năng kỹ thuật trong phát triển ứng dụng.", en: "Leveled up my UI/UX thinking, balancing aesthetics with technical performance in app development." },
+        icon: Terminal, highlight: true,
+      },
+      {
+        desc: { vi: "Danh hiệu Sao tháng Giêng cấp Trường.", en: "University-level January Star Award." },
+        lesson: { vi: "Khẳng định bản lĩnh của một cán bộ Đoàn - Hội xuất sắc, biết dung hòa giữa học thuật và công tác xã hội.", en: "Proved myself as a standout Youth Union & Student Association officer, balancing academics with community work." },
+        icon: Star, highlight: true,
+      },
+      {
+        desc: { vi: "Danh hiệu Sinh viên 5 Tốt cấp Trường (Năm 2).", en: "University-level Five-Merit Student title (second year)." },
+        lesson: { vi: "Duy trì sự bền bỉ trong việc rèn luyện các tiêu chí toàn diện, không ngừng nâng cao chuẩn mực của bản thân.", en: "Stayed consistent across every all-round criterion, continually raising my own standards." },
+        icon: Medal,
+      },
+      {
+        desc: { vi: "Tham gia Olympic Toán học Sinh viên toàn quốc.", en: "Competed in the National Student Mathematics Olympiad." },
+        lesson: { vi: "Mài giũa khả năng phân tích toán học logic - nền tảng để giải quyết những thách thức phức tạp trong ngành IT.", en: "Sharpened logical, mathematical analysis — the foundation for tackling complex challenges in IT." },
+        icon: BookOpen,
+      },
+      {
+        desc: { vi: "MC IT Cup 2024 & Office Tour.", en: "MC for IT Cup 2024 & Office Tour." },
+        lesson: { vi: "Phát triển kỹ năng dẫn chương trình linh hoạt và tìm hiểu văn hóa doanh nghiệp tại các tập đoàn công nghệ lớn.", en: "Developed versatile hosting skills and explored the workplace culture of major tech companies." },
+        icon: Sparkles,
+      },
+      {
+        desc: { vi: "Giấy khen xuất sắc trong công tác Hội và phong trào.", en: "Certificate of Merit for outstanding Student Association work." },
+        lesson: { vi: "Đúc kết kinh nghiệm tổ chức các hoạt động quy mô lớn và kỹ năng truyền cảm hứng cho cộng đồng sinh viên.", en: "Gained hands-on experience running large-scale events and inspiring the student community." },
+        icon: Medal,
+      },
+      {
+        desc: { vi: "Tham gia các seminar và hội thảo.", en: "Attended seminars and workshops." },
+        lesson: { vi: "Cập nhật những xu hướng công nghệ mới nhất và rèn luyện kỹ năng đặt câu hỏi phản biện khoa học.", en: "Kept up with the latest tech trends and practiced asking sharp, critical questions." },
+        icon: Lightbulb,
+      },
     ],
     images: [
       "/pictures/mc.png",
@@ -82,14 +153,34 @@ const rawTimeline: Chapter[] = [
   },
   {
     year: "2025",
-    title: "Chuyên nghiệp hóa",
-    subtitle: "Thực chiến doanh nghiệp & Nghiên cứu khoa học",
+    title: { vi: "Chuyên nghiệp hóa", en: "Going Professional" },
+    subtitle: { vi: "Thực chiến doanh nghiệp & Nghiên cứu khoa học", en: "Industry Experience & Scientific Research" },
     milestones: [
-      { desc: "Phó Liên chi hội Khoa CNTT và Phó ban Kỹ năng CLB.", lesson: "Phát triển năng lực và kỹ năng quản trị tổ chức để vận hành hiệu quả các phong trào sinh viên.", icon: Briefcase },
-      { desc: "Thực tập Tester tại DHY Solutions.", lesson: "Làm quen với quy trình Agile/Scrum và học cách đảm bảo chất lượng phần mềm thông qua tư duy kiểm thử tỉ mỉ.", icon: Briefcase },
-      { desc: "Hoàn thành Nghiên cứu khoa học cấp Trường.", lesson: "Rèn luyện phương pháp luận khoa học, kỹ năng thu thập dữ liệu và tư duy giải quyết vấn đề độc lập.", icon: Microscope, highlight: true },
-      { desc: "Sinh viên & Đoàn viên Xuất sắc 2024-2025.", lesson: "Minh chứng cho sự kiên trì trong suốt lộ trình dài, khẳng định vai trò tiên phong trong các hoạt động đoàn thể.", icon: Rocket },
-      { desc: "Tham gia Hội thảo Nghiên cứu khoa học sinh viên.", lesson: "Phát triển kỹ năng thuyết trình báo cáo khoa học và khả năng bảo vệ quan điểm trước hội đồng chuyên môn.", icon: Medal },
+      {
+        desc: { vi: "Phó Liên chi hội Khoa CNTT và Phó ban Kỹ năng CLB.", en: "Vice President of the Faculty of IT Student Association and Deputy Head of Skills at the club." },
+        lesson: { vi: "Phát triển năng lực và kỹ năng quản trị tổ chức để vận hành hiệu quả các phong trào sinh viên.", en: "Grew my organizational and management skills to run student programs effectively." },
+        icon: Briefcase,
+      },
+      {
+        desc: { vi: "Thực tập Tester tại DHY Solutions.", en: "Software Tester Intern at DHY Solutions." },
+        lesson: { vi: "Làm quen với quy trình Agile/Scrum và học cách đảm bảo chất lượng phần mềm thông qua tư duy kiểm thử tỉ mỉ.", en: "Worked within Agile/Scrum and learned to safeguard software quality through meticulous testing." },
+        icon: Briefcase,
+      },
+      {
+        desc: { vi: "Hoàn thành Nghiên cứu khoa học cấp Trường.", en: "Completed a university-level research project." },
+        lesson: { vi: "Rèn luyện phương pháp luận khoa học, kỹ năng thu thập dữ liệu và tư duy giải quyết vấn đề độc lập.", en: "Trained in research methodology, data collection and independent problem-solving." },
+        icon: Microscope, highlight: true,
+      },
+      {
+        desc: { vi: "Sinh viên & Đoàn viên Xuất sắc 2024-2025.", en: "Excellent Student & Outstanding Youth Union Member 2024–2025." },
+        lesson: { vi: "Minh chứng cho sự kiên trì trong suốt lộ trình dài, khẳng định vai trò tiên phong trong các hoạt động đoàn thể.", en: "A testament to perseverance over the long run and to a leading role in Youth Union activities." },
+        icon: Rocket,
+      },
+      {
+        desc: { vi: "Tham gia Hội thảo Nghiên cứu khoa học sinh viên.", en: "Took part in the Student Scientific Research Conference." },
+        lesson: { vi: "Phát triển kỹ năng thuyết trình báo cáo khoa học và khả năng bảo vệ quan điểm trước hội đồng chuyên môn.", en: "Developed my skills in presenting research and defending my findings before an expert panel." },
+        icon: Medal,
+      },
     ],
     images: [
       "/pictures/z7706777017285_3edda6686d13e489d1bd22cc44f3ad82.jpg",
@@ -103,16 +194,44 @@ const rawTimeline: Chapter[] = [
   },
   {
     year: "2026",
-    title: "Cống hiến & Vươn xa",
-    subtitle: "Tốt nghiệp & Khởi đầu hành trình mới",
+    title: { vi: "Cống hiến & Vươn xa", en: "Giving Back & Reaching Further" },
+    subtitle: { vi: "Tốt nghiệp & Khởi đầu hành trình mới", en: "Graduation & the Start of a New Journey" },
     milestones: [
-      { desc: "Công bố bài báo nghiên cứu khoa học.", lesson: "Bài báo “Phương pháp kết hợp đặc trưng thích nghi cho bài toán phân lớp bệnh viêm phổi từ ảnh X-quang” được công nhận tại Trường Đại học Khoa học, Đại học Huế.", icon: FileText, highlight: true },
-      { desc: "Giải Nhì HUE-ICT Challenge 2026.", lesson: "Phần thi Sản phẩm sáng tạo CNTT với đề tài Gated Fusion chẩn đoán viêm phổi từ ảnh X-quang – đưa nghiên cứu đến gần hơn với thực tiễn.", icon: Trophy, highlight: true },
-      { desc: "Hỗ trợ cuộc thi ICPC.", lesson: "Học hỏi quy trình tổ chức giải đấu lập trình chuẩn quốc tế và kỹ năng xử lý các tình huống kỹ thuật phát sinh.", icon: Globe },
-      { desc: "Thực tập tại Trung tâm Internet Việt Nam (VNNIC).", lesson: "Phát triển giao diện website và ứng dụng mô hình AI đa phương thức trong môi trường làm việc chuyên nghiệp.", icon: Briefcase },
-      { desc: "Hoàn thành Khóa luận tốt nghiệp.", lesson: "Sản phẩm kết tinh 4 năm đại học - ứng dụng toàn bộ kiến thức kỹ thuật và thực tiễn để giải quyết một bài toán xã hội.", icon: GraduationCap },
-      { desc: "Tốt nghiệp với danh hiệu Á khoa Khoa CNTT.", lesson: "Khép lại 4 năm đại học bằng thành quả xứng đáng cho sự bền bỉ và nỗ lực không ngừng.", icon: Crown, highlight: true },
-      { desc: "Lập trình viên Fresher tại PT Valley.", lesson: "Bắt đầu hành trình đi làm: phát triển ứng dụng di động đa nền tảng với Flutter và Dart.", icon: Smartphone },
+      {
+        desc: { vi: "Công bố bài báo nghiên cứu khoa học.", en: "Published a scientific research paper." },
+        lesson: { vi: "Bài báo “Phương pháp kết hợp đặc trưng thích nghi cho bài toán phân lớp bệnh viêm phổi từ ảnh X-quang” được công nhận tại Trường Đại học Khoa học, Đại học Huế.", en: "The paper “An Adaptive Feature Fusion Method for Pneumonia Classification from X-ray Images” was recognized at the University of Sciences, Hue University." },
+        icon: FileText, highlight: true,
+      },
+      {
+        desc: { vi: "Giải Nhì HUE-ICT Challenge 2026.", en: "Second Prize, HUE-ICT Challenge 2026." },
+        lesson: { vi: "Phần thi Sản phẩm sáng tạo CNTT với đề tài Gated Fusion chẩn đoán viêm phổi từ ảnh X-quang – đưa nghiên cứu đến gần hơn với thực tiễn.", en: "Creative IT Product category, with a Gated Fusion model for diagnosing pneumonia from X-ray images — bringing research closer to real-world use." },
+        icon: Trophy, highlight: true,
+      },
+      {
+        desc: { vi: "Hỗ trợ cuộc thi ICPC.", en: "Supported the ICPC programming contest." },
+        lesson: { vi: "Học hỏi quy trình tổ chức giải đấu lập trình chuẩn quốc tế và kỹ năng xử lý các tình huống kỹ thuật phát sinh.", en: "Learned how an international-standard programming contest is run and how to handle technical issues on the fly." },
+        icon: Globe,
+      },
+      {
+        desc: { vi: "Thực tập tại Trung tâm Internet Việt Nam (VNNIC).", en: "Intern at the Vietnam Internet Network Information Center (VNNIC)." },
+        lesson: { vi: "Phát triển giao diện website và ứng dụng mô hình AI đa phương thức trong môi trường làm việc chuyên nghiệp.", en: "Built website interfaces and applied multimodal AI models in a professional environment." },
+        icon: Briefcase,
+      },
+      {
+        desc: { vi: "Hoàn thành Khóa luận tốt nghiệp.", en: "Completed my graduation thesis." },
+        lesson: { vi: "Sản phẩm kết tinh 4 năm đại học - ứng dụng toàn bộ kiến thức kỹ thuật và thực tiễn để giải quyết một bài toán xã hội.", en: "The culmination of four years at university — applying everything I learned, in theory and practice, to a real social problem." },
+        icon: GraduationCap,
+      },
+      {
+        desc: { vi: "Tốt nghiệp với danh hiệu Á khoa Khoa CNTT.", en: "Graduated as Runner-up Valedictorian of the Faculty of Information Technology." },
+        lesson: { vi: "Khép lại 4 năm đại học bằng thành quả xứng đáng cho sự bền bỉ và nỗ lực không ngừng.", en: "Closing four years of university with a well-earned reward for persistence and relentless effort." },
+        icon: Crown, highlight: true,
+      },
+      {
+        desc: { vi: "Lập trình viên Fresher tại PT Valley.", en: "Fresher Developer at PT Valley." },
+        lesson: { vi: "Bắt đầu hành trình đi làm: phát triển ứng dụng di động đa nền tảng với Flutter và Dart.", en: "Starting my career: building cross-platform mobile apps with Flutter and Dart." },
+        icon: Smartphone,
+      },
     ],
     images: [
       "/pictures/z7719855323618_1f8a7ed679cce5d893cc0fc20921c8b6.jpg",
@@ -137,23 +256,25 @@ const MAX_ALTITUDE = 10000; // mét – độ cao khi tới chặng cuối
 
 type OpenFn = (images: string[], index: number) => void;
 
-const formatAltitude = (v: number) => `${Math.round(v).toLocaleString('vi-VN')} m`;
+const numberLocale = (lang: Lang) => (lang === "en" ? "en-US" : "vi-VN");
+const formatAltitude = (v: number, lang: Lang) => `${Math.round(v).toLocaleString(numberLocale(lang))} m`;
 
 // ============ THẺ LÊN MÁY BAY (mỗi năm) ============
 const BoardingPass = ({ chapter, index, className = "" }: { chapter: Chapter; index: number; className?: string }) => {
-  const from = index === 0 ? "Huế" : timelineData[index - 1].year;
+  const { lang, t } = useLang();
+  const from = index === 0 ? t("Huế", "Hue") : timelineData[index - 1].year;
   const altitude = Math.round(((index + 1) / timelineData.length) * MAX_ALTITUDE);
   return (
     <div className={`flex flex-col overflow-hidden rounded-[2rem] border border-white bg-white/90 shadow-[0_30px_70px_-35px_rgba(150,50,70,0.55)] backdrop-blur ${className}`}>
       {/* Dải đầu thẻ */}
       <div className="relative bg-gradient-to-r from-rose-500 to-pink-400 px-6 py-4 text-white">
         <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.25em] text-rose-50">
-          <span>Thẻ lên máy bay</span>
-          <span>Chương {String(index + 1).padStart(2, "0")}</span>
+          <span>{t("Thẻ lên máy bay", "Boarding pass")}</span>
+          <span>{t("Chương", "Chapter")} {String(index + 1).padStart(2, "0")}</span>
         </div>
         <div className="mt-3 flex items-center justify-between">
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-rose-100">Điểm đi</p>
+            <p className="text-[10px] uppercase tracking-widest text-rose-100">{t("Điểm đi", "From")}</p>
             <p className="text-xl font-black">{from}</p>
           </div>
           <div className="flex flex-1 items-center gap-2 px-4">
@@ -162,7 +283,7 @@ const BoardingPass = ({ chapter, index, className = "" }: { chapter: Chapter; in
             <span className="h-px flex-1 border-t border-dashed border-white/60" />
           </div>
           <div className="text-right">
-            <p className="text-[10px] uppercase tracking-widest text-rose-100">Điểm đến</p>
+            <p className="text-[10px] uppercase tracking-widest text-rose-100">{t("Điểm đến", "To")}</p>
             <p className="text-xl font-black">{chapter.year}</p>
           </div>
         </div>
@@ -171,12 +292,12 @@ const BoardingPass = ({ chapter, index, className = "" }: { chapter: Chapter; in
       {/* Thông tin chuyến bay */}
       <div className="px-6 pt-5">
         <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-[#a88a80]">
-          <span>Chuyến TT-{chapter.year}</span>
+          <span>{t("Chuyến", "Flight")} TT-{chapter.year}</span>
           <span className="h-1 w-1 rounded-full bg-rose-300" />
-          <span>Độ cao {altitude.toLocaleString('vi-VN')} m</span>
+          <span>{t("Độ cao", "Altitude")} {altitude.toLocaleString(numberLocale(lang))} m</span>
         </div>
-        <h3 className="mt-2 text-2xl font-black leading-tight tracking-tight text-[#3a2420]">{chapter.title}</h3>
-        <p className="mt-1 text-sm italic text-[#a88a80]">{chapter.subtitle}</p>
+        <h3 className="mt-2 text-2xl font-black leading-tight tracking-tight text-[#3a2420]">{pick(chapter.title, lang)}</h3>
+        <p className="mt-1 text-sm italic text-[#a88a80]">{pick(chapter.subtitle, lang)}</p>
       </div>
 
       {/* Đường răng cưa kiểu vé */}
@@ -188,16 +309,16 @@ const BoardingPass = ({ chapter, index, className = "" }: { chapter: Chapter; in
 
       {/* Cột mốc */}
       <ul className="journey-scroll flex-1 space-y-2.5 overflow-y-auto px-6 pb-6">
-        {chapter.milestones.map((ms) => {
+        {chapter.milestones.map((ms, i) => {
           const Icon = ms.icon;
           return (
-            <li key={ms.desc} className="flex items-start gap-3">
+            <li key={i} className="flex items-start gap-3">
               <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${ms.highlight ? "bg-gradient-to-br from-rose-500 to-pink-400 text-white" : "bg-rose-50 text-rose-500"}`}>
                 <Icon size={15} />
               </span>
               <div>
-                <p className="text-sm font-bold leading-snug text-[#3a2420]">{ms.desc}</p>
-                <p className="mt-0.5 text-xs leading-relaxed text-[#8a6f66]">{ms.lesson}</p>
+                <p className="text-sm font-bold leading-snug text-[#3a2420]">{pick(ms.desc, lang)}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-[#8a6f66]">{pick(ms.lesson, lang)}</p>
               </div>
             </li>
           );
@@ -222,6 +343,7 @@ const Cloud = ({ className, style }: { className: string; style?: React.Componen
 const MarqueeRow = ({ images, year, reverse, duration, offset, onOpen, tall }: {
   images: string[]; year: string; reverse?: boolean; duration: number; offset: number; onOpen: OpenFn; tall?: boolean;
 }) => {
+  const { t } = useLang();
   const trackRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const paused = useRef(false);
@@ -253,9 +375,9 @@ const MarqueeRow = ({ images, year, reverse, duration, offset, onOpen, tall }: {
               key={i}
               onClick={() => onOpen(images, i % images.length)}
               className={`group/img relative shrink-0 overflow-hidden rounded-[1.5rem] border-4 border-white shadow-[0_20px_40px_-25px_rgba(150,50,70,0.55)] ${tall ? "h-[210px] w-[280px]" : "h-[170px] w-[230px]"}`}
-              aria-label={`Xem ảnh ${idx + 1} năm ${year}`}
+              aria-label={t(`Xem ảnh ${idx + 1} năm ${year}`, `View photo ${idx + 1} from ${year}`)}
             >
-              <Image src={img} alt={`Khoảnh khắc năm ${year}`} fill sizes="280px" quality={85} className="object-cover transition-transform duration-700 group-hover/img:scale-110" />
+              <Image src={img} alt={t(`Khoảnh khắc năm ${year}`, `A moment from ${year}`)} fill sizes="280px" quality={85} className="object-cover transition-transform duration-700 group-hover/img:scale-110" />
               <div className="absolute inset-0 bg-[#4a1f2a]/0 transition-colors duration-500 group-hover/img:bg-[#4a1f2a]/20" />
             </button>
           );
@@ -266,6 +388,7 @@ const MarqueeRow = ({ images, year, reverse, duration, offset, onOpen, tall }: {
 };
 
 const PhotoStream = ({ chapter, onOpen }: { chapter: Chapter; onOpen: OpenFn }) => {
+  const { t } = useLang();
   // Hàng dưới bắt đầu từ giữa album để hai hàng không trùng ảnh
   const half = Math.ceil(chapter.images.length / 2);
   const shifted = [...chapter.images.slice(half), ...chapter.images.slice(0, half)];
@@ -280,7 +403,7 @@ const PhotoStream = ({ chapter, onOpen }: { chapter: Chapter; onOpen: OpenFn }) 
       <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#fbf5f1] to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#fbf5f1] to-transparent" />
       <span className="pointer-events-none absolute -bottom-7 right-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-rose-400">
-        <Images size={12} /> {chapter.images.length} khoảnh khắc · rê chuột để dừng
+        <Images size={12} /> {chapter.images.length} {t("khoảnh khắc · rê chuột để dừng", "moments · hover to pause")}
       </span>
     </div>
   );
@@ -288,6 +411,7 @@ const PhotoStream = ({ chapter, onOpen }: { chapter: Chapter; onOpen: OpenFn }) 
 
 // ============ CHUYẾN BAY DỌC ============
 const VerticalFlight = ({ onOpen }: { onOpen: OpenFn }) => {
+  const { lang, t } = useLang();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 65%", "end 65%"] });
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
@@ -311,8 +435,8 @@ const VerticalFlight = ({ onOpen }: { onOpen: OpenFn }) => {
             <Plane size={20} fill="currentColor" className="rotate-[135deg]" />
           </span>
           <span className="mt-2 hidden whitespace-nowrap rounded-full bg-white/90 px-2.5 py-1 text-center shadow-md backdrop-blur lg:block">
-            <span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-[#a88a80]">Độ cao</span>
-            <span className="block text-[11px] font-black tabular-nums text-rose-500">{formatAltitude(altitude)}</span>
+            <span className="block text-[8px] font-bold uppercase tracking-[0.2em] text-[#a88a80]">{t("Độ cao", "Altitude")}</span>
+            <span className="block text-[11px] font-black tabular-nums text-rose-500">{formatAltitude(altitude, lang)}</span>
           </span>
         </motion.div>
 
@@ -362,11 +486,11 @@ const VerticalFlight = ({ onOpen }: { onOpen: OpenFn }) => {
             <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="relative z-10 rounded-full bg-[#fbf5f1] p-4">
               <Image src="/pictures/Plane2.png" alt="" width={200} height={200} className="h-auto w-[180px] drop-shadow-[0_20px_40px_rgba(244,63,94,0.3)]" />
             </motion.div>
-            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.35em] text-rose-500">Điểm đến tiếp theo</p>
+            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.35em] text-rose-500">{t("Điểm đến tiếp theo", "Next destination")}</p>
             <h3 className="mt-2 text-4xl font-black leading-tight tracking-tight">
-              Bầu trời <span className="font-normal italic text-rose-500">rộng lớn hơn</span>
+              {t("Bầu trời", "A wider")} <span className="font-normal italic text-rose-500">{t("rộng lớn hơn", "sky ahead")}</span>
             </h3>
-            <p className="mt-3 italic text-[#a88a80]">Hành trình vẫn đang tiếp tục…</p>
+            <p className="mt-3 italic text-[#a88a80]">{t("Hành trình vẫn đang tiếp tục…", "The journey continues…")}</p>
           </div>
         </div>
       </div>
@@ -375,15 +499,16 @@ const VerticalFlight = ({ onOpen }: { onOpen: OpenFn }) => {
 };
 
 const Journey = () => {
+  const { t } = useLang();
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
   const open: OpenFn = (images, index) => setLightbox({ images, index });
 
   const totalMilestones = timelineData.reduce((n, c) => n + c.milestones.length, 0);
   const totalPhotos = timelineData.reduce((n, c) => n + c.images.length, 0);
   const stats = [
-    { value: timelineData.length, label: "Chặng bay" },
-    { value: totalMilestones, label: "Cột mốc" },
-    { value: totalPhotos, label: "Khoảnh khắc" },
+    { value: timelineData.length, label: t("Chặng bay", "Legs") },
+    { value: totalMilestones, label: t("Cột mốc", "Milestones") },
+    { value: totalPhotos, label: t("Khoảnh khắc", "Moments") },
   ];
 
   // Điều khiển xem ảnh bằng bàn phím
@@ -422,7 +547,7 @@ const Journey = () => {
           <div className="lg:col-span-7">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
               <span className="h-px w-10 bg-rose-300" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Hành trình của mình</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{t("Hành trình của mình", "My journey")}</span>
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -430,9 +555,9 @@ const Journey = () => {
               transition={{ duration: 0.9, ease }}
               className="text-5xl font-black leading-[0.95] tracking-tighter md:text-7xl"
             >
-              Bay xa, <br />
+              {t("Bay xa,", "Flying far,")} <br />
               <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text font-normal italic text-transparent">
-                bay cao hơn mỗi năm
+                {t("bay cao hơn mỗi năm", "climbing higher every year")}
               </span>
             </motion.h1>
             <motion.p
@@ -441,7 +566,10 @@ const Journey = () => {
               transition={{ duration: 0.8, ease, delay: 0.2 }}
               className="mt-8 max-w-xl border-l-2 border-rose-300 pl-5 italic leading-relaxed text-[#6e5249]"
             >
-              Từ cô học sinh mê giải toán đến Á khoa Khoa CNTT – mỗi năm là một chặng bay, mỗi chặng lại đưa mình lên một độ cao mới.
+              {t(
+                "Từ cô học sinh mê giải toán đến Á khoa Khoa CNTT – mỗi năm là một chặng bay, mỗi chặng lại đưa mình lên một độ cao mới.",
+                "From a schoolgirl who loved solving math problems to Runner-up Valedictorian of the Faculty of Information Technology – every year is a new leg of the flight, and every leg takes me to a new altitude.",
+              )}
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -449,8 +577,8 @@ const Journey = () => {
               transition={{ duration: 0.8, ease, delay: 0.35 }}
               className="mt-8 grid max-w-md grid-cols-3 gap-px overflow-hidden rounded-[1.5rem] border border-rose-100 bg-rose-100"
             >
-              {stats.map((s) => (
-                <div key={s.label} className="bg-[#fffaf8] px-2 py-4 text-center">
+              {stats.map((s, i) => (
+                <div key={i} className="bg-[#fffaf8] px-2 py-4 text-center">
                   <div className="text-3xl font-black text-rose-500">{s.value}</div>
                   <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#a88a80]">{s.label}</div>
                 </div>
@@ -469,7 +597,7 @@ const Journey = () => {
               <path d="M 0 190 C 120 180, 200 120, 300 60" fill="none" stroke="#fda4af" strokeWidth="2" strokeDasharray="6 8" />
             </svg>
             <motion.div animate={{ y: [0, -16, 0], rotate: [0, 3, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
-              <Image src="/pictures/Plane.png" alt="Máy bay giấy" width={360} height={360} priority className="relative h-auto w-[280px] drop-shadow-[0_30px_50px_rgba(244,63,94,0.35)] md:w-[360px]" />
+              <Image src="/pictures/Plane.png" alt={t("Máy bay giấy", "Paper plane")} width={360} height={360} priority className="relative h-auto w-[280px] drop-shadow-[0_30px_50px_rgba(244,63,94,0.35)] md:w-[360px]" />
             </motion.div>
           </motion.div>
         </div>
@@ -479,7 +607,7 @@ const Journey = () => {
           transition={{ duration: 2, repeat: Infinity }}
           className="relative z-10 mt-12 flex flex-col items-center gap-1 text-rose-500"
         >
-          <span className="text-[10px] font-bold uppercase tracking-[0.35em]">Cuộn xuống để cất cánh</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.35em]">{t("Cuộn xuống để cất cánh", "Scroll down to take off")}</span>
           <ChevronsDown size={20} />
         </motion.div>
       </div>
@@ -499,17 +627,17 @@ const Journey = () => {
           <div className="pointer-events-none absolute -left-20 -top-20 h-80 w-80 rounded-full bg-rose-400/25 blur-[100px]" />
           <Quote size={40} className="mx-auto mb-5 text-rose-300/60" />
           <p className="relative text-2xl font-light italic text-rose-50 md:text-4xl">
-            Hành trình vạn dặm bắt đầu từ những <span className="text-rose-300">bước chân nhỏ bé.</span>
+            {t("Hành trình vạn dặm bắt đầu từ những", "A journey of a thousand miles begins with")} <span className="text-rose-300">{t("bước chân nhỏ bé.", "a single small step.")}</span>
           </p>
           <p className="relative mt-5 flex items-center justify-center gap-2 text-sm text-rose-100/70">
-            <MapPin size={14} /> Khởi hành từ Huế
+            <MapPin size={14} /> {t("Khởi hành từ Huế", "Departing from Hue")}
           </p>
         </motion.div>
 
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {[
-            { href: "/journey/activities", image: "/pictures/Hỗ_trợ_ICPC.jpg", icon: Images, eyebrow: "Album", title: "Khoảnh khắc ngoại khóa", desc: "Văn nghệ, MC & Tình nguyện" },
-            { href: "/journey/certificate", image: "/pictures/Sao tháng giêng-2024.jpg", icon: Trophy, eyebrow: "Bảng vàng", title: "Thành tích & Chứng nhận", desc: "Danh hiệu, giải thưởng & chứng chỉ" },
+            { href: "/journey/activities", image: "/pictures/Hỗ_trợ_ICPC.jpg", icon: Images, eyebrow: t("Album", "Album"), title: t("Khoảnh khắc ngoại khóa", "Extracurricular Moments"), desc: t("Văn nghệ, MC & Tình nguyện", "Performing arts, MC & Volunteering") },
+            { href: "/journey/certificate", image: "/pictures/Sao tháng giêng-2024.jpg", icon: Trophy, eyebrow: t("Bảng vàng", "Hall of Fame"), title: t("Thành tích & Chứng nhận", "Achievements & Certificates"), desc: t("Danh hiệu, giải thưởng & chứng chỉ", "Titles, awards & certificates") },
           ].map(({ href, image, icon: Icon, eyebrow, title, desc }) => (
             <Link key={href} href={href} className="group relative block h-[320px] overflow-hidden rounded-[2.5rem] shadow-[0_30px_60px_-30px_rgba(150,50,70,0.5)]">
               <Image src={image} alt={title} fill sizes="(max-width: 768px) 100vw, 560px" className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110" />
@@ -542,13 +670,13 @@ const Journey = () => {
             className="fixed inset-0 z-[200] flex items-center justify-center bg-[#2a1216]/90 p-4 backdrop-blur-md"
             onClick={() => setLightbox(null)}
           >
-            <button className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20" aria-label="Đóng">
+            <button className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20" aria-label={t("Đóng", "Close")}>
               <X size={22} />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); step(-1); }}
               className="absolute left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-rose-500"
-              aria-label="Ảnh trước"
+              aria-label={t("Ảnh trước", "Previous photo")}
             >
               <ChevronLeft size={24} />
             </button>
@@ -560,12 +688,12 @@ const Journey = () => {
               className="relative h-[75vh] w-full max-w-5xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image src={lightbox.images[lightbox.index]} alt="Khoảnh khắc" fill sizes="100vw" quality={90} className="object-contain" />
+              <Image src={lightbox.images[lightbox.index]} alt={t("Khoảnh khắc", "Moment")} fill sizes="100vw" quality={90} className="object-contain" />
             </motion.div>
             <button
               onClick={(e) => { e.stopPropagation(); step(1); }}
               className="absolute right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-rose-500"
-              aria-label="Ảnh tiếp theo"
+              aria-label={t("Ảnh tiếp theo", "Next photo")}
             >
               <ChevronRight size={24} />
             </button>
