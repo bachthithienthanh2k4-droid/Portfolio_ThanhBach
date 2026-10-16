@@ -1,301 +1,448 @@
 "use client";
 
-import React from 'react';
-import { motion, Variants } from 'framer-motion';
+import React, { useState } from 'react';
+import {
+    motion,
+    AnimatePresence,
+    useMotionValue,
+    useMotionTemplate,
+    Variants,
+} from 'framer-motion';
 import {
     Stethoscope,
     Car,
     MessageSquare,
-    ExternalLink,
     Layers,
     Sparkles,
     Activity,
     ArrowUpRight,
-    ArrowRight,
-    Layout
+    Layout,
+    Award,
 } from 'lucide-react';
-import { GithubIcon } from '../components/icons';
 import Link from 'next/link';
 
+type ProjectGroup = "ai" | "web";
+
+type Project = {
+    year: string;
+    title: string;
+    category: string;
+    group: ProjectGroup;
+    desc: string;
+    icon: React.ElementType;
+    accent: string;
+    link: string;
+    techStack: string[];
+    image: string;
+    featured?: boolean;
+};
+
+const projectList: Project[] = [
+    {
+        year: "2025 - Hiện tại",
+        title: "Khóa luận Tốt nghiệp: Nghiên cứu phương pháp kết hợp đặc trưng đa nguồn dựa trên Gated Fusion cho bài toán chẩn đoán bệnh viêm phổi từ ảnh X-quang",
+        category: "Deep Learning / Healthcare",
+        group: "ai",
+        desc: "Dự án tâm huyết nhất, tập trung vào việc tối ưu hóa độ chính xác trong việc phát hiện các tổn thương phổi phức tạp bằng các kiến trúc mạng nơ-ron tiên tiến nhất.",
+        icon: Sparkles,
+        accent: "#f59e0b",
+        link: "https://drive.google.com/file/d/1AqDR3z6G5wPuqz_syZjtJ3CiMvAhmchR/view",
+        techStack: ["Python", "PyTorch", "EfficientNet"],
+        image: "/pictures/xray.png",
+        featured: true,
+    },
+    {
+        year: "2025",
+        title: "Nghiên cứu khoa học: Kết hợp Phân đoạn & Phân lớp",
+        category: "Research / AI",
+        group: "ai",
+        desc: "Đề tài nghiên cứu phương pháp kết hợp phân đoạn và phân lớp dựa trên học sâu cho chẩn đoán bệnh Viêm phổi từ ảnh X-quang lồng ngực.",
+        icon: Stethoscope,
+        accent: "#f43f5e",
+        link: "https://drive.google.com/file/d/1O1vPY-XOXIIM21QA4dJ-xUrYzcbW_o7H/view",
+        techStack: ["Python", "PyTorch", "Kaggle"],
+        image: "/pictures/NCKH_1.jpg",
+    },
+    {
+        year: "2025",
+        title: "Nhận dạng vùng phổi & Chẩn đoán đa giai đoạn",
+        category: "Computer Vision",
+        group: "ai",
+        desc: "Hệ thống kết hợp YOLOv8, VGG16 và Random Forest để tối ưu hóa độ chính xác trong chẩn đoán lâm sàng.",
+        icon: Activity,
+        accent: "#3b82f6",
+        link: "https://drive.google.com/file/d/1rtOeo2ktcGgeMjkaiQt_DBfYSB-jkCsk/view",
+        techStack: ["YOLOv8", "VGG16", "Random Forest"],
+        image: "/pictures/Lý thuyết nhận dạng.png",
+    },
+    {
+        year: "2025",
+        title: "Phân tích cảm xúc với PhoBERT",
+        category: "NLP / Vietnamese",
+        group: "ai",
+        desc: "Sử dụng mô hình PhoBERT để phân loại phản hồi sinh viên, hỗ trợ cải thiện chất lượng đào tạo.",
+        icon: MessageSquare,
+        accent: "#6366f1",
+        link: "https://drive.google.com/file/d/1PsZwZOL1JtzuVaNwAHwdSPXLKoD3V9qi/view",
+        techStack: ["NLP", "PhoBERT", "Transformers"],
+        image: "/pictures/Xử lý ngôn ngữ tự nhiên.png",
+    },
+    {
+        year: "2025",
+        title: "Nhận dạng Biển báo giao thông (CNN)",
+        category: "Computer Vision",
+        group: "ai",
+        desc: "Xây dựng mạng nơ-ron tích chập (CNN) để nhận diện biển báo từ tập dữ liệu thực tế.",
+        icon: Car,
+        accent: "#10b981",
+        link: "https://drive.google.com/file/d/1Y-Avf6gFmovR_S9rg7Pt0xtozGb0FEI9/view",
+        techStack: ["CNN", "OpenCV", "Tensorflow"],
+        image: "/pictures/Lý thuyết nhận dạng_2.png",
+    },
+    {
+        year: "2026",
+        title: "Thiết kế giao diện Chả cá cây Sang",
+        category: "UX/UI Design",
+        group: "web",
+        desc: "Dự án phát triển giao diện website bằng Next.js, tập trung vào trải nghiệm người dùng và hiệu năng.",
+        icon: Layout,
+        accent: "#f97316",
+        link: "https://chacacaysang.bachthanh.id.vn/",
+        techStack: ["Next.js", "TailwindCSS"],
+        image: "/pictures/cha_ca.png",
+    },
+    {
+        year: "2024",
+        title: "Thiết kế giao diện CLB SPIT",
+        category: "UX/UI Design",
+        group: "web",
+        desc: "Dự án đầu tay về phát triển giao diện bằng HTML/CSS thuần, tập trung vào trải nghiệm người dùng.",
+        icon: Layers,
+        accent: "#a855f7",
+        link: "https://bach-thi-thien-thanh.github.io/BanhTrang/index.html",
+        techStack: ["HTML", "CSS", "JS"],
+        image: "/pictures/front_end.png",
+    },
+];
+
+const filters: { key: "all" | ProjectGroup; label: string }[] = [
+    { key: "all", label: "Tất cả" },
+    { key: "ai", label: "AI & Nghiên cứu" },
+    { key: "web", label: "Web & Giao diện" },
+];
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const itemVariants: Variants = {
+    hidden: { y: 40, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease } },
+};
+
+// Vầng sáng chạy theo con trỏ chuột
+const useSpotlight = () => {
+    const mouseX = useMotionValue(-400);
+    const mouseY = useMotionValue(-400);
+    const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        mouseX.set(e.clientX - rect.left);
+        mouseY.set(e.clientY - rect.top);
+    };
+    return { mouseX, mouseY, onMouseMove };
+};
+
+const FeaturedProject = ({ project }: { project: Project }) => {
+    const { mouseX, mouseY, onMouseMove } = useSpotlight();
+    const spotlight = useMotionTemplate`radial-gradient(500px circle at ${mouseX}px ${mouseY}px, rgba(244,63,94,0.18), transparent 70%)`;
+    const Icon = project.icon;
+
+    return (
+        <motion.article
+            variants={itemVariants}
+            onMouseMove={onMouseMove}
+            className="group relative overflow-hidden rounded-[2.5rem] bg-[#2D1E17] text-white shadow-[0_50px_100px_-30px_rgba(45,30,23,0.55)]"
+        >
+            <motion.div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: spotlight }} />
+            <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-rose-500/20 blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-40 right-1/3 h-96 w-96 rounded-full bg-amber-400/10 blur-[120px]" />
+            <div
+                className="pointer-events-none absolute inset-0 opacity-[0.06]"
+                style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+            />
+
+            <div className="relative grid grid-cols-1 lg:grid-cols-12">
+                <div className="lg:col-span-7 p-8 md:p-14 flex flex-col">
+                    <div className="flex flex-wrap items-center gap-3 mb-10">
+                        <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-300 to-rose-400 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-[#2D1E17]">
+                            <Award size={14} /> Dự án nổi bật
+                        </span>
+                        <span className="rounded-full border border-white/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">
+                            {project.year}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-amber-300 ring-1 ring-white/15 transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-110">
+                            <Icon size={24} strokeWidth={1.5} />
+                        </div>
+                        <p className="text-xs font-black uppercase tracking-[0.25em] text-rose-300">{project.category}</p>
+                    </div>
+
+                    <h3 className="text-2xl md:text-4xl font-bold leading-[1.2] tracking-tight">
+                        {project.title}
+                    </h3>
+                    <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65">
+                        {project.desc}
+                    </p>
+
+                    <div className="mt-8 flex flex-wrap gap-2">
+                        {project.techStack.map((tech) => (
+                            <span key={tech} className="rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-semibold text-white/80 backdrop-blur">
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+
+                    <div className="mt-12 lg:mt-auto lg:pt-12">
+                        <Link
+                            href={project.link}
+                            target="_blank"
+                            className="group/btn relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 text-[#2D1E17] shadow-xl transition-transform active:scale-95"
+                        >
+                            <span className="absolute inset-0 w-0 bg-gradient-to-r from-rose-500 to-amber-400 transition-all duration-500 ease-out group-hover/btn:w-full" />
+                            <span className="relative z-10 text-[11px] font-black uppercase tracking-widest transition-colors group-hover/btn:text-white">Khám phá dự án</span>
+                            <ArrowUpRight size={18} className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 group-hover/btn:text-white" />
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="lg:col-span-5 relative p-6 md:p-10 lg:pl-0 flex items-center">
+                    <div className="relative w-full">
+                        <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-rose-500/40 via-amber-300/20 to-transparent blur-2xl opacity-60 transition-opacity duration-700 group-hover:opacity-100" />
+                        <div className="relative aspect-[4/3] lg:aspect-[4/5] overflow-hidden rounded-[2rem] ring-1 ring-white/20 transition-transform duration-700 group-hover:-translate-y-2 group-hover:rotate-1">
+                            <img
+                                src={encodeURI(project.image)}
+                                alt={project.title}
+                                className="h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#2D1E17]/70 via-transparent to-transparent" />
+                            <span className="absolute bottom-5 left-5 text-[64px] font-black leading-none text-white/15 select-none">01</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.article>
+    );
+};
+
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+    const { mouseX, mouseY, onMouseMove } = useSpotlight();
+    const spotlight = useMotionTemplate`radial-gradient(380px circle at ${mouseX}px ${mouseY}px, ${project.accent}22, transparent 70%)`;
+    const Icon = project.icon;
+
+    return (
+        <motion.article
+            layout
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.97 }}
+            transition={{ duration: 0.6, ease, delay: index * 0.06 }}
+            onMouseMove={onMouseMove}
+            className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-stone-200/80 bg-white/80 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-transparent hover:shadow-[0_40px_80px_-30px_rgba(45,30,23,0.3)]"
+        >
+            <motion.div className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: spotlight }} />
+            {/* Viền gradient khi hover */}
+            <div
+                className="pointer-events-none absolute inset-0 rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                style={{ boxShadow: `inset 0 0 0 1.5px ${project.accent}55` }}
+            />
+
+            {/* Ảnh */}
+            <div className="relative m-3 mb-0 aspect-[16/10] overflow-hidden rounded-[1.5rem]">
+                <img
+                    src={encodeURI(project.image)}
+                    alt={project.title}
+                    className="h-full w-full object-cover grayscale-[0.35] transition-all duration-[1.2s] ease-out group-hover:scale-110 group-hover:grayscale-0"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/10" />
+                <div
+                    className="absolute inset-0 opacity-0 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-30"
+                    style={{ background: `linear-gradient(135deg, ${project.accent}, transparent 65%)` }}
+                />
+
+                <div className="absolute left-4 top-4 flex items-center gap-2">
+                    <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-stone-800 backdrop-blur">
+                        {project.category}
+                    </span>
+                </div>
+                <span className="absolute right-4 top-4 rounded-full bg-black/40 px-3 py-1 text-[10px] font-bold tracking-widest text-white backdrop-blur">
+                    {project.year}
+                </span>
+                <span className="absolute bottom-3 left-5 text-5xl font-black leading-none text-white/80 drop-shadow-lg select-none">
+                    {String(index + 2).padStart(2, "0")}
+                </span>
+            </div>
+
+            {/* Nội dung */}
+            <div className="relative flex flex-1 flex-col p-7 md:p-8">
+                <div className="mb-5 flex items-center gap-3">
+                    <div
+                        className="flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-500 group-hover:-rotate-12 group-hover:scale-110"
+                        style={{ backgroundColor: `${project.accent}15`, color: project.accent }}
+                    >
+                        <Icon size={22} strokeWidth={1.75} />
+                    </div>
+                    <span className="h-px flex-1 bg-gradient-to-r from-stone-200 to-transparent" />
+                </div>
+
+                <h3 className="text-xl md:text-2xl font-bold leading-snug tracking-tight text-[#2D1E17]">
+                    {project.title}
+                </h3>
+                <p className="mt-3 text-[15px] leading-relaxed text-stone-500">
+                    {project.desc}
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                    {project.techStack.map((tech) => (
+                        <span key={tech} className="rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-[11px] font-semibold text-stone-600">
+                            {tech}
+                        </span>
+                    ))}
+                </div>
+
+                <div className="mt-auto pt-8">
+                    <Link
+                        href={project.link}
+                        target="_blank"
+                        className="group/btn flex items-center justify-between border-t border-stone-100 pt-5"
+                    >
+                        <span className="text-[11px] font-black uppercase tracking-[0.2em] text-stone-800 transition-colors group-hover/btn:text-rose-500">
+                            Xem chi tiết
+                        </span>
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2D1E17] text-white transition-all duration-500 group-hover:bg-rose-500 group-hover/btn:rotate-45">
+                            <ArrowUpRight size={18} />
+                        </span>
+                    </Link>
+                </div>
+            </div>
+        </motion.article>
+    );
+};
+
 const Projects = () => {
+    const [filter, setFilter] = useState<"all" | ProjectGroup>("all");
 
-    const containerVariants: Variants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.15 }
-        }
-    };
+    const featured = projectList.find((p) => p.featured)!;
+    const others = projectList
+        .filter((p) => !p.featured)
+        .filter((p) => filter === "all" || p.group === filter);
 
-    const itemVariants: Variants = {
-        hidden: { y: 40, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
-        }
-    };
-
-    const projectList = [
-        {
-            year: "2025 - Hiện tại",
-            title: "Khóa luận Tốt nghiệp: Phân tích X-quang Phổi nâng cao",
-            category: "Deep Learning / Healthcare",
-            desc: "Dự án tâm huyết nhất, tập trung vào việc tối ưu hóa độ chính xác trong việc phát hiện các tổn thương phổi phức tạp bằng các kiến trúc mạng nơ-ron tiên tiến nhất.",
-            icon: Sparkles,
-            color: "bg-amber-50/50",
-            borderColor: "border-amber-200",
-            size: "md:col-span-12",
-            link: "",
-            techStack: ["Python", "PyTorch", "EfficientNet"],
-            image: "/pictures/xray.png"
-        },
-        {
-            year: "2025",
-            title: "Nghiên cứu khoa học: Kết hợp Phân đoạn & Phân lớp",
-            category: "Research / AI",
-            desc: "Đề tài nghiên cứu phương pháp kết hợp phân đoạn và phân lớp dựa trên học sâu cho chẩn đoán bệnh Viêm phổi từ ảnh X-quang lồng ngực.",
-            icon: Stethoscope,
-            color: "bg-rose-50/50",
-            borderColor: "border-rose-200",
-            size: "md:col-span-6",
-            link: "https://drive.google.com/file/d/1O1vPY-XOXIIM21QA4dJ-xUrYzcbW_o7H/view",
-            techStack: ["Python", "PyTorch", "Kaggle"],
-            image: "/pictures/NCKH_1.jpg"
-        },
-        {
-            year: "2025",
-            title: "Nhận dạng vùng phổi & Chẩn đoán đa giai đoạn",
-            category: "Computer Vision",
-            desc: "Hệ thống kết hợp YOLOv8, VGG16 và Random Forest để tối ưu hóa độ chính xác trong chẩn đoán lâm sàng.",
-            icon: Activity,
-            color: "bg-blue-50/50",
-            borderColor: "border-blue-200",
-            size: "md:col-span-6",
-            link: "https://drive.google.com/file/d/1rtOeo2ktcGgeMjkaiQt_DBfYSB-jkCsk/view",
-            techStack: ["YOLOv8", "VGG16", "Random Forest"],
-            image: "/pictures/Lý thuyết nhận dạng.png"
-        },
-        {
-            year: "2025",
-            title: "Phân tích cảm xúc với PhoBERT",
-            category: "NLP / Vietnamese",
-            desc: "Sử dụng mô hình PhoBERT để phân loại phản hồi sinh viên, hỗ trợ cải thiện chất lượng đào tạo.",
-            icon: MessageSquare,
-            color: "bg-indigo-50/50",
-            borderColor: "border-indigo-200",
-            size: "md:col-span-6",
-            link: "https://drive.google.com/file/d/1PsZwZOL1JtzuVaNwAHwdSPXLKoD3V9qi/view",
-            techStack: ["NLP", "PhoBERT", "Transformers"],
-            image: "/pictures/Xử lý ngôn ngữ tự nhiên.png"
-        },
-        {
-            year: "2025",
-            title: "Nhận dạng Biển báo giao thông (CNN)",
-            category: "Computer Vision",
-            desc: "Xây dựng mạng nơ-ron tích chập (CNN) để nhận diện biển báo từ tập dữ liệu thực tế.",
-            icon: Car,
-            color: "bg-emerald-50/50",
-            borderColor: "border-emerald-200",
-            size: "md:col-span-6",
-            link: "https://drive.google.com/file/d/1Y-Avf6gFmovR_S9rg7Pt0xtozGb0FEI9/view",
-            techStack: ["CNN", "OpenCV", "Tensorflow"],
-            image: "/pictures/Lý thuyết nhận dạng_2.png"
-        },
-        {
-            year: "2026",
-            title: "Thiết kế giao diện Chả cá cây Sang",
-            category: "UX/UI Design",
-            desc: "Dự án phát triển giao diện website bằng Next.js, tập trung vào trải nghiệm người dùng và hiệu năng.",
-            icon: Layout, 
-            color: "bg-orange-50/50",
-            borderColor: "border-orange-200",
-            size: "md:col-span-6",
-            link: "https://chacacaysang.bachthanh.id.vn/", 
-            techStack: ["Next.js", "TailwindCSS"],
-            image: "/pictures/cha_ca.png"
-        },
-        {
-            year: "2024",
-            title: "Thiết kế giao diện CLB SPIT",
-            category: "UX/UI Design",
-            desc: "Dự án đầu tay về phát triển giao diện bằng HTML/CSS thuần, tập trung vào trải nghiệm người dùng.",
-            icon: Layers,
-            color: "bg-purple-50/50",
-            borderColor: "border-purple-200",
-            size: "md:col-span-6",
-            link: "https://bach-thi-thien-thanh.github.io/BanhTrang/index.html",
-            techStack: ["HTML", "CSS", "JS"],
-            image: "/pictures/front_end.png"
-        }
+    const stats = [
+        { value: projectList.length, label: "Dự án" },
+        { value: projectList.filter((p) => p.group === "ai").length, label: "AI & Nghiên cứu" },
+        { value: new Set(projectList.map((p) => p.category)).size, label: "Lĩnh vực" },
     ];
 
     return (
-        <section id="projects" className="py-32 px-6 bg-[#fcfcfc] min-h-screenoverflow-hidden">
-            <div className="max-w-7xl mx-auto">
+        <section id="projects" className="relative overflow-hidden bg-[#fbf8f4] py-32 px-6 min-h-screen">
+            {/* Nền trang trí */}
+            <div className="pointer-events-none absolute -top-40 right-0 h-[500px] w-[500px] rounded-full bg-rose-200/40 blur-[140px]" />
+            <div className="pointer-events-none absolute top-1/2 -left-40 h-[500px] w-[500px] rounded-full bg-amber-100/60 blur-[140px]" />
+            <div
+                className="pointer-events-none absolute inset-0 opacity-[0.35]"
+                style={{
+                    backgroundImage: "linear-gradient(rgba(45,30,23,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(45,30,23,0.05) 1px, transparent 1px)",
+                    backgroundSize: "64px 64px",
+                    maskImage: "radial-gradient(ellipse at top, black 20%, transparent 70%)",
+                    WebkitMaskImage: "radial-gradient(ellipse at top, black 20%, transparent 70%)",
+                }}
+            />
 
-                {/* Header Section */}
-                <div className="max-w-6xl mx-auto">
-
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                    <div className="max-w-2xl">
+            <div className="relative max-w-6xl mx-auto">
+                {/* Header */}
+                <div className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-end">
+                    <div className="lg:col-span-7">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            className="flex items-center gap-2 mb-4"
+                            viewport={{ once: true }}
+                            className="mb-5 flex items-center gap-3"
                         >
-                            <span className="w-12 h-[1px] bg-rose-500"></span>
-                            <span className="text-rose-500 font-bold uppercase tracking-[0.3em] text-xs">Projects</span>
+                            <span className="h-px w-12 bg-rose-500" />
+                            <span className="text-xs font-bold uppercase tracking-[0.3em] text-rose-500">Projects</span>
                         </motion.div>
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="text-5xl md:text-6xl font-black text-[#2D1E17] tracking-tighter"
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease }}
+                            className="text-5xl md:text-7xl font-black tracking-tighter text-[#2D1E17] leading-[0.95]"
                         >
-                            CÁC DỰ ÁN <br />
-                            <span className="italic font-light text-rose-500 text-4xl md:text-5xl">Tiêu biểu.</span>
+                            Các dự án <br />
+                            <span className="italic font-normal bg-gradient-to-r from-rose-500 via-rose-400 to-amber-500 bg-clip-text text-transparent">
+                                tiêu biểu.
+                            </span>
                         </motion.h2>
                     </div>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-stone-500 italic max-w-sm text-right"
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, ease, delay: 0.15 }}
+                        className="lg:col-span-5"
                     >
-                        "Hành trình 4 năm không ngừng thử nghiệm, từ những dòng code thuần đầu tiên đến các mô hình học sâu phức tạp."
-                    </motion.p>
-                </div>
-                </div>
-
-                {/* Bento Grid */}
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12"
-                >
-                    {projectList.map((project, index) => {
-                        const isLarge = project.size === "md:col-span-12";
-
-                        return (
-                            <motion.div
-                                key={index}
-                                variants={itemVariants}
-                                className={`${project.size} group relative`}
-                            >
-                                {/* KHUNG NGOÀI CÙNG (Card Container) */}
-                                <div className={`h-full bg-white border ${project.borderColor} border rounded-[3rem] overflow-hidden p-3 transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)]`}>
-
-                                    <div className={`flex flex-col ${isLarge ? 'md:flex-row' : 'flex-col'} h-full rounded-[2.5rem] overflow-hidden`}>
-
-                                        {/* PHẦN ẢNH - KIỂU 2 (FLOATING & LAYERS) */}
-                                        <div className={`${isLarge ? 'md:w-[48%]' : 'w-full'} p-4 relative order-2 ${isLarge ? 'md:order-2' : ''}`}>
-                                            {/* --- LAYERS TRANG TRÍ PHÍA SAU --- */}
-
-                                            {/* 1. Lớp nền quầng sáng (Glow Blob) */}
-                                            <div
-                                                className="absolute -inset-6 rounded-[3rem] opacity-0 group-hover:opacity-100 blur-3xl transition-all duration-1000 scale-90 group-hover:scale-110"
-                                                style={{ backgroundColor: `rgba(${project.color}, 0.12)` }} // Sử dụng rgbColor từ projectList
-                                            />
-
-                                            {/* 2. Khối hình học trang trí nổi (Decorative Shape) */}
-                                            <motion.div
-                                                className="absolute -bottom-10 -right-10 w-40 h-40 bg-rose-500 rounded-full -z-0 opacity-10 blur-xl group-hover:opacity-20 transition-opacity duration-700"
-                                                animate={{
-                                                    scale: [1, 1.1, 1],
-                                                    rotate: [12, 20, 12],
-                                                }}
-                                                transition={{
-                                                    duration: 10,
-                                                    repeat: Infinity,
-                                                    ease: "easeInOut"
-                                                }}
-                                            />
-
-
-                                            {/* --- KHUNG ẢNH CHÍNH (FLOATING CARD) --- */}
-                                            <div className="relative z-10 aspect-video md:aspect-auto h-full min-h-[280px] overflow-hidden rounded-[2rem] shadow-2xl border-4 border-white transition-all duration-700 group-hover:-translate-y-4 group-hover:rotate-1">
-
-                                                {/* Viền sáng bao quanh ảnh khi hover */}
-                                                <div className="absolute inset-0 rounded-[2rem] border-2 border-transparent group-hover:border-rose-300 opacity-0 group-hover:opacity-100 transition-all duration-700" />
-
-                                                <div className="relative w-full h-full overflow-hidden rounded-[2rem]">
-                                                    <img
-                                                        src={project.image}
-                                                        alt={project.title}
-                                                        className="w-full h-full object-cover grayscale-[0.6] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110 ease-out"
-                                                    />
-
-                                                    {/* Lớp phủ màu gradient hòa quyện */}
-                                                    <div
-                                                        className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity"
-                                                        style={{
-                                                            background: `linear-gradient(to bottom right, rgba(${project.color}, 0.6), transparent 60%)`
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            {/* --- TAG NỔI TRÊN ẢNH (Dùng asolute với container p-4) --- */}
-                                            <div className="absolute -top-3 -right-3 bg-white/95 backdrop-blur-sm p-4 rounded-[1.5rem] shadow-2xl translate-y-6 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-150 z-20 border border-stone-100">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[10px] font-black text-rose-600 uppercase tracking-widest">Xem ảnh</span>
-                                                    <ExternalLink size={20} className="text-rose-600" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* NỘI DUNG TEXT - Nền đồng bộ màu Border */}
-                                        <div className={`flex-1 p-10 md:p-14 flex flex-col justify-between ${project.color} order-1 ${isLarge ? 'md:order-1' : ''}`}>
-                                            <div>
-                                                <div className="flex justify-between items-start mb-12">
-                                                    <div className="w-14 h-14 flex items-center justify-center bg-white shadow-sm border border-stone-100 rounded-2xl text-stone-800 group-hover:bg-rose-500 group-hover:text-white group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500">
-                                                        {project.icon && <project.icon size={28} strokeWidth={1.5} />}
-                                                    </div>
-                                                    <span className="text-[10px] font-bold text-stone-400 bg-white px-3 py-1 rounded-full border border-stone-100 uppercase tracking-widest">{project.year}</span>
-                                                </div>
-
-                                                <div className="space-y-4">
-                                                    <p className="text-xs font-black text-rose-500 uppercase tracking-widest">{project.category}</p>
-                                                    <h3 className={`${isLarge ? 'text-4xl md:text-5xl' : 'text-3xl'} font-black text-stone-950 leading-[1.1] tracking-tight`}>
-                                                        {project.title}
-                                                    </h3>
-                                                    <p className="text-stone-600 text-base leading-relaxed max-w-lg">
-                                                        {project.desc}
-                                                    </p>
-                                                </div>
-
-                                                {/* Tech Stack Pills */}
-                                                <div className="flex flex-wrap gap-2 pt-6">
-                                                    {project.techStack?.map((tech, i) => (
-                                                        <span key={i} className="text-[10px] font-bold px-4 py-1.5 bg-white text-stone-600 rounded-full border border-stone-100 group-hover:border-rose-200 transition-colors">
-                                                            {tech}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Action Buttons */}
-                                            <div className="mt-12 flex items-center justify-between">
-                                                <Link href="#" className="text-stone-400 hover:text-rose-500 transition-colors">
-                                                    <GithubIcon size={24} />
-                                                </Link>
-
-                                                <Link href={project.link} target="_blank" className="relative inline-flex items-center gap-3 px-8 py-4 bg-stone-900 text-white rounded-full overflow-hidden group/btn transition-all duration-300 shadow-lg active:scale-95">
-                                                    <div className="absolute inset-0 w-0 bg-rose-600 transition-all duration-300 ease-out group-hover/btn:w-full" />
-                                                    <span className="relative z-10 text-[11px] font-black uppercase tracking-widest">Xem chi tiết</span>
-                                                    <div className="relative z-10 bg-white/20 p-1 rounded-full">
-                                                        <ArrowRight size={16} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
-                                                    </div>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <p className="border-l-2 border-rose-300 pl-5 italic leading-relaxed text-stone-500">
+                            “Hành trình 4 năm không ngừng thử nghiệm, từ những dòng code thuần đầu tiên đến các mô hình học sâu phức tạp.”
+                        </p>
+                        <div className="mt-8 grid grid-cols-3 divide-x divide-stone-200 rounded-2xl border border-stone-200/80 bg-white/70 backdrop-blur">
+                            {stats.map((s) => (
+                                <div key={s.label} className="px-4 py-4 text-center">
+                                    <div className="text-3xl font-black text-[#2D1E17]">{s.value}</div>
+                                    <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-stone-400">{s.label}</div>
                                 </div>
-                            </motion.div>
-                        );
-                    })}
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* Dự án nổi bật */}
+                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
+                    <FeaturedProject project={featured} />
+                </motion.div>
+
+                {/* Bộ lọc */}
+                <div className="mt-24 mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[#2D1E17]">
+                        Dự án khác <span className="text-stone-300">/</span>{" "}
+                        <span className="text-rose-500">{others.length}</span>
+                    </h3>
+                    <div className="inline-flex w-fit flex-wrap gap-1 rounded-full border border-stone-200 bg-white/80 p-1.5 shadow-sm backdrop-blur">
+                        {filters.map((f) => (
+                            <button
+                                key={f.key}
+                                onClick={() => setFilter(f.key)}
+                                className={`relative rounded-full px-5 py-2 text-xs font-bold tracking-wide transition-colors ${filter === f.key ? "text-white" : "text-stone-500 hover:text-stone-900"}`}
+                            >
+                                {filter === f.key && (
+                                    <motion.span
+                                        layoutId="project-filter"
+                                        className="absolute inset-0 rounded-full bg-[#2D1E17]"
+                                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                                    />
+                                )}
+                                <span className="relative z-10">{f.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Lưới dự án */}
+                <motion.div layout className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <AnimatePresence mode="popLayout">
+                        {others.map((project, index) => (
+                            <ProjectCard key={project.title} project={project} index={index} />
+                        ))}
+                    </AnimatePresence>
                 </motion.div>
             </div>
         </section>

@@ -159,7 +159,7 @@ export const DUMMY_POSTS: Post[] = [
   contentBlocks: [
     {
       type: "heading",
-      text: "🤖 Sự phát triển mạnh mẽ của AI"
+      text: "Sự phát triển mạnh mẽ của AI"
     },
     {
       type: "paragraph",
@@ -172,7 +172,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "⚠️ Nỗi lo là hoàn toàn có cơ sở"
+      text: "Nỗi lo là hoàn toàn có cơ sở"
     },
     {
       type: "paragraph",
@@ -191,7 +191,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🧠 Nhưng AI không thể thay thế hoàn toàn con người"
+      text: "Nhưng AI không thể thay thế hoàn toàn con người"
     },
     {
       type: "paragraph",
@@ -214,7 +214,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "⚙️ AI là công cụ, không phải đối thủ"
+      text: "AI là công cụ, không phải đối thủ"
     },
     {
       type: "paragraph",
@@ -227,7 +227,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "📚 Điều quan trọng là thích nghi"
+      text: "Điều quan trọng là thích nghi"
     },
     {
       type: "paragraph",
@@ -246,7 +246,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🚀 Kết luận"
+      text: "Kết luận"
     },
     {
       type: "paragraph",
@@ -274,7 +274,7 @@ export const DUMMY_POSTS: Post[] = [
   contentBlocks: [
     {
       type: "heading",
-      text: "🎯 Bài toán quen thuộc nhưng dễ hiểu sai"
+      text: "Bài toán quen thuộc nhưng dễ hiểu sai"
     },
     {
       type: "paragraph",
@@ -287,7 +287,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "⚠️ Accuracy cao chưa phản ánh đúng chất lượng"
+      text: "Accuracy cao chưa phản ánh đúng chất lượng"
     },
     {
       type: "paragraph",
@@ -305,7 +305,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🧠 Chọn sai metric – nguyên nhân chính"
+      text: "Chọn sai metric – nguyên nhân chính"
     },
     {
       type: "paragraph",
@@ -324,7 +324,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🏥 Ví dụ thực tế: bài toán chẩn đoán"
+      text: "Ví dụ thực tế: bài toán chẩn đoán"
     },
     {
       type: "paragraph",
@@ -341,7 +341,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "📌 Bài học rút ra"
+      text: "Bài học rút ra"
     },
     {
       type: "list",
@@ -356,7 +356,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🚀 Kết luận"
+      text: "Kết luận"
     },
     {
       type: "paragraph",
@@ -384,7 +384,7 @@ export const DUMMY_POSTS: Post[] = [
   contentBlocks: [
     {
       type: "heading",
-      text: "🎯 Năm 3 – giai đoạn bản lề của sinh viên IT"
+      text: "Năm 3 – giai đoạn bản lề của sinh viên IT"
     },
     {
       type: "paragraph",
@@ -397,7 +397,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "💻 Tập trung vào dự án thực tế"
+      text: "Tập trung vào dự án thực tế"
     },
     {
       type: "paragraph",
@@ -420,7 +420,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "📊 Nhà tuyển dụng nhìn vào điều gì?"
+      text: "Nhà tuyển dụng nhìn vào điều gì?"
     },
     {
       type: "paragraph",
@@ -433,7 +433,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🗣️ Phát triển kỹ năng mềm"
+      text: "Phát triển kỹ năng mềm"
     },
     {
       type: "paragraph",
@@ -456,7 +456,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🏢 Trải nghiệm thực tập sớm"
+      text: "Trải nghiệm thực tập sớm"
     },
     {
       type: "paragraph",
@@ -469,7 +469,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🚀 Kết luận"
+      text: "Kết luận"
     },
     {
       type: "paragraph",
@@ -497,7 +497,7 @@ export const DUMMY_POSTS: Post[] = [
   contentBlocks: [
     {
       type: "heading",
-      text: "🎯 Machine Learning quan trọng – nhưng học đúng cách còn quan trọng hơn"
+      text: "Machine Learning quan trọng – nhưng học đúng cách còn quan trọng hơn"
     },
     {
       type: "paragraph",
@@ -510,7 +510,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "❌ Những sai lầm thường gặp"
+      text: "Những sai lầm thường gặp"
     },
 
     {
@@ -580,7 +580,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "✅ Làm sao để tránh những sai lầm này?"
+      text: "Làm sao để tránh những sai lầm này?"
     },
     {
       type: "list",
@@ -596,7 +596,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🚀 Kết luận"
+      text: "Kết luận"
     },
     {
       type: "paragraph",
@@ -624,7 +624,7 @@ export const DUMMY_POSTS: Post[] = [
   contentBlocks: [
     {
       type: "heading",
-      text: "🎯 Bài toán quen thuộc của sinh viên"
+      text: "Bài toán quen thuộc của sinh viên"
     },
     {
       type: "paragraph",
@@ -637,7 +637,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "⚖️ Vì sao cần cân bằng?"
+      text: "Vì sao cần cân bằng?"
     },
     {
       type: "list",
@@ -653,7 +653,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🧠 Chiến lược quản lý thời gian hiệu quả"
+      text: "Chiến lược quản lý thời gian hiệu quả"
     },
 
     {
@@ -722,7 +722,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🎯 Đặt mục tiêu và ưu tiên"
+      text: "Đặt mục tiêu và ưu tiên"
     },
     {
       type: "paragraph",
@@ -731,7 +731,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "💪 Chăm sóc sức khỏe toàn diện"
+      text: "Chăm sóc sức khỏe toàn diện"
     },
     {
       type: "list",
@@ -754,7 +754,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🤝 Xây dựng mối quan hệ lành mạnh"
+      text: "Xây dựng mối quan hệ lành mạnh"
     },
     {
       type: "list",
@@ -769,7 +769,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "📱 Công cụ hỗ trợ quản lý thời gian"
+      text: "Công cụ hỗ trợ quản lý thời gian"
     },
     {
       type: "list",
@@ -784,7 +784,7 @@ export const DUMMY_POSTS: Post[] = [
 
     {
       type: "heading",
-      text: "🚀 Kết luận"
+      text: "Kết luận"
     },
     {
       type: "paragraph",

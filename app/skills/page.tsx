@@ -1,253 +1,391 @@
 "use client";
 
-import React from 'react';
-import { motion, useMotionValue, useSpring, useTransform, Variants } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Layout,
   Terminal,
   Users,
-  Zap,
-  Coffee,
+  Wrench,
   Cpu,
   BrainCircuit,
   Microscope,
-  Book,
   Presentation,
   Lightbulb,
   Clock,
   Scale,
   Smile,
-  ExternalLink,
+  Sparkles,
+  Rocket,
+  Heart,
+  CheckCircle2,
 } from 'lucide-react';
-const SkillCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
-  };
+const ease = [0.16, 1, 0.3, 1] as const;
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+const itemVariants: Variants = {
+  hidden: { y: 30, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease } }
+};
 
+type Skill = { name: string; level: number };
+type SkillGroup = {
+  key: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  icon: React.ElementType;
+  skills: Skill[];
+};
+
+const skillGroups: SkillGroup[] = [
+  {
+    key: "ai",
+    title: "AI & Khoa học dữ liệu",
+    subtitle: "Nghiên cứu & Chuyên ngành",
+    desc: "Nền tảng cho các đề tài nghiên cứu chẩn đoán viêm phổi từ ảnh X-quang.",
+    icon: BrainCircuit,
+    skills: [
+      { name: "Deep Learning (CNNs, Vision)", level: 90 },
+      { name: "Machine Learning (Scikit-learn)", level: 90 },
+      { name: "Computer Vision (OpenCV)", level: 85 },
+      { name: "Xử lý dữ liệu (Pandas/NumPy)", level: 90 },
+    ]
+  },
+  {
+    key: "frontend",
+    title: "Phát triển Frontend",
+    subtitle: "Thế mạnh thực chiến & Trải nghiệm",
+    desc: "Xây dựng giao diện hiện đại, mượt mà và chú trọng trải nghiệm người dùng.",
+    icon: Layout,
+    skills: [
+      { name: "Next.js / React", level: 90 },
+      { name: "Tailwind CSS", level: 95 },
+      { name: "Framer Motion", level: 80 },
+      { name: "HTML / CSS", level: 85 },
+    ]
+  },
+  {
+    key: "backend",
+    title: "Backend & Hệ thống",
+    subtitle: "Nền tảng kỹ thuật & Giải thuật",
+    desc: "Ngôn ngữ, cơ sở dữ liệu và công cụ làm nền cho tư duy giải thuật.",
+    icon: Terminal,
+    skills: [
+      { name: "Python", level: 90 },
+      { name: "Java / C++", level: 80 },
+      { name: "SQL Server", level: 80 },
+      { name: "Git", level: 85 },
+    ]
+  }
+];
+
+// Công nghệ đã dùng trong công việc / thực tập
+const appliedTech = ["Flutter", "Dart", "Qwen3-VL", "Kiểm thử phần mềm", "UI/UX", "PyTorch", "YOLOv8"];
+
+const softSkills = [
+  { name: "Giao tiếp & Thuyết trình", icon: Presentation },
+  { name: "Làm việc nhóm", icon: Users },
+  { name: "Tư duy logic & Giải thuật", icon: Cpu },
+  { name: "Nghiên cứu khoa học", icon: Microscope },
+  { name: "Tự học", icon: BrainCircuit },
+  { name: "Giải quyết vấn đề", icon: Lightbulb },
+  { name: "Quản lý thời gian", icon: Clock },
+  { name: "Tư duy phản biện", icon: Scale },
+  { name: "Thích nghi & Quản lý cảm xúc", icon: Smile },
+];
+
+const tools = ['Git', 'VS Code', 'Kaggle', 'Canva', 'Colab', 'Figma', 'Postman'];
+
+// Vòng tròn phần trăm
+const SkillRing = ({ skill, delay }: { skill: Skill; delay: number }) => {
+  const r = 42;
+  const c = 2 * Math.PI * r;
   return (
     <motion.div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className={className}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease, delay }}
+      whileHover={{ y: -6 }}
+      className="group flex flex-col items-center rounded-[2rem] border border-rose-100/80 bg-gradient-to-b from-white to-[#fff8f5] p-6 text-center transition-shadow duration-500 hover:shadow-[0_25px_50px_-25px_rgba(244,63,94,0.5)]"
     >
-      {children}
+      <div className="relative h-28 w-28">
+        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+          <circle cx="50" cy="50" r={r} fill="none" stroke="#fde4e4" strokeWidth="7" />
+          <motion.circle
+            cx="50" cy="50" r={r} fill="none"
+            stroke="url(#ringGradient)" strokeWidth="7" strokeLinecap="round"
+            strokeDasharray={c}
+            initial={{ strokeDashoffset: c }}
+            animate={{ strokeDashoffset: c * (1 - skill.level / 100) }}
+            transition={{ duration: 1.4, ease, delay: delay + 0.15 }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-2xl font-black tracking-tight text-[#3a2420]">
+            {skill.level}<span className="text-sm text-rose-400">%</span>
+          </span>
+        </div>
+      </div>
+      <p className="mt-4 text-sm font-bold leading-snug text-[#6e5249] transition-colors group-hover:text-rose-500">{skill.name}</p>
     </motion.div>
   );
 };
 
 const Skills = () => {
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
+  const [active, setActive] = useState(skillGroups[0].key);
+  const group = skillGroups.find((g) => g.key === active)!;
+  const GroupIcon = group.icon;
+  const totalTech = skillGroups.reduce((n, g) => n + g.skills.length, 0);
 
-  const itemVariants: Variants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-  const skillGroups = [
-    {
-      title: "AI & Data Science",
-      subtitle: "Nghiên cứu & Chuyên ngành Hệ thống",
-      icon: <BrainCircuit className="text-indigo-500" size={24} />,
-      gradient: "from-indigo-50/50 to-white",
-      skills: [
-        { name: "Deep Learning (CNNs, Vision)", level: "90%", color: "bg-indigo-600" },
-        { name: "Machine Learning (Scikit-learn)", level: "90%", color: "bg-blue-500" },
-        { name: "Computer Vision (OpenCV)", level: "85%", color: "bg-cyan-500" },
-        { name: "Data Processing (Pandas/Numpy)", level: "90%", color: "bg-violet-500" },
-      ]
-    },
-    {
-      title: "Frontend Development",
-      subtitle: "Thế mạnh thực chiến & Trải nghiệm",
-      icon: <Layout className="text-rose-500" size={24} />,
-      gradient: "from-rose-50/50 to-white",
-      skills: [
-        { name: "Next.js / React", level: "90%", color: "bg-black" },
-        { name: "Tailwind CSS", level: "95%", color: "bg-sky-400" },
-        { name: "Framer Motion (Animation)", level: "80%", color: "bg-rose-400" },
-        { name: "HTML/CSS", level: "85%", color: "bg-blue-600" },
-      ]
-    },
-    {
-      title: "Backend & Systems",
-      subtitle: "Nền tảng kỹ thuật & Giải thuật",
-      icon: <Terminal className="text-amber-500" size={24} />,
-      gradient: "from-amber-50/50 to-white",
-      skills: [
-        { name: "Python", level: "90%", color: "bg-blue-700" },
-        { name: "Java / C++", level: "80%", color: "bg-red-500" },
-        { name: "SQL Server", level: "80%", color: "bg-slate-600" },
-        { name: "Git", level: "85%", color: "bg-orange-600" },
-      ]
-    }
+  const stats = [
+    { value: skillGroups.length, label: "Nhóm chuyên môn" },
+    { value: totalTech, label: "Kỹ năng kỹ thuật" },
+    { value: softSkills.length, label: "Kỹ năng mềm" },
+    { value: tools.length, label: "Công cụ" },
   ];
 
-  const softSkills = [
-    { name: "Giao tiếp & Thuyết trình", icon: <Presentation size={18} /> },
-    { name: "Làm việc nhóm", icon: <Users size={18} /> },
-    { name: "Tư duy logic & Giải thuật", icon: <Cpu size={18} /> },
-    { name: "Nghiên cứu khoa học", icon: <Microscope size={18} /> },
-    { name: "Kỹ năng tự học", icon: <BrainCircuit size={18} /> },
-    { name: "Kỹ năng giải quyết vấn đề", icon: <Lightbulb size={18} /> },
-    { name: "Kỹ năng quản lý thời gian", icon: <Clock size={18} /> },
-    { name: "Kỹ năng tư duy phản biện", icon: <Scale size={18} /> },
-    { name: "Thích nghi & quản lý cảm xúc", icon: <Smile size={18} /> }
-  ];
   return (
-    <section className="py-25 lg:py-35 px-4 sm:px-8 bg-[#FAF9F6] min-h-screen selection:bg-rose-200 overflow-x-hidden">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative min-h-screen overflow-x-hidden bg-[#fbf5f1] px-4 pb-28 pt-32 text-[#3a2420] selection:bg-rose-200 sm:px-6">
+      {/* Gradient dùng chung cho vòng tròn */}
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <linearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#f43f5e" />
+            <stop offset="100%" stopColor="#f9a8d4" />
+          </linearGradient>
+        </defs>
+      </svg>
 
-        <div className="text-center mb-12 lg:mb-16">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="flex justify-center items-center gap-2 mb-4">
-            <span className="h-[1px] w-8 bg-rose-200"></span>
-            <span className="text-rose-500 font-bold tracking-[0.3em] uppercase text-[10px]">Technical Expertise</span>
-            <span className="h-[1px] w-8 bg-rose-200"></span>
+      {/* Nền trang trí */}
+      <div className="pointer-events-none absolute -top-40 -right-40 h-[640px] w-[640px] rounded-full bg-rose-200/50 blur-[140px]" />
+      <div className="pointer-events-none absolute top-[40%] -left-60 h-[560px] w-[560px] rounded-full bg-[#fde4dc]/80 blur-[140px]" />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[800px] opacity-40"
+        style={{
+          backgroundImage: "radial-gradient(rgba(190,80,100,0.18) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+          maskImage: "radial-gradient(ellipse at top, black 15%, transparent 65%)",
+          WebkitMaskImage: "radial-gradient(ellipse at top, black 15%, transparent 65%)",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl">
+        {/* ================= TIÊU ĐỀ ================= */}
+        <div className="mb-14 grid grid-cols-1 items-end gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
+              <span className="h-px w-10 bg-rose-300" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Năng lực chuyên môn</span>
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease }}
+              className="text-5xl font-black leading-[0.95] tracking-tighter md:text-7xl"
+            >
+              Kỹ năng <br />
+              <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text font-normal italic text-transparent">
+                & công cụ
+              </span>
+            </motion.h1>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease, delay: 0.2 }}
+            className="lg:col-span-5"
+          >
+            <p className="border-l-2 border-rose-300 pl-5 italic leading-relaxed text-[#6e5249]">
+              Sự kết hợp giữa tư duy toán học và sự tinh tế trong giao diện.
+            </p>
+            <div className="mt-6 grid grid-cols-4 gap-px overflow-hidden rounded-[1.5rem] border border-rose-100 bg-rose-100">
+              {stats.map((s) => (
+                <div key={s.label} className="bg-[#fffaf8] px-2 py-4 text-center">
+                  <div className="text-2xl font-black text-rose-500">{s.value}</div>
+                  <div className="mt-1 text-[9px] font-bold uppercase leading-tight tracking-wider text-[#a88a80]">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </motion.div>
-
-          <motion.h2
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#2D1E17] tracking-tight leading-tight"
-          >
-            KỸ NĂNG <span className="italic font-light text-rose-500">& CÔNG CỤ</span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="mt-4 text-stone-500 italic text-base lg:text-lg max-w-2xl mx-auto px-4 leading-relaxed"
-          >
-            Sự kết hợp giữa tư duy toán học và sự tinh tế trong giao diện.
-          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-
-          <div className="col-span-1 md:col-span-8 grid grid-cols-1 gap-6">
-            {skillGroups.map((group, idx) => (
-              <SkillCard key={idx} className="group relative bg-white border border-stone-100 rounded-[2.5rem] p-8 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
-                <div className={`absolute inset-0 bg-gradient-to-br ${group.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start mb-10">
-                    <div className="flex items-center gap-5">
-                      <div className="p-4 bg-stone-50 rounded-2xl group-hover:scale-110 group-hover:bg-white transition-all duration-500 shadow-inner">
-                        {group.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-bold text-stone-800">{group.title}</h3>
-                        <p className="text-stone-400 text-sm font-medium">{group.subtitle}</p>
-                      </div>
-                    </div>
-                    <ExternalLink size={20} className="text-stone-300 group-hover:text-rose-500 transition-colors" />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
-                    {group.skills.map((skill, sIdx) => (
-                      <div key={sIdx} className="space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-bold text-stone-600 tracking-tight">{skill.name}</span>
-                          <span className="text-xs font-black text-rose-500">{skill.level}</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-stone-100 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: skill.level }}
-                            transition={{ duration: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
-                            className={`h-full ${skill.color} rounded-full relative`}
-                          >
-                            <div className="absolute top-0 right-0 h-full w-8 bg-white/20 skew-x-[30deg] animate-pulse" />
-                          </motion.div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </SkillCard>
-            ))}
+        {/* ================= KỸ NĂNG CHUYÊN MÔN (TAB) ================= */}
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+          className="rounded-[2.5rem] border border-white bg-white/70 p-4 shadow-[0_30px_80px_-40px_rgba(190,80,100,0.4)] backdrop-blur md:p-6"
+        >
+          {/* Thanh tab */}
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {skillGroups.map((g) => {
+              const Icon = g.icon;
+              const isActive = g.key === active;
+              return (
+                <button
+                  key={g.key}
+                  onClick={() => setActive(g.key)}
+                  className={`relative flex items-center gap-3 rounded-[1.5rem] px-5 py-4 text-left transition-colors ${isActive ? "text-white" : "text-[#6e5249] hover:bg-rose-50"}`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="skill-tab"
+                      className="absolute inset-0 rounded-[1.5rem] bg-gradient-to-r from-rose-500 to-pink-400 shadow-lg shadow-rose-200"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <span className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isActive ? "bg-white/20" : "bg-rose-50 text-rose-500"}`}>
+                    <Icon size={20} />
+                  </span>
+                  <span className="relative z-10">
+                    <span className="block font-black leading-tight">{g.title}</span>
+                    <span className={`block text-xs ${isActive ? "text-white/80" : "text-[#a88a80]"}`}>{g.subtitle}</span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="col-span-1 lg:col-span-4 flex flex-col gap-6">
+          {/* Nội dung tab */}
+          <AnimatePresence mode="wait">
             <motion.div
-              variants={itemVariants}
-              className="bg-[#2D1E17] p-6 lg:p-8 rounded-[1.5rem] lg:rounded-[2rem] text-white relative overflow-hidden shadow-lg"
+              key={group.key}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.35, ease }}
+              className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12"
             >
-              <div className="absolute -right-4 -top-4 opacity-5 rotate-12 pointer-events-none">
-                <BrainCircuit size={120} />
+              <div className="relative flex flex-col justify-between overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#4a1f2a] via-[#5c2633] to-[#3a1820] p-8 text-white lg:col-span-4">
+                <div className="pointer-events-none absolute -left-16 -top-16 h-56 w-56 rounded-full bg-rose-400/25 blur-[80px]" />
+                <GroupIcon size={180} className="pointer-events-none absolute -bottom-10 -right-10 text-white/[0.06]" />
+                <div className="relative">
+                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-rose-200 ring-1 ring-white/15">
+                    <GroupIcon size={26} />
+                  </div>
+                  <h2 className="text-3xl font-black leading-tight tracking-tight">{group.title}</h2>
+                  <p className="mt-3 leading-relaxed text-rose-100/75">{group.desc}</p>
+                </div>
+                <div className="relative mt-8 flex items-end gap-2">
+                  <span className="text-5xl font-black text-rose-200">
+                    {Math.round(group.skills.reduce((n, s) => n + s.level, 0) / group.skills.length)}%
+                  </span>
+                  <span className="mb-2 text-xs font-bold uppercase tracking-widest text-rose-100/60">Trung bình</span>
+                </div>
               </div>
-              <h3 className="text-lg font-bold mb-6 flex items-center gap-3 relative z-10">
-                <span className="w-8 h-[2px] bg-rose-500"></span>
-                Kỹ năng mềm
-              </h3>
-              <div className="space-y-3 relative z-10">
-                {softSkills.map((skill, idx) => (
+
+              <div className="grid grid-cols-2 gap-4 lg:col-span-8">
+                {group.skills.map((skill, i) => (
+                  <SkillRing key={skill.name} skill={skill} delay={i * 0.08} />
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+
+        {/* ================= ĐÃ ỨNG DỤNG THỰC TẾ ================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease }}
+          className="mt-6 flex flex-col gap-5 rounded-[2.5rem] border border-rose-100 bg-gradient-to-r from-[#fff8f5] via-rose-50 to-pink-50 p-7 md:flex-row md:items-center md:p-8"
+        >
+          <div className="flex shrink-0 items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-rose-500 shadow-md">
+              <Rocket size={22} />
+            </div>
+            <div>
+              <p className="font-black">Đã ứng dụng thực tế</p>
+              <p className="text-xs text-[#a88a80]">Trong công việc, thực tập & nghiên cứu</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 md:ml-auto md:justify-end">
+            {appliedTech.map((t) => (
+              <span key={t} className="flex items-center gap-1.5 rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-bold text-[#6e5249] shadow-sm">
+                <CheckCircle2 size={14} className="text-rose-400" /> {t}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* ================= KỸ NĂNG MỀM & CÔNG CỤ ================= */}
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease }}
+            className="rounded-[2.5rem] border border-white bg-white/80 p-8 shadow-[0_20px_60px_-30px_rgba(190,80,100,0.25)] backdrop-blur lg:col-span-8"
+          >
+            <div className="mb-7 flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-100 to-[#fde4dc] text-rose-500">
+                <Heart size={22} />
+              </div>
+              <h3 className="text-2xl font-black tracking-tight">Kỹ năng mềm</h3>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {softSkills.map(({ name, icon: Icon }, i) => (
+                <motion.div
+                  key={name}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04 }}
+                  whileHover={{ y: -4 }}
+                  className="group flex items-center gap-3 rounded-2xl border border-rose-100/80 bg-[#fff8f5] p-3.5 transition-colors hover:border-rose-400 hover:bg-rose-500"
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-rose-500 shadow-sm">
+                    <Icon size={17} />
+                  </span>
+                  <span className="text-sm font-semibold text-[#6e5249] transition-colors group-hover:text-white">{name}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease, delay: 0.1 }}
+            className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-rose-400 to-pink-400 p-8 text-white shadow-[0_30px_60px_-30px_rgba(244,63,94,0.6)] lg:col-span-4"
+          >
+            <Wrench size={160} className="pointer-events-none absolute -bottom-8 -right-8 rotate-12 text-white/10" />
+            <div className="relative">
+              <div className="mb-7 flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 ring-1 ring-white/30 backdrop-blur">
+                  <Wrench size={22} />
+                </div>
+                <h3 className="text-2xl font-black tracking-tight">Công cụ</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {tools.map((tool) => (
                   <motion.div
-                    key={idx}
-                    whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.08)" }}
-                    className="flex items-center gap-4 p-3.5 bg-white/5 rounded-xl border border-white/5 transition-all"
+                    key={tool}
+                    whileHover={{ scale: 1.04 }}
+                    className="flex items-center gap-2.5 rounded-2xl bg-white/15 p-3 ring-1 ring-white/20 backdrop-blur transition-colors hover:bg-white hover:text-rose-500"
                   >
-                    <div className="text-rose-400 shrink-0">{skill.icon}</div>
-                    <span className="text-sm font-medium text-stone-200">{skill.name}</span>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/25 text-xs font-black">
+                      {tool.slice(0, 2).toUpperCase()}
+                    </span>
+                    <span className="text-sm font-bold">{tool}</span>
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
-
-            <motion.div
-              variants={itemVariants}
-              className="bg-white p-6 lg:p-8 rounded-[1.5rem] lg:rounded-[2rem] border border-stone-100 shadow-sm"
-            >
-              <h3 className="text-stone-800 font-bold mb-6 flex items-center gap-2 text-base">
-                <Zap className="text-amber-500" size={18} /> Toolkits
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {['Git', 'VS Code', 'Kaggle', 'Canva', 'Colab', 'Figma', 'Postman'].map((tool) => (
-                  <span
-                    key={tool}
-                    className="px-3 py-1.5 bg-stone-50 rounded-lg text-[11px] font-bold text-stone-500 border border-stone-100 hover:text-rose-500 hover:bg-rose-50/30 transition-all cursor-default"
-                  >
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
+            </div>
+          </motion.div>
         </div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-14 flex items-center justify-center gap-2 text-center text-sm italic text-[#a88a80]"
+        >
+          <Sparkles size={14} className="text-rose-400" /> Luôn học hỏi và cập nhật công nghệ mới mỗi ngày
+        </motion.p>
       </div>
     </section>
   );

@@ -1,69 +1,91 @@
 "use client";
 
 import { use } from "react";
-import { DUMMY_POSTS } from "@/app/data/post";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { DUMMY_POSTS } from "@/app/data/post";
 import { BlogCard } from "../blogcard";
+import { getCategories, readingTime } from "../utils";
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
-    // 1. Giải nén params từ URL
     const resolvedParams = use(params);
-    
-    // 2. GIẢI MÃ URL (QUAN TRỌNG): 
-    // decodeURIComponent sẽ biến "K%E1%BB%B9%20n%C4%83ng" thành "Kỹ năng"
+    // Giải mã URL, ví dụ "K%E1%BB%B9%20n%C4%83ng" -> "Kỹ năng"
     const categoryFromUrl = decodeURIComponent(resolvedParams.category);
 
-    // 3. Lọc bài viết thông minh: 
-    // So sánh cả với categorySlug (không dấu) VÀ category (có dấu) để chắc chắn tìm thấy
+    // So sánh cả slug (không dấu) và tên (có dấu)
     const filteredPosts = DUMMY_POSTS.filter(
-        (post) => 
-            post.categorySlug === categoryFromUrl || 
-            post.category === categoryFromUrl
+        (post) => post.categorySlug === categoryFromUrl || post.category === categoryFromUrl
     );
-
-    // 4. Lấy tên hiển thị
-    const displayName = filteredPosts.length > 0 
-        ? filteredPosts[0].category 
-        : categoryFromUrl.replace("-", " ");
+    const displayName = filteredPosts.length > 0 ? filteredPosts[0].category : categoryFromUrl.replace(/-/g, " ");
+    const activeSlug = filteredPosts[0]?.categorySlug ?? categoryFromUrl;
+    const categories = getCategories();
+    const totalMinutes = filteredPosts.reduce((n, p) => n + readingTime(p), 0);
 
     return (
-        <div className="min-h-screen bg-[#fff5f7] py-32 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                
-                {/* Header chuyên mục */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-12 border-b border-pink-200 pb-8"
-                >
-                    <h1 className="text-4xl font-extrabold text-gray-900">
-                        Chuyên mục: <span className="text-pink-500 capitalize">{displayName}</span>
-                    </h1>
-                    <p className="text-gray-500 mt-2 italic">
-                        Tổng hợp những bài viết hay nhất về chủ đề {displayName}
-                    </p>
-                </motion.div>
+        <div className="relative min-h-screen overflow-hidden bg-[#fbf5f1] px-4 pb-28 pt-32 text-[#3a2420] selection:bg-rose-200 sm:px-6">
+            <div className="pointer-events-none absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-rose-200/50 blur-[140px]" />
+            <div className="pointer-events-none absolute top-[45%] -left-60 h-[520px] w-[520px] rounded-full bg-[#fde4dc]/80 blur-[140px]" />
 
-                {/* Danh sách bài viết hoặc thông báo trống */}
+            <div className="relative mx-auto max-w-6xl">
+                <Link href="/blogs" className="mb-10 inline-flex items-center gap-2 rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-bold text-[#6e5249] shadow-sm backdrop-blur transition-colors hover:text-rose-500">
+                    ← Tất cả bài viết
+                </Link>
+
+                {/* Tiêu đề chuyên mục */}
+                <motion.header
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, ease }}
+                    className="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+                >
+                    <div>
+                        <div className="mb-5 flex items-center gap-3">
+                            <span className="h-px w-10 bg-rose-300" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Chuyên mục</span>
+                        </div>
+                        <h1 className="text-5xl font-black capitalize leading-[0.95] tracking-tighter md:text-7xl">
+                            <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text font-normal italic text-transparent">{displayName}</span>
+                        </h1>
+                        <p className="mt-4 italic text-[#a88a80]">Tổng hợp những bài viết về chủ đề {displayName}.</p>
+                    </div>
+                    <div className="flex gap-3">
+                        <span className="rounded-2xl border border-white bg-white/80 px-4 py-3 text-sm font-bold shadow-sm">
+                            <span className="text-rose-500">{filteredPosts.length}</span> bài viết
+                        </span>
+                        <span className="rounded-2xl border border-white bg-white/80 px-4 py-3 text-sm font-bold shadow-sm">
+                            <span className="text-rose-500">{totalMinutes}</span> phút đọc
+                        </span>
+                    </div>
+                </motion.header>
+
+                {/* Chuyển chuyên mục */}
+                <div className="mb-12 flex flex-wrap gap-2">
+                    {categories.map((c) => (
+                        <Link
+                            key={c.slug}
+                            href={`/blogs/${c.slug}`}
+                            className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${c.slug === activeSlug ? "bg-gradient-to-r from-rose-500 to-pink-400 text-white shadow-md shadow-rose-200" : "border border-white bg-white/80 text-[#6e5249] hover:text-rose-500"}`}
+                        >
+                            {c.name} <span className={c.slug === activeSlug ? "text-white/70" : "text-[#c4aaa2]"}>{c.count}</span>
+                        </Link>
+                    ))}
+                </div>
+
                 {filteredPosts.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+                    <div className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
                         {filteredPosts.map((post, index) => (
-                            <BlogCard key={index} post={post} />
+                            <BlogCard key={post.slug} post={post} index={index} />
                         ))}
                     </div>
                 ) : (
-                    <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-center py-20 bg-white rounded-3xl shadow-sm border border-pink-100"
-                    >
-                        <div className="text-6xl mb-4">🌸</div>
-                        <p className="text-gray-400 text-lg italic">
-                            Hiện chưa có bài viết nào trong mục <span className="font-bold text-pink-400">"{displayName}"</span>
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[2rem] border border-white bg-white/80 py-20 text-center shadow-sm">
+                        <p className="text-lg italic text-[#a88a80]">
+                            Hiện chưa có bài viết nào trong mục <span className="font-bold text-rose-400">&ldquo;{displayName}&rdquo;</span>
                         </p>
                     </motion.div>
                 )}
-                
             </div>
         </div>
     );

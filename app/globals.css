@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Thanh cuộn mảnh cho trang Hành trình */
+.journey-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #fecdd3 transparent;
+}
+

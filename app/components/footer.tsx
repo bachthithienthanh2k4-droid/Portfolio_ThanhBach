@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Heart, Sparkles } from 'lucide-react';
 import Link from 'next/link';
@@ -9,7 +9,17 @@ import Decor from './decor';
 
 const Footer = () => {
     const pathname = usePathname(); // 2. Khởi tạo lấy path hiện tại
-    const stars = useMemo(() => Array.from({ length: 100 }), []);
+    // Sinh số ngẫu nhiên sau khi mount để HTML server và client khớp nhau (tránh lỗi hydration)
+    const [stars, setStars] = useState<{ left: number; scale: number; x: number; duration: number; delay: number }[]>([]);
+    useEffect(() => {
+        setStars(Array.from({ length: 100 }, () => ({
+            left: Math.random() * 100,
+            scale: Math.random() * 0.5 + 0.3,
+            x: Math.random() * 50 - 25,
+            duration: Math.random() * 7 + 8,
+            delay: Math.random() * 15,
+        })));
+    }, []);
 
     // 3. Định nghĩa mảng link với href chính xác (đổi tên để map cho chuẩn)
     const navLinks = [
@@ -29,25 +39,25 @@ const Footer = () => {
             </div>
 
             <div className="absolute inset-0 pointer-events-none">
-                {stars.map((_, i) => (
+                {stars.map((star, i) => (
                     <motion.div
                         key={i}
                         initial={{
                             top: -20,
-                            left: `${Math.random() * 100}%`,
+                            left: `${star.left}%`,
                             opacity: 0,
-                            scale: Math.random() * 0.5 + 0.3
+                            scale: star.scale
                         }}
                         animate={{
                             top: "100%",
                             opacity: [0, 0.8, 0.8, 0],
-                            x: [0, Math.random() * 50 - 25],
+                            x: [0, star.x],
                         }}
                         transition={{
-                            duration: Math.random() * 7 + 8,
+                            duration: star.duration,
                             repeat: Infinity,
                             ease: "linear",
-                            delay: Math.random() * 15,
+                            delay: star.delay,
                         }}
                         className="absolute shadow-[0_0_10px_rgba(225,29,72,0.2)]"
                     >

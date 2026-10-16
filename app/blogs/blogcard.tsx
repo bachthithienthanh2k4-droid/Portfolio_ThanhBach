@@ -1,66 +1,51 @@
 "use client";
+
 import { motion } from "framer-motion";
-import { Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Post } from "../data/post";
+import { imgSrc, readingTime } from "./utils";
 
-// Cập nhật Interface để bao gồm slug và categorySlug
-interface PostProps {
-  title: string;
-  excerpt: string;
-  category: string;
-  categorySlug: string; // Thêm dòng này
-  slug: string;         // Thêm dòng này
-  image: string;
-}
-
-export const BlogCard = ({ post }: { post: PostProps }) => {
+export const BlogCard = ({ post, index = 0 }: { post: Post; index?: number }) => {
   return (
-    <motion.div
-      whileHover={{ y: -10 }}
-      initial={{ opacity: 0, y: 20 }}
+    <motion.article
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="bg-white rounded-3xl overflow-hidden shadow-lg border border-pink-100 group cursor-pointer h-full flex flex-col"
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: (index % 3) * 0.08 }}
+      whileHover={{ y: -8 }}
+      className="group h-full"
     >
-      {/* Bao bọc toàn bộ card bằng Link để tối ưu trải nghiệm (UX) */}
-      <Link href={`/blogs/${post.categorySlug}/${post.slug}`} className="flex flex-col h-full">
-        
-        {/* Container Ảnh */}
-        <div className="relative h-52 overflow-hidden">
-          <img 
-            src={post.image} 
+      <Link
+        href={`/blogs/${post.categorySlug}/${post.slug}`}
+        className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-white bg-white/85 p-3 shadow-[0_20px_50px_-30px_rgba(190,80,100,0.45)] backdrop-blur transition-shadow duration-500 hover:shadow-[0_35px_70px_-30px_rgba(244,63,94,0.45)]"
+      >
+        {/* Ảnh */}
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imgSrc(post.image)}
             alt={post.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
-          <div className="absolute top-4 left-4 bg-pink-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/40 via-transparent to-transparent" />
+          <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-rose-500 shadow-sm">
             {post.category}
-          </div>
+          </span>
         </div>
 
         {/* Nội dung */}
-        <div className="p-6 flex flex-col flex-grow">
-          <div className="flex items-center text-pink-400 text-xs mb-3">
-            <Calendar size={14} className="mr-2" />
-            <span>10 Tháng 4, 2026</span>
-          </div>
-          
-          <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-pink-600 transition-colors line-clamp-2">
+        <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#a88a80]">{readingTime(post)} phút đọc</p>
+          <h3 className="line-clamp-2 text-xl font-black leading-snug tracking-tight text-[#3a2420] transition-colors group-hover:text-rose-500">
             {post.title}
           </h3>
-          
-          <p className="text-gray-500 text-sm line-clamp-2 mb-6 flex-grow">
-            {post.excerpt}
-          </p>
-          
-          <div className="flex items-center text-pink-500 font-bold text-sm mt-auto">
-            <span className="relative overflow-hidden inline-block">
-              Đọc thêm
-              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </span>
-            <ArrowRight size={16} className="ml-2 group-hover:translate-x-2 transition-transform" />
+          <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-[#8a6f66]">{post.excerpt}</p>
+          <div className="mt-5 flex items-center gap-2 border-t border-rose-100 pt-4 text-[11px] font-black uppercase tracking-[0.2em] text-[#4a1f2a] transition-colors group-hover:text-rose-500">
+            Đọc bài viết
+            <span className="h-px w-6 bg-current transition-all duration-500 group-hover:w-12" />
           </div>
         </div>
       </Link>
-    </motion.div>
+    </motion.article>
   );
 };

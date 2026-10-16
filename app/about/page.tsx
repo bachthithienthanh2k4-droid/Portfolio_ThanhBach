@@ -1,539 +1,512 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { motion, useScroll, useTransform, useSpring, Variants } from 'framer-motion';
-import { ExternalLink, Award, BookOpen, Zap, ArrowUpRight, Sparkles, Star, Quote, FileText, Mail, ArrowRight } from 'lucide-react';
+import {
+    Award, Zap, ArrowUpRight, Sparkles, Star, Quote, FileText, Mail, ArrowRight,
+    Crown, GraduationCap, MapPin, Brain, Smartphone, Code, Bug, Trophy, Users,
+} from 'lucide-react';
 import { FacebookIcon, GithubIcon, LinkedinIcon, YoutubeIcon } from '../components/icons';
 import Link from 'next/link';
-import StartPage from '../components/start';
-import Decor from '../components/decor';
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } }
+};
+
+const itemVariants: Variants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease } }
+};
+
+// Tiêu đề nhỏ dùng chung
+const Eyebrow = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex items-center gap-3">
+        <span className="h-px w-10 bg-rose-300" />
+        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">{children}</span>
+    </div>
+);
+
+// Tiêu đề section có đánh số (đồng bộ với trang Giới thiệu)
+const SectionHeader = ({ number, eyebrow, title, accent, subtitle }: {
+    number: string; eyebrow: string; title: string; accent: string; subtitle?: string;
+}) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease }}
+        className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
+    >
+        <div className="flex items-end gap-5">
+            <span className="select-none bg-gradient-to-b from-rose-300 to-rose-100 bg-clip-text text-6xl font-black leading-none text-transparent md:text-7xl">
+                {number}
+            </span>
+            <div>
+                <Eyebrow>{eyebrow}</Eyebrow>
+                <h2 className="mt-3 text-3xl font-black tracking-tighter md:text-5xl">
+                    {title} <span className="font-normal italic text-rose-500">{accent}</span>
+                </h2>
+            </div>
+        </div>
+        {subtitle && <p className="max-w-sm italic text-[#a88a80] md:text-right">{subtitle}</p>}
+    </motion.div>
+);
 
 const About = () => {
-    const containerRef = useRef(null);
     const { scrollYProgress } = useScroll();
-
-    // Hiệu ứng Spring giúp animation mượt và có độ nảy (physics-based)
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+    const yImage = useTransform(smoothProgress, [0, 0.3], [0, 60]);
 
-    const yContent = useTransform(smoothProgress, [0, 0.2], [0, -80]);
-    const yImage = useTransform(smoothProgress, [0, 0.3], [0, 120]);
-    const rotateImage = useTransform(smoothProgress, [0, 0.3], [0, 5]);
+    const socialLinks = [
+        { Icon: FacebookIcon, href: "https://www.facebook.com/thanh.bach.395/", label: "Facebook" },
+        { Icon: YoutubeIcon, href: "https://youtube.com/yourchannel", label: "YouTube" },
+        { Icon: LinkedinIcon, href: "https://linkedin.com/in/yourprofile", label: "LinkedIn" },
+        { Icon: GithubIcon, href: "https://github.com/bachthithienthanh2k4-droid", label: "GitHub" },
+    ];
 
+    const quickStats = [
+        { value: "3.83", label: "GPA / 4.0" },
+        { value: "Á khoa", label: "Khoa CNTT" },
+        { value: "03", label: "Kinh nghiệm" },
+        { value: "02", label: "Giải Nhì" },
+    ];
+
+    const focusAreas = [
+        { icon: Brain, title: "Trí tuệ nhân tạo", desc: "Deep Learning cho ảnh y tế" },
+        { icon: Code, title: "Phát triển Web", desc: "Next.js, giao diện UI/UX" },
+        { icon: Smartphone, title: "Ứng dụng di động", desc: "Flutter & Dart đa nền tảng" },
+        { icon: Bug, title: "Kiểm thử phần mềm", desc: "Test case, kiểm thử hồi quy" },
+    ];
+
+    const activities = [
+        { icon: Users, label: "Đoàn – Hội" },
+        { icon: Code, label: "Câu lạc bộ" },
+        { icon: Brain, label: "Nghiên cứu khoa học" },
+        { icon: Sparkles, label: "Văn nghệ" },
+    ];
+
+    // Xếp theo trình tự thời gian
     const achievements = [
         {
-            title: "Sao Tháng Giêng 2024",
-            desc: "Giải thưởng cao quý dành cho cán bộ Hội SV có thành tích xuất sắc trong học tập và rèn luyện.",
-            date: "2024",
-            icon: <Star className="text-rose-400" />,
-            image: "/pictures/Sao tháng giêng-2024.jpg"
-        },
-        {
-            title: "Sinh viên 5 Tốt 2 năm",
-            desc: "Đạt danh hiệu liên tiếp 2023 - 2024, minh chứng cho sự toàn diện trong đạo đức, học tập, thể lực, tình nguyện và hội nhập.",
-            date: "23-24",
-            icon: <Zap className="text-rose-400" />,
+            title: "Sinh viên 5 Tốt",
+            desc: "Đạt danh hiệu liên tiếp 2023 – 2024, toàn diện về đạo đức, học tập, thể lực, tình nguyện và hội nhập.",
+            date: "2023 – 2024",
+            icon: Zap,
             image: "/pictures/SV5T_2023_2.jpg"
         },
         {
+            title: "Sao Tháng Giêng",
+            desc: "Giải thưởng dành cho cán bộ Hội Sinh viên có thành tích xuất sắc trong học tập và rèn luyện.",
+            date: "2024",
+            icon: Star,
+            image: "/pictures/Sao tháng giêng-2024.jpg"
+        },
+        {
             title: "Sinh viên Xuất sắc",
-            desc: "Duy trì phong độ học thuật ấn tượng trong suốt 4 năm đại học với bảng điểm rực rỡ.",
-            date: "4 Years",
-            icon: <Award className="text-rose-400" />,
+            desc: "Duy trì phong độ học tập xuất sắc trong suốt 4 năm đại học.",
+            date: "4 năm",
+            icon: Award,
             image: "/pictures/z7706777109007_23a5f5f8d29e646288fc635d8458cc7c.jpg"
         }
     ];
-    const containerVariants: Variants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-                delayChildren: 0.3
-            }
-        }
-    };
 
-    const itemVariants: Variants = {
-        hidden: { y: 30, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.8,
-                // Khi đã khai báo kiểu Variants, mảng số này sẽ được chấp nhận là Cubic Bezier
-                ease: [0.16, 1, 0.3, 1]
-            }
-        }
-    };
-
-    const socialLinks = [
-        { Icon: FacebookIcon, href: "https://www.facebook.com/thanh.bach.395/" },
-        { Icon: YoutubeIcon, href: "https://youtube.com/yourchannel" },
-        { Icon: LinkedinIcon, href: "https://linkedin.com/in/yourprofile" },
-        { Icon: GithubIcon, href: "https://github.com/bachthithienthanh2k4-droid" },
-    ];
     return (
-        <div ref={containerRef} className="bg-[#faf7f2] min-h-screen text-[#432818] selection:bg-rose-200 overflow-x-hidden">
+        <div className="relative min-h-screen overflow-x-hidden bg-[#fbf5f1] text-[#3a2420] selection:bg-rose-200">
+            {/* Thanh tiến trình cuộn */}
             <motion.div
-                className="fixed top-0 left-0 right-0 h-[5px] bg-gradient-to-r from-rose-300 via-rose-500 to-amber-200 z-[100] origin-left shadow-lg shadow-rose-200/50"
+                className="fixed left-0 right-0 top-0 z-[100] h-[4px] origin-left bg-gradient-to-r from-rose-300 via-rose-500 to-pink-300"
                 style={{ scaleX: smoothProgress }}
             />
 
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 lg:px-24 py-20">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center z-10">
+            {/* Nền trang trí */}
+            <div className="pointer-events-none absolute -top-40 -right-40 h-[640px] w-[640px] rounded-full bg-rose-200/50 blur-[140px]" />
+            <div className="pointer-events-none absolute top-[35%] -left-60 h-[560px] w-[560px] rounded-full bg-[#fde4dc]/80 blur-[140px]" />
+            <div
+                className="pointer-events-none absolute inset-x-0 top-0 h-[900px] opacity-40"
+                style={{
+                    backgroundImage: "radial-gradient(rgba(190,80,100,0.18) 1px, transparent 1px)",
+                    backgroundSize: "26px 26px",
+                    maskImage: "radial-gradient(ellipse at top, black 15%, transparent 65%)",
+                    WebkitMaskImage: "radial-gradient(ellipse at top, black 15%, transparent 65%)",
+                }}
+            />
 
-                    {/* Cột trái: Văn bản với hiệu ứng xuất hiện theo trình tự */}
-                    <motion.div
-                        style={{ y: yContent }}
-                        className="text-center lg:text-left order-2 lg:order-1 relative"
-                    >
+            {/* ================= MỞ ĐẦU ================= */}
+            <section className="relative z-10 px-6 pb-20 pt-32 lg:pt-36">
+                <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 lg:grid-cols-12">
+                    <div className="order-2 text-center lg:order-1 lg:col-span-7 lg:text-left">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-rose-200 bg-white shadow-sm text-rose-600 text-[10px] font-bold tracking-[0.3em] uppercase mb-10"
+                            className="mb-8 inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white/80 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-rose-500 shadow-sm backdrop-blur"
                         >
-                            <Sparkles size={14} className="animate-pulse" /> Digital Portfolio 2026
+                            <Sparkles size={14} className="animate-pulse" /> Hồ sơ cá nhân 2026
                         </motion.div>
 
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.9, ease, delay: 0.1 }}
+                            className="mb-6 text-6xl font-black leading-[0.9] tracking-tighter md:text-8xl"
                         >
-                            <h1 className="text-7xl md:text-9xl italic font-light leading-none mb-6">
-                                Bạch <br />
-                                <span className="not-italic font-black text-transparent bg-clip-text bg-gradient-to-br from-[#432818] via-[#8d7b6d] to-rose-400">Thanh</span>
-                            </h1>
-                        </motion.div>
+                            Bạch Thị <br />
+                            <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text font-normal italic text-transparent">
+                                Thiện Thanh
+                            </span>
+                        </motion.h1>
 
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.6 }}
-                            className="max-w-md mx-auto lg:mx-0 text-[#6b584c] text-xl font-light tracking-wide italic leading-relaxed border-l-2 border-rose-200 pl-6"
+                            transition={{ delay: 0.3 }}
+                            className="mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm font-bold uppercase tracking-[0.2em] text-[#a88a80] lg:justify-start"
                         >
-                            "Nơi những dòng code không chỉ là logic, mà còn là câu chuyện mang đậm dấu ấn của riêng mình."
+                            <span>Khoa học Máy tính</span>
+                            <span className="h-1 w-1 rounded-full bg-rose-300" />
+                            <span className="text-rose-500">Á khoa CNTT</span>
+                            <span className="h-1 w-1 rounded-full bg-rose-300" />
+                            <span>ĐH Khoa học Huế</span>
                         </motion.p>
 
-                        <div className="flex gap-6 justify-center lg:justify-start mt-12">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.45, duration: 0.8, ease }}
+                            className="relative mx-auto max-w-xl rounded-[2rem] border border-white/80 bg-white/60 p-7 pl-14 text-left shadow-[0_20px_60px_-30px_rgba(190,80,100,0.35)] backdrop-blur lg:mx-0"
+                        >
+                            <Quote size={24} className="absolute left-5 top-7 text-rose-300" />
+                            <p className="text-lg italic leading-relaxed text-[#6e5249]">
+                                Nơi những dòng code không chỉ là logic, mà còn là câu chuyện mang đậm dấu ấn của riêng mình.
+                            </p>
+                        </motion.div>
+
+                        <div className="mt-10 flex justify-center gap-4 lg:justify-start">
                             {socialLinks.map((item, i) => (
                                 <motion.a
-                                    key={i}
+                                    key={item.label}
                                     initial={{ opacity: 0, scale: 0 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: 0.8 + (i * 0.1), type: 'spring' }}
-                                    whileHover={{ y: -10, scale: 1.15, rotate: 5 }}
+                                    transition={{ delay: 0.6 + i * 0.1, type: 'spring' }}
+                                    whileHover={{ y: -6 }}
                                     href={item.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-14 h-14 flex items-center justify-center rounded-full border border-[#d6ccc2] bg-white transition-colors shadow-md group hover:border-rose-400 hover:bg-rose-50"
+                                    aria-label={item.label}
+                                    className="group flex h-12 w-12 items-center justify-center rounded-2xl border border-rose-100 bg-white text-[#a88a80] shadow-md transition-colors hover:border-rose-500 hover:bg-rose-500 hover:text-white hover:shadow-rose-200"
                                 >
-                                    <div className="text-[#8d7b6d] group-hover:text-rose-500 transition-colors">
-                                        <item.Icon size={22} />
-                                    </div>
+                                    <item.Icon size={20} />
                                 </motion.a>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
 
+                    {/* Ảnh đại diện */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
-                        style={{ y: yImage, rotate: rotateImage }}
-                        className="relative order-1 lg:order-2 flex justify-center lg:justify-end"
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1.1, ease }}
+                        style={{ y: yImage }}
+                        className="relative order-1 mx-auto w-full max-w-sm lg:order-2 lg:col-span-5"
                     >
-                        <div className="relative group p-4">
-                            {/* Khung trang trí phía dưới */}
-                            <div className="absolute top-0 right-0 w-full h-full border-2 border-rose-300 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-500" />
-
-                            <div className="relative w-full max-w-[420px] aspect-[3/4] rounded-[3rem] overflow-hidden shadow-2xl border-[12px] border-white z-20 transition-transform duration-700 group-hover:scale-[1.02]">
-                                <img
-                                    src="/pictures/Ảnh đại diện.jpg"
-                                    alt="Bạch Thanh"
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-rose-200/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            </div>
-
-                            <motion.div
-                                animate={{ y: [0, 10, 0] }}
-                                transition={{ repeat: Infinity, duration: 4 }}
-                                className="absolute -bottom-4 -left-8 bg-white p-6 rounded-2xl shadow-xl z-30 hidden md:block"
-                            >
-                                <p className="text-xs font-bold uppercase tracking-widest text-rose-500">Student Excellence</p>
-                                <p className="text-lg font-black text-[#432818]">Class of 2026</p>
-                            </motion.div>
+                        <div className="absolute -inset-6 rounded-[3.5rem] bg-gradient-to-b from-rose-200/70 to-[#fde4dc]/40 blur-2xl" />
+                        <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[3rem] border-2 border-rose-200" />
+                        <div className="group relative aspect-[3/4] overflow-hidden rounded-[3rem] border-[8px] border-white shadow-[0_40px_80px_-30px_rgba(150,50,70,0.45)]">
+                            <img
+                                src="/pictures/anhtotnghiep.jpg"
+                                alt="Bạch Thị Thiện Thanh"
+                                className="h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/40 via-transparent to-transparent" />
                         </div>
-                    </motion.div>
-                </div>
 
-                <div className="absolute inset-0 z-0 pointer-events-none">
-                    <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-rose-200/20 rounded-full blur-[120px] animate-pulse" />
-                    <div className="absolute bottom-[10%] right-[0%] w-[500px] h-[500px] bg-amber-100/30 rounded-full blur-[150px]" />
-                </div>
-                <div className="absolute inset-0 z-0 pointer-events-none">
-                    <motion.div
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                        transition={{ repeat: Infinity, duration: 8 }}
-                        className="absolute top-[10%] left-[5%] w-[500px] h-[500px] bg-rose-200/50 rounded-full blur-[120px]"
-                    />
-                    <motion.div
-                        animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-                        transition={{ repeat: Infinity, duration: 10 }}
-                        className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-amber-100/60 rounded-full blur-[150px]"
-                    />
+                        <motion.div
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+                            className="absolute -bottom-6 -left-6 flex items-center gap-3 rounded-2xl border border-white bg-white/95 p-4 pr-6 shadow-xl backdrop-blur md:-left-12"
+                        >
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-pink-400 text-white">
+                                <Crown size={20} />
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-rose-500">Tốt nghiệp</p>
+                                <p className="font-black text-[#3a2420]">Á khoa CNTT</p>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                            className="absolute -top-5 right-4 text-rose-300"
+                        >
+                            <Sparkles size={36} />
+                        </motion.div>
+                    </motion.div>
                 </div>
             </section>
 
-            <section className="py-32 px-6 relative flex justify-center items-center overflow-hidden">
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex flex-wrap justify-around">
-                    {[...Array(20)].map((_, i) => <Star key={i} size={40} />)}
-                </div>
-
+            {/* ================= TUYÊN NGÔN ================= */}
+            <section className="relative z-10 px-6 py-16">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="max-w-6xl text-center relative z-10 px-8 py-16 border-y-2 border-rose-100"
+                    transition={{ duration: 0.9, ease }}
+                    className="relative mx-auto max-w-5xl overflow-hidden rounded-[3rem] bg-gradient-to-br from-[#4a1f2a] via-[#5c2633] to-[#3a1820] px-8 py-14 text-center shadow-[0_50px_100px_-40px_rgba(74,31,42,0.7)] md:px-16 md:py-20"
                 >
-                    <h2 className="text-3xl md:text-5xl leading-tight text-[#432818]">
-                        Trưởng thành là hành trình được vun đắp bằng
-                        <span className="block italic text-rose-500 mt-4 relative">
-                            đôi tay và sự nỗ lực không ngừng
-                            <motion.span
-                                initial={{ width: 0 }}
-                                whileInView={{ width: '100%' }}
-                                transition={{ delay: 0.5, duration: 1 }}
-                                className="absolute bottom-0 left-0 h-2 bg-rose-100/60 -z-10"
-                            />
-                        </span>
+                    <div className="pointer-events-none absolute -left-20 -top-20 h-80 w-80 rounded-full bg-rose-400/25 blur-[100px]" />
+                    <div className="pointer-events-none absolute -bottom-24 -right-10 h-72 w-72 rounded-full bg-pink-300/15 blur-[100px]" />
+                    <Quote size={48} className="mx-auto mb-6 text-rose-300/60" />
+                    <h2 className="relative text-2xl font-light leading-snug text-rose-50 md:text-4xl">
+                        Trưởng thành là hành trình được vun đắp bằng{" "}
+                        <span className="font-normal italic text-rose-300">đôi tay và sự nỗ lực không ngừng</span>{" "}
                         của chính mình.
                     </h2>
                 </motion.div>
             </section>
 
+            {/* ================= 01. CÂU CHUYỆN ================= */}
+            <section className="relative z-10 mx-auto max-w-6xl px-6 py-16">
+                <SectionHeader
+                    number="01"
+                    eyebrow="Câu chuyện"
+                    title="Kỹ thuật, tâm hồn"
+                    accent="& sự cống hiến"
+                    subtitle="Mình là ai, mình làm gì và điều gì thúc đẩy mình."
+                />
 
-            <section className="py-24 px-6 bg-[#FCFBF9] relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-rose-50/50 blur-[120px] rounded-full -z-10" />
-
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-20 items-start">
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            className="lg:col-span-5 relative group"
-                        >
-                            <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-[0_32px_64px_-15px_rgba(0,0,0,0.2)]">
-                                <motion.img
-                                    whileHover={{ scale: 1.05 }}
-                                    transition={{ duration: 0.6 }}
-                                    src="/pictures/Ảnh profile.jpg"
-                                    alt="Profile"
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-rose-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                    {/* Ảnh chân dung */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease }}
+                        className="group relative min-h-[420px] overflow-hidden rounded-[2.5rem] shadow-[0_30px_60px_-30px_rgba(150,50,70,0.45)] lg:col-span-5"
+                    >
+                        <img
+                            src={encodeURI("/pictures/Ảnh profile.jpg")}
+                            alt="Chân dung Thiện Thanh"
+                            className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/85 via-[#4a1f2a]/10 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
+                            <div className="mb-3 flex items-center gap-2 text-xs text-rose-100/90">
+                                <MapPin size={14} /> Huế, Việt Nam
                             </div>
-
-                            <motion.div
-                                initial={{ x: 20, opacity: 0 }}
-                                whileInView={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                                className="absolute -bottom-6 -right-6 md:-right-10 bg-white p-6 rounded-3xl shadow-xl border border-rose-50 z-20 max-w-[200px]"
-                            >
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex -space-x-2">
-                                        {[1, 2, 3, 4, 5].map((i) => (
-                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-rose-100 flex items-center justify-center">
-                                                <Star size={12} className="text-rose-500" fill="currentColor" />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p className="text-[11px] font-bold uppercase tracking-tighter text-stone-400">Awarded</p>
-                                    <p className="text-sm font-bold text-stone-800 italic">"Sinh viên 5 Tốt"</p>
-                                </div>
-                            </motion.div>
-                        </motion.div>
-
-                        <motion.div
-                            className="lg:col-span-7 pt-8 lg:pt-0"
-                            variants={containerVariants}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                        >
-                            <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6">
-                                <div className="h-[1px] w-12 bg-rose-300" />
-                                <span className="text-rose-500 font-bold tracking-[0.3em] uppercase text-[11px]">
-                                    Personal Biography
-                                </span>
-                            </motion.div>
-
-                            <motion.h2 variants={itemVariants} className="text-5xl md:text-7xl font-black text-[#2D1E17] mb-10 leading-[0.9] tracking-tighter">
-                                Kỹ thuật, tâm hồn <br />
-                                <span className="text-rose-500 font-light italic"> & sự cống hiến.</span>
-                            </motion.h2>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-justify">
-                                <motion.div variants={itemVariants} className="space-y-4">
-                                    <p className="text-lg text-[#5D4D44] leading-relaxed">
-                                        Mình là <strong>Bạch Thị Thiện Thanh</strong>, sinh viên năm cuối chuyên ngành Khoa học Máy tính tại
-                                        <span className="text-rose-600 font-medium"> Khoa Công nghệ thông tin, Đại học Khoa học, Đại học Huế</span>.
-                                    </p>
-                                    <p className="text-base text-stone-500 font-light">
-                                        Với mình, code không chỉ là những dòng lệnh khô khan, mà là công cụ để giải quyết những "vấn đề" của xã hội thông qua lăng kính công nghệ.
-                                    </p>
-                                </motion.div>
-
-                                <motion.div variants={itemVariants} className="space-y-4 bg-white p-6 rounded-3xl border border-stone-100 shadow-sm">
-                                    <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center text-rose-500 mb-2">
-                                        <Zap size={20} fill="currentColor" />
-                                    </div>
-                                    <p className="text-sm text-[#5D4D44] leading-relaxed">
-                                        Dự án tâm huyết nhất là nghiên cứu <strong>Deep Learning</strong> chẩn đoán viêm phổi từ ảnh X-quang. Một hành trình từ thuật toán đến giá trị cộng đồng.
-                                    </p>
-
-                                </motion.div>
-                            </div>
-                            <Link href="/introduction" className="inline-block mt-8">
-                                <motion.button
-                                    whileHover="hover"
-                                    initial="rest"
-                                    animate="rest"
-                                    className="relative group/btn flex items-center gap-4 py-2 pr-2 pl-6 overflow-hidden rounded-full bg-[#2D1E17] transition-all duration-300 hover:shadow-[0_15px_30px_-10px_rgba(225,29,72,0.3)]"
-                                >
-                                    <span className="relative z-10 text-[11px] font-black uppercase tracking-[0.2em] text-white/90 group-hover/btn:text-white transition-colors duration-300">
-                                        Xem chi tiết
+                            <div className="flex flex-wrap gap-2">
+                                {activities.map(({ icon: Icon, label }) => (
+                                    <span key={label} className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-bold ring-1 ring-white/25 backdrop-blur">
+                                        <Icon size={12} /> {label}
                                     </span>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
 
-                                    <motion.div
-                                        variants={{
-                                            rest: { scale: 1, rotate: 0 },
-                                            hover: { scale: 1.05, rotate: 45 }
-                                        }}
-                                        className="relative z-10 w-10 h-10 rounded-full bg-rose-500 text-white flex items-center justify-center transition-all duration-300 group-hover/btn:bg-white group-hover/btn:text-rose-500"
-                                    >
-                                        <ArrowUpRight size={18} strokeWidth={3} />
-                                    </motion.div>
-
-                                    <motion.div
-                                        variants={{
-                                            rest: { x: "-100%" },
-                                            hover: { x: "0%" }
-                                        }}
-                                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                                        className="absolute inset-0 bg-gradient-to-r from-rose-600 to-rose-400 -z-0"
-                                    />
-                                </motion.button>
-                            </Link>
-                            <motion.div
-                                variants={itemVariants}
-                                className="mt-12 p-1 border-t border-stone-100 flex flex-wrap items-center gap-x-12 gap-y-6 pt-10"
-                            >
-                                <div>
-                                    <p className="text-3xl font-black text-stone-800">3.81</p>
-                                    <p className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">GPA Tích lũy</p>
+                    {/* Tiểu sử */}
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        className="flex flex-col gap-6 lg:col-span-7"
+                    >
+                        <motion.div variants={itemVariants} className="rounded-[2.5rem] border border-white bg-white/80 p-8 shadow-[0_20px_60px_-30px_rgba(190,80,100,0.25)] backdrop-blur md:p-10">
+                            <div className="mb-6 flex items-center gap-4">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-100 to-[#fde4dc] text-rose-500">
+                                    <GraduationCap size={22} />
                                 </div>
-                                <div className="h-10 w-[1px] bg-stone-200 hidden md:block" />
-                                <div className="flex-1">
-                                    <p className="text-sm font-medium text-stone-600 mb-2 flex items-center gap-2">
-                                        <Sparkles size={16} className="text-amber-400" /> Hoạt động nổi bật
-                                    </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {['Đoàn - Hội', 'Câu lạc bộ', 'Nghiên cứu khoa học', 'Văn nghệ'].map((tag) => (
-                                            <span key={tag} className="px-3 py-1 bg-stone-100 text-stone-500 rounded-full text-[11px] font-bold">
-                                                {tag}
-                                            </span>
-                                        ))}
+                                <h3 className="text-2xl font-black tracking-tight">Xin chào, mình là Thanh</h3>
+                            </div>
+                            <div className="space-y-4 leading-relaxed text-[#6e5249]">
+                                <p>
+                                    Mình là <strong className="text-[#3a2420]">Bạch Thị Thiện Thanh</strong>, tốt nghiệp chuyên ngành Khoa học Máy tính với danh hiệu{" "}
+                                    <strong className="text-rose-500">Á khoa Khoa Công nghệ Thông tin</strong>, Trường Đại học Khoa học – Đại học Huế.
+                                </p>
+                                <p>
+                                    Với mình, code không chỉ là những dòng lệnh khô khan, mà là công cụ để giải quyết các vấn đề của xã hội. Dự án tâm huyết nhất là nghiên cứu{" "}
+                                    <strong className="text-[#3a2420]">Deep Learning chẩn đoán viêm phổi từ ảnh X-quang</strong> – hành trình từ thuật toán đến giá trị cộng đồng.
+                                </p>
+                            </div>
+
+                            <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[1.5rem] border border-rose-100 bg-rose-100 sm:grid-cols-4">
+                                {quickStats.map((s) => (
+                                    <div key={s.label} className="bg-[#fffaf8] px-3 py-4 text-center">
+                                        <div className="text-2xl font-black tracking-tight text-rose-500">{s.value}</div>
+                                        <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#a88a80]">{s.label}</div>
                                     </div>
-                                </div>
-                            </motion.div>
+                                ))}
+                            </div>
                         </motion.div>
 
-                    </div>
+                        {/* Lĩnh vực theo đuổi */}
+                        <motion.div variants={itemVariants} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            {focusAreas.map(({ icon: Icon, title, desc }) => (
+                                <motion.div
+                                    key={title}
+                                    whileHover={{ y: -4 }}
+                                    className="group flex items-center gap-4 rounded-[1.75rem] border border-rose-100/80 bg-gradient-to-br from-[#fff8f5] to-white p-5 transition-shadow hover:shadow-[0_20px_40px_-25px_rgba(244,63,94,0.5)]"
+                                >
+                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-500 text-white shadow-md shadow-rose-200 transition-transform duration-500 group-hover:-rotate-6">
+                                        <Icon size={20} />
+                                    </div>
+                                    <div>
+                                        <p className="font-black text-[#3a2420]">{title}</p>
+                                        <p className="text-sm text-[#a88a80]">{desc}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+
+                        <motion.div variants={itemVariants}>
+                            <Link
+                                href="/introduction"
+                                className="group inline-flex items-center gap-4 rounded-full bg-[#4a1f2a] py-2 pl-6 pr-2 text-white shadow-lg transition-all duration-300 hover:bg-rose-500 hover:shadow-rose-200"
+                            >
+                                <span className="text-[11px] font-black uppercase tracking-[0.2em]">Đọc giới thiệu chi tiết</span>
+                                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 group-hover:rotate-45">
+                                    <ArrowUpRight size={18} />
+                                </span>
+                            </Link>
+                        </motion.div>
+                    </motion.div>
                 </div>
             </section>
 
+            {/* ================= 02. DANH HIỆU & THÀNH TỰU ================= */}
+            <section className="relative z-10 mx-auto max-w-6xl px-6 py-16">
+                <SectionHeader
+                    number="02"
+                    eyebrow="Dấu ấn"
+                    title="Danh hiệu"
+                    accent="& thành tựu"
+                    subtitle="Lưu giữ những khoảnh khắc nỗ lực và những cột mốc đáng tự hào."
+                />
 
-            {/* 4. ACHIEVEMENTS SECTION - CAROUSEL-STYLE GRID */}
-            <section className="py-1 px-6 max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8 mt-10">
-
-                    <div className="text-center md:text-left">
-                        <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6">
-                            <div className="h-[1px] w-12 bg-rose-300" />
-                            <span className="text-rose-500 font-bold tracking-[0.3em] uppercase text-[11px]">
-                                HIGHLIGHT
-                            </span>
-                        </motion.div>
-                        <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase mt-4">
-                            Hành trình <br /> <span className="font-serif italic font-light text-rose-400">& Thành tựu</span>
-                        </h2>
+                {/* Danh hiệu nổi bật nhất */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease }}
+                    className="relative mb-8 flex flex-col items-center gap-6 overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-rose-500 via-rose-400 to-pink-400 p-8 text-white shadow-[0_30px_60px_-30px_rgba(244,63,94,0.7)] md:flex-row md:p-10"
+                >
+                    <Crown size={200} className="pointer-events-none absolute -bottom-10 -right-6 rotate-12 text-white/10" />
+                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl bg-white/20 ring-1 ring-white/30 backdrop-blur">
+                        <GraduationCap size={38} />
                     </div>
-                    <p className="max-w-xs text-[#8d7b6d] text-lg font-light italic border-l-2 border-rose-300 pl-6 mb-2">
-                        Lưu giữ những khoảnh khắc nỗ lực và những cột mốc đáng tự hào.
-                    </p>
-                </div>
+                    <div className="relative text-center md:text-left">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-rose-100">Danh hiệu tốt nghiệp</p>
+                        <h3 className="mt-1 text-3xl font-black tracking-tight md:text-4xl">Á khoa Khoa Công nghệ Thông tin</h3>
+                        <p className="mt-2 text-white/85">Thành quả của 4 năm bền bỉ học tập và rèn luyện, GPA 3.83/4.0.</p>
+                    </div>
+                    <div className="relative flex shrink-0 gap-3 md:ml-auto">
+                        <span className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-xs font-bold backdrop-blur">
+                            <Trophy size={14} /> 2 giải Nhì
+                        </span>
+                    </div>
+                </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     {achievements.map((item, index) => (
                         <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 60 }}
+                            key={item.title}
+                            initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.2, duration: 0.8 }}
+                            transition={{ delay: index * 0.15, duration: 0.8, ease }}
                             viewport={{ once: true }}
-                            className="group"
+                            className="group overflow-hidden rounded-[2.5rem] border border-white bg-white/80 shadow-[0_20px_60px_-30px_rgba(190,80,100,0.3)] backdrop-blur transition-shadow duration-500 hover:shadow-[0_40px_80px_-30px_rgba(244,63,94,0.45)]"
                         >
-                            <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] mb-10 shadow-2xl group-hover:shadow-rose-200 transition-all duration-500">
+                            <div className="relative m-3 mb-0 aspect-[4/3] overflow-hidden rounded-[2rem]">
                                 <img
-                                    src={item.image}
+                                    src={encodeURI(item.image)}
                                     alt={item.title}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-rose-950/80 via-transparent to-transparent opacity-90 group-hover:opacity-70 transition-opacity" />
-
-                                {/* Year Badge */}
-                                <div className="absolute top-6 right-6 w-20 h-20 rounded-full bg-black/10 backdrop-blur-md border border-white/20 flex flex-col items-center justify-center text-white">
-                                    <span className="text-xs font-bold uppercase tracking-tighter">Year</span>
-                                    <span className="text-xl font-bold">{item.date}</span>
-                                </div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/60 via-transparent to-transparent" />
+                                <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-black text-rose-500 backdrop-blur">
+                                    {item.date}
+                                </span>
                             </div>
-
-                            <div className="space-y-5 px-4 mb-20">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 flex items-center justify-center bg-rose-50 rounded-2xl text-rose-600 group-hover:bg-rose-500 group-hover:text-white transition-all duration-500 shadow-sm">
-                                        {item.icon}
+                            <div className="p-7">
+                                <div className="mb-4 flex items-center gap-3">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-500 transition-all duration-500 group-hover:bg-rose-500 group-hover:text-white">
+                                        <item.icon size={20} />
                                     </div>
-                                    <div className="h-[1px] flex-1 bg-gradient-to-r from-rose-200 to-transparent" />
+                                    <span className="h-px flex-1 bg-gradient-to-r from-rose-200 to-transparent" />
                                 </div>
-
-                                <h4 className="text-3xl font-bold text-[#432818] group-hover:text-rose-600 transition-colors leading-tight">
-                                    {item.title}
-                                </h4>
-                                <p className="text-[#8d7b6d] leading-relaxed text-base font-light italic">
-                                    {item.desc}
-                                </p>
-
-                                {/* <motion.button
-                                    whileHover={{ x: 10 }}
-                                    className="flex items-center gap-3 text-xs font-bold text-rose-500 tracking-widest uppercase pt-2"
-                                >
-                                    Tìm hiểu thêm <ArrowUpRight size={18} />
-                                </motion.button> */}
+                                <h4 className="text-xl font-black text-[#3a2420] transition-colors group-hover:text-rose-500">{item.title}</h4>
+                                <p className="mt-2 text-sm leading-relaxed text-[#6e5249]">{item.desc}</p>
                             </div>
                         </motion.div>
                     ))}
                 </div>
-                <div className="flex justify-center items-center pb-10">
-                    <Link href="/journey" passHref>
-                        <motion.button
-                            whileHover={{ scale: 1.02, translateY: -3 }}
+
+                <div className="flex justify-center pt-14">
+                    <Link href="/journey" className="group relative">
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-500 via-rose-400 to-[#e8a598] opacity-30 blur transition duration-1000 group-hover:opacity-90 group-hover:duration-200" />
+                        <motion.div
+                            whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.98 }}
-                            className="group relative px-10 py-5 bg-rose-50/50 backdrop-blur-sm border border-rose-200 rounded-full overflow-hidden transition-all duration-300 shadow-sm hover:shadow-rose-200/50 hover:shadow-xl"
+                            className="relative flex items-center gap-3 rounded-full border border-white bg-white px-8 py-4 shadow-2xl"
                         >
-                            {/* Hiệu ứng tia sáng lướt qua khi hover */}
-                            <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-
-                            <span className="relative z-10 flex items-center gap-3 tracking-wide">
-                                {/* Chữ màu hồng đậm (Rose-600) trên nền hồng nhạt (Rose-50) sẽ rất nổi bật */}
-                                <span className="text-lg font-bold text-rose-600 transition-colors duration-300">
-                                    Hãy cùng khám phá hành trình của Thanh nhé!
-                                </span>
-
-                                <div className="flex items-center">
-                                    <Sparkles
-                                        size={18}
-                                        className="text-rose-400 group-hover:text-rose-500 group-hover:rotate-12 transition-all duration-300"
-                                    />
-                                    <motion.div
-                                        initial={{ width: 0, opacity: 0 }}
-                                        whileHover={{ width: "auto", opacity: 1 }}
-                                        className="overflow-hidden"
-                                    >
-                                        <ArrowRight size={20} className="ml-2 text-rose-500" />
-                                    </motion.div>
-                                </div>
+                            <Sparkles size={18} className="text-rose-400" />
+                            <span className="font-bold text-[#3a2420] transition-colors group-hover:text-rose-500 md:text-lg">
+                                Khám phá toàn bộ hành trình
                             </span>
-
-                            {/* Lớp nền phủ nhẹ khi hover để nút trông "đầy" hơn một chút */}
-                            <div className="absolute inset-0 bg-rose-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </motion.button>
+                            <ArrowRight className="text-rose-500 transition-transform duration-300 group-hover:translate-x-1" size={20} />
+                        </motion.div>
                     </Link>
                 </div>
             </section>
 
-            {/* 5. NÂNG CẤP FOOTER CTA */}
-            <section className="px-6 py-24 relative overflow-hidden bg-[#FCFBF9]">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-50/50 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/3" />
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-50/40 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/4" />
-
+            {/* ================= KẾT NỐI ================= */}
+            <section className="relative z-10 px-6 pb-24 pt-8">
                 <motion.div
                     initial={{ y: 40, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="max-w-6xl mx-auto bg-white border border-stone-100 rounded-[3rem] md:rounded-[5rem] p-12 md:p-24 text-center relative overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.03)]"
+                    transition={{ duration: 0.8, ease }}
+                    className="relative mx-auto max-w-5xl overflow-hidden rounded-[3.5rem] bg-gradient-to-br from-rose-100 via-[#fdeee9] to-pink-100 p-10 text-center shadow-[0_40px_80px_-40px_rgba(190,80,100,0.5)] md:p-16"
                 >
-                    <div className="absolute inset-0 opacity-40 pointer-events-none">
-                        <div className="absolute top-10 left-10 w-2 h-2 bg-rose-200 rounded-full" />
-                        <div className="absolute bottom-20 right-20 w-3 h-3 bg-amber-200 rounded-full" />
-                        <div className="absolute top-1/2 left-1/4 w-1 h-1 bg-rose-300 rounded-full" />
+                    <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white/70 blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-8 -left-4 select-none text-[8rem] italic leading-none text-white/60 md:text-[11rem]">
+                        Thanh
                     </div>
 
                     <div className="relative z-10 flex flex-col items-center">
-                        <div className="mb-8 flex items-center gap-2 px-4 py-1.5 bg-rose-50 rounded-full text-rose-500 font-bold text-[10px] uppercase tracking-[0.3em]">
-                            <Sparkles size={14} fill="currentColor" /> Sẵn sàng cho những ý tưởng mới
+                        <div className="mb-6 flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-rose-500 shadow-sm">
+                            <Sparkles size={14} /> Sẵn sàng cho những ý tưởng mới
                         </div>
-
-                        <h2 className="text-4xl md:text-7xl font-light text-[#2D1E17] mb-12 leading-[1.1] tracking-tight">
+                        <h2 className="mb-10 text-4xl font-black leading-[1.1] tracking-tight text-[#3a2420] md:text-6xl">
                             Cùng tạo nên những <br />
-                            <span className="italic text-rose-500 pr-2">điều tuyệt vời</span>
-                            <span className="font-black"> nhé?</span>
+                            <span className="font-normal italic text-rose-500">điều tuyệt vời nhé?</span>
                         </h2>
 
-                        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full sm:w-auto">
-                            <motion.a
-                                whileHover={{ y: -5, boxShadow: "0 20px 40px rgba(244, 63, 94, 0.2)" }}
-                                whileTap={{ scale: 0.98 }}
+                        <div className="flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
+                            <Link
                                 href="/connect"
-                                className="group px-10 py-5 bg-[#2D1E17] text-white rounded-full font-bold text-sm uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl shadow-stone-200"
+                                className="group flex items-center gap-3 rounded-full bg-rose-500 px-9 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-xl shadow-rose-300/50 transition-all duration-300 hover:bg-[#4a1f2a]"
                             >
-                                <Mail size={18} strokeWidth={2.5} />
-                                Gửi tin nhắn
-                                <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            </motion.a>
-
-                            <motion.a
-                                whileHover={{ backgroundColor: "#FFF5F5", borderColor: "#FDA4AF" }}
-                                whileTap={{ scale: 0.98 }}
+                                <Mail size={18} /> Gửi tin nhắn
+                                <ArrowUpRight size={18} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                            </Link>
+                            <a
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 href="https://drive.google.com/file/d/1mnZTDMhEp757wSQL0N-xrcYFmgmIzGk0/view"
-                                className="px-10 py-5 border border-stone-200 text-stone-600 rounded-full font-bold text-sm uppercase tracking-widest transition-all flex items-center gap-3 bg-white"
+                                className="flex items-center gap-3 rounded-full border border-white bg-white/80 px-9 py-4 text-sm font-bold uppercase tracking-widest text-[#6e5249] backdrop-blur transition-all duration-300 hover:bg-white hover:text-rose-500"
                             >
-
                                 <FileText size={18} /> Tải CV chi tiết
-
-
-                            </motion.a>
+                            </a>
                         </div>
 
-                        {/* Câu quote nhỏ tinh tế phía dưới */}
-                        <p className="mt-12 text-stone-400 text-sm font-medium italic">
-                            "Luôn phản hồi trong vòng 24 giờ làm việc"
-                        </p>
-                    </div>
-
-                    {/* Decor nhẹ nhàng phía sau text */}
-                    <div className="absolute -bottom-10 -left-5 text-rose-50/50 pointer-events-none select-none italic text-[12rem]">
-                        Thanh Bạch
+                        <p className="mt-10 text-sm italic text-[#a88a80]">Luôn phản hồi trong vòng 24 giờ làm việc</p>
                     </div>
                 </motion.div>
             </section>
-
         </div>
     );
 };

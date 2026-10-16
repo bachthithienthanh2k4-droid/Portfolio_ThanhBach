@@ -4,441 +4,672 @@ import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import {
     BookOpen, Code, Award, GraduationCap,
-    Users, Rocket, Heart, Brain, Calendar,
-    ArrowRight, Sparkles, ChevronRight, Briefcase, Search, Target,
+    Users, Rocket, Heart, Brain,
+    ArrowRight, Sparkles, Briefcase, Search, Target,
     MessageCircle,
     Coffee,
     Music,
     Camera,
     Gamepad2,
     Lightbulb,
-    ShieldAlert,
-    Zap
+    Zap,
+    Trophy,
+    FileText,
+    Quote,
+    MapPin,
+    Building2,
+    Star,
+    Languages,
+    Medal,
+    Crown,
+    Palette,
+    Mic,
+    Presentation,
+    Microscope,
+    Smartphone,
+    Calendar,
 } from 'lucide-react';
-import Decor from '../components/decor';
 import Link from 'next/link';
-import ScientificResearchCard from './NCKH';
-import Intership from './intership';
-import PortfolioSections from './intership';
+import FutureVision from './dreams';
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    }
+};
+
+const itemVariants: Variants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease } }
+};
+
+const cardBase = "rounded-[2.5rem] border border-white bg-white/80 shadow-[0_20px_60px_-30px_rgba(190,80,100,0.25)] backdrop-blur";
+
+// Tiêu đề nhỏ dùng chung cho các section
+const Eyebrow = ({ children, light = false }: { children: React.ReactNode; light?: boolean }) => (
+    <div className="flex items-center gap-3">
+        <span className={`h-px w-10 ${light ? 'bg-rose-300/60' : 'bg-rose-300'}`} />
+        <span className={`text-[10px] font-bold uppercase tracking-[0.4em] ${light ? 'text-rose-200' : 'text-rose-500'}`}>{children}</span>
+    </div>
+);
+
+// Ô icon hồng dùng chung
+const IconBadge = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-100 to-[#fde4dc] text-rose-500 ring-1 ring-white shadow-[0_10px_30px_-10px_rgba(244,63,94,0.35)] ${className}`}>
+        {children}
+    </div>
+);
+
+// Tiêu đề card: icon + chữ
+const CardTitle = ({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) => (
+    <div className="mb-7 flex items-center gap-4">
+        <IconBadge className="transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105">
+            <Icon size={22} />
+        </IconBadge>
+        <h3 className="text-2xl font-black tracking-tight">{children}</h3>
+    </div>
+);
+
+// Tiêu đề section có đánh số
+const SectionHeader = ({ number, eyebrow, title, accent, subtitle, center = false }: {
+    number: string; eyebrow: string; title: string; accent: string; subtitle?: string; center?: boolean;
+}) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease }}
+        className={`mb-10 flex flex-col gap-5 md:mb-12 ${center ? "items-center text-center" : "md:flex-row md:items-end md:justify-between"}`}
+    >
+        <div className={`flex gap-5 ${center ? "flex-col items-center gap-3" : "items-end"}`}>
+            <span className="select-none bg-gradient-to-b from-rose-300 to-rose-100 bg-clip-text text-6xl font-black leading-none text-transparent md:text-7xl">
+                {number}
+            </span>
+            <div className={center ? "flex flex-col items-center" : ""}>
+                <Eyebrow>{eyebrow}</Eyebrow>
+                <h2 className="mt-3 text-3xl font-black tracking-tighter md:text-5xl">
+                    {title} <span className="font-normal italic text-rose-500">{accent}</span>
+                </h2>
+            </div>
+        </div>
+        {subtitle && (
+            <p className={`max-w-sm italic text-[#a88a80] ${center ? "" : "md:text-right"}`}>{subtitle}</p>
+        )}
+    </motion.div>
+);
 
 const Introduction = () => {
-    const containerVariants: Variants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.2
-            }
-        }
-    };
-
-    const itemVariants: Variants = {
-        hidden: { y: 30, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1] // TypeScript sẽ chấp nhận mảng này là cubic-bezier
-            }
-        }
-    };
     const timelineData = [
+        { year: "2023", title: "Sinh viên 5 Tốt", desc: "Giấy khen xuất sắc công tác Hội, gia nhập CLB Hỗ trợ lập trình.", icon: Heart, tag: "Hoạt động" },
+        { year: "2024", title: "Sao tháng Giêng", desc: "Danh hiệu Sao tháng Giêng & Sinh viên 5 Tốt cấp Trường.", icon: Award, tag: "Vinh danh" },
+        { year: "2024", title: "Giải Nhì SPIT Front-end", desc: "Cùng tham gia Olympic Toán học Sinh viên toàn quốc.", icon: Code, tag: "Giải thưởng" },
+        { year: "2025", title: "Thực tập Tester tại DHY Solutions", desc: "Kiểm thử app giao hàng PANGO (4/2025 - 10/2025).", icon: Search, tag: "Kinh nghiệm" },
+        { year: "2025", title: "Nghiên cứu khoa học", desc: "Đề tài Deep Learning chẩn đoán viêm phổi; Phó LCH Khoa CNTT.", icon: Brain, tag: "Nghiên cứu" },
+        { year: "2026", title: "Giải Nhì HUE-ICT Challenge", desc: "Sản phẩm Gated Fusion chẩn đoán viêm phổi từ ảnh X-quang.", icon: Trophy, tag: "Giải thưởng" },
+        { year: "2026", title: "Thực tập tại VNNIC", desc: "Phát triển giao diện web & ứng dụng AI đa phương thức.", icon: Briefcase, tag: "Thực tập" },
+        { year: "2026", title: "Lập trình viên tại PT Valley", desc: "Phát triển ứng dụng di động đa nền tảng với Flutter.", icon: Smartphone, tag: "Làm việc" },
+        { year: "2026", title: "Tốt nghiệp Á khoa CNTT", desc: "Tốt nghiệp với danh hiệu Á khoa Khoa Công nghệ Thông tin.", icon: GraduationCap, tag: "Tốt nghiệp" },
+    ];
+
+    const experiences = [
         {
-            year: "2023 - 2024",
-            title: "Cống hiến & Rèn luyện",
-            desc: "Nhận giấy khen xuất sắc trong công tác Hội và phong trào sinh viên, Sinh viên 5 Tốt năm 2023. Bắt đầu hành trình tại CLB Hỗ trợ lập trình.",
-            icon: <Heart className="text-rose-500" />,
-            tag: "Activity"
+            company: "PT Valley",
+            role: "Lập trình viên Fresher",
+            type: "Làm việc",
+            period: "",
+            icon: Smartphone,
+            tasks: [
+                "Phát triển app di động đa nền tảng",
+                "Xây dựng giao diện & chức năng theo yêu cầu",
+                "Quản lý mã nguồn, làm việc nhóm qua Git/GitHub",
+            ],
+            tech: ["Flutter", "Dart", "Git"],
         },
         {
-            year: "2024",
-            title: "Vinh danh Sinh viên",
-            desc: "Nhận được danh hiệu Sao tháng Giêng và Sinh viên 5 Tốt cấp Trường.",
-            icon: <Award className="text-rose-500" />,
-            tag: "Honor"
+            company: "Trung tâm Internet Việt Nam",
+            role: "Thực tập sinh",
+            type: "Thực tập",
+            period: "4/2026 - 5/2026",
+            icon: Briefcase,
+            tasks: [
+                "Thiết kế & phát triển giao diện website",
+                "Dùng Qwen3-VL-2B phân tích ảnh, phát hiện vi phạm",
+                "Làm việc nhóm & giải quyết vấn đề",
+            ],
+            tech: ["UI/UX", "Qwen3-VL", "Website"],
         },
         {
-            year: "2024",
-            title: "Chinh phục thử thách",
-            desc: "Giải Nhì cuộc thi SPIT Front-End. Tham gia Olympic Toán học Sinh viên toàn quốc, rèn luyện tư duy logic và thuật toán chuyên sâu.",
-            icon: <Code className="text-amber-500" />,
-            tag: "Award"
-        },
-        {
-            year: "2025",
-            title: "Thực tập DHY Solutions",
-            desc: "Tham gia phát triển hệ thống App giao hàng PANGO thực tế với vai trò Tester (4/2025 - 10/2025). App đã được hoàn thiện và đang trải nghiệm tại Huế.",
-            icon: <Search className="text-orange-500" />,
-            tag: "Experience"
-        },
-        {
-            year: "2025",
-            title: "Đột phá Nghiên cứu",
-            desc: "Hoàn thành Nghiên cứu khoa học cấp Trường về Deep Learning chẩn đoán viêm phổi. Đảm nhiệm chức vụ Phó Liên chi hội Khoa CNTT và Phó ban Kỹ năng CLB.",
-            icon: <Brain className="text-purple-500" />,
-            tag: "Research"
-        },
-        {
-            year: "2026",
-            title: "Công nghệ vì cộng đồng",
-            desc: "Đang triển khai dự án App di động hỗ trợ sinh viên Đại học Khoa học Huế. Tiếp tục duy trì GPA xuất sắc 3.81/4.0.",
-            icon: <Rocket className="text-blue-500" />,
-            tag: "Project"
-        },
-        {
-            year: "2026",
-            title: "Thực tập VNNIC",
-            desc: "Học hỏi quy trình làm việc chuyên nghiệp và làm việc với thực tế tại Trung tâm Internet Việt Nam (4/2026 - 5/2026).",
-            icon: <Briefcase className="text-indigo-500" />,
-            tag: "Internship"
+            company: "DHY Solutions",
+            role: "Thực tập sinh Tester",
+            type: "Thực tập",
+            period: "4/2025 - 10/2025",
+            icon: Search,
+            tasks: [
+                "Kiểm thử app giao hàng PANGO",
+                "Viết & thực thi test case, theo dõi bug",
+                "Kiểm thử lại, kiểm thử hồi quy cùng lập trình viên",
+            ],
+            tech: ["Test case", "Theo dõi lỗi", "Kiểm thử hồi quy"],
         },
     ];
 
+    const achievements = [
+        {
+            icon: FileText,
+            tag: "Công bố khoa học",
+            title: "Bài báo khoa học",
+            desc: "“Phương pháp kết hợp đặc trưng thích nghi cho bài toán phân lớp bệnh viêm phổi từ ảnh X-quang” – ĐH Khoa học Huế.",
+        },
+        {
+            icon: Trophy,
+            tag: "HUE-ICT 2026",
+            title: "Giải Nhì HUE-ICT Challenge",
+            desc: "Sản phẩm sáng tạo CNTT: Gated Fusion chẩn đoán viêm phổi từ ảnh X-quang.",
+            image: "/pictures/hueict.jpg",
+        },
+        {
+            icon: Medal,
+            tag: "SPIT Front-end",
+            title: "Giải Nhì SPIT Front-end",
+            desc: "Cuộc thi thiết kế giao diện web của CLB Hỗ trợ lập trình.",
+            image: "/pictures/spitfront-end.jpg",
+        },
+    ];
+
+    const heroStats = [
+        { value: "3.83", label: "GPA / 4.0" },
+        { value: "B1", label: "Ngoại ngữ" },
+        { value: "03", label: "Kinh nghiệm" },
+        { value: "07", label: "Dự án" },
+    ];
+
+    const academicFacts = [
+        { icon: GraduationCap, label: "Chuyên ngành", value: "Khoa học Máy tính" },
+        { icon: Building2, label: "Trường", value: "ĐH Khoa học – ĐH Huế" },
+        { icon: Star, label: "GPA", value: "3.83 / 4.0" },
+        { icon: Languages, label: "Ngoại ngữ", value: "Chứng chỉ B1" },
+    ];
+
+    const leadershipSkills = [
+        { icon: Crown, label: "Lãnh đạo" },
+        { icon: Palette, label: "Thiết kế ấn phẩm" },
+        { icon: Mic, label: "Văn nghệ" },
+        { icon: Presentation, label: "Đào tạo" },
+    ];
+
+    const strengths = [
+        { icon: Brain, label: "Tư duy thuật toán" },
+        { icon: BookOpen, label: "Tự học nhanh" },
+        { icon: Users, label: "Làm việc nhóm" },
+    ];
+
+    const interests = [
+        { icon: Coffee, label: "Code bên ly cà phê" },
+        { icon: Music, label: "Nhạc Lo-fi" },
+        { icon: Camera, label: "Nhiếp ảnh" },
+        { icon: Gamepad2, label: "Trò chơi tư duy" },
+        { icon: BookOpen, label: "Đọc blog công nghệ" },
+    ];
+
     return (
-        <div className="min-h-screen bg-[#faf7f2] text-[#432818] pb-24 selection:bg-rose-200">
+        <div className="relative min-h-screen overflow-hidden bg-[#fbf5f1] text-[#3a2420] pb-24 selection:bg-rose-200">
+            {/* Nền trang trí toàn trang */}
+            <div className="pointer-events-none absolute -top-40 -right-40 h-[640px] w-[640px] rounded-full bg-rose-200/50 blur-[140px]" />
+            <div className="pointer-events-none absolute top-[30%] -left-60 h-[560px] w-[560px] rounded-full bg-[#fde4dc]/80 blur-[140px]" />
+            <div
+                className="pointer-events-none absolute inset-x-0 top-0 h-[900px] opacity-40"
+                style={{
+                    backgroundImage: "radial-gradient(rgba(190,80,100,0.18) 1px, transparent 1px)",
+                    backgroundSize: "26px 26px",
+                    maskImage: "radial-gradient(ellipse at top, black 15%, transparent 65%)",
+                    WebkitMaskImage: "radial-gradient(ellipse at top, black 15%, transparent 65%)",
+                }}
+            />
 
-            {/* HEADER SECTION */}
-            <section className="relative pt-32 pb-20 px-6">
-                <div className="max-w-6xl mx-auto relative z-10">
+            {/* ================= HERO ================= */}
+            <section className="relative px-6 pt-32 pb-24">
+                <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 lg:grid-cols-12">
+                    <div className="lg:col-span-7">
+                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-8">
+                            <Eyebrow>Giới thiệu</Eyebrow>
+                        </motion.div>
+
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.9, ease }}
+                            className="mb-10 text-6xl font-black leading-[0.9] tracking-tighter md:text-8xl"
+                        >
+                            Bạch Thị <br />
+                            <span className="bg-gradient-to-r from-rose-500 via-pink-400 to-[#e8a598] bg-clip-text italic font-normal text-transparent">
+                                Thiện Thanh
+                            </span>
+                        </motion.h1>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3, duration: 0.8, ease }}
+                            className="relative max-w-xl rounded-[2rem] border border-white/80 bg-white/60 p-7 pl-14 shadow-[0_20px_60px_-30px_rgba(190,80,100,0.35)] backdrop-blur"
+                        >
+                            <Quote size={24} className="absolute left-5 top-7 text-rose-300" />
+                            <p className="text-lg italic leading-relaxed text-[#6e5249]">
+                                Không chỉ nhìn vào những dòng code, mà còn thấy giá trị nhân văn sau mỗi giải pháp công nghệ.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5, duration: 0.8, ease }}
+                            className="mt-10 grid max-w-xl grid-cols-2 gap-px overflow-hidden rounded-[1.75rem] border border-rose-100 bg-rose-100 sm:grid-cols-4"
+                        >
+                            {heroStats.map((s) => (
+                                <div key={s.label} className="bg-[#fffaf8] px-4 py-5 text-center transition-colors hover:bg-white">
+                                    <div className="text-3xl font-black tracking-tight text-rose-500">{s.value}</div>
+                                    <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-[#a88a80]">{s.label}</div>
+                                </div>
+                            ))}
+                        </motion.div>
+                    </div>
+
+                    {/* Ảnh chân dung dạng vòm */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-3 mb-8"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1, ease, delay: 0.2 }}
+                        className="relative mx-auto w-full max-w-sm lg:col-span-5"
                     >
-                        <span className="h-[1px] w-12 bg-rose-300" />
-                        <span className="text-rose-500 font-bold tracking-[0.4em] uppercase text-[10px]">Biographical Narrative</span>
+                        <div className="absolute -inset-6 rounded-t-full rounded-b-[3rem] bg-gradient-to-b from-rose-200/70 to-[#fde4dc]/40 blur-2xl" />
+                        <div className="absolute -inset-3 rounded-t-full rounded-b-[2.75rem] border border-rose-200/80" />
+                        <div className="group relative aspect-[3/4] overflow-hidden rounded-t-full rounded-b-[2.5rem] border-[6px] border-white bg-rose-100 shadow-[0_40px_80px_-30px_rgba(150,50,70,0.45)]">
+                            <img
+                                src={encodeURI("/pictures/Ảnh profile.jpg")}
+                                alt="Bạch Thanh"
+                                className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a]/75 via-transparent to-transparent" />
+                            <div className="absolute bottom-7 left-0 right-0 text-center text-white">
+                                <p className="text-2xl font-bold tracking-tight">Thiện Thanh</p>
+                                <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.3em] text-rose-100/90">Lập trình viên & Thủ lĩnh</p>
+                            </div>
+                        </div>
+
+                        {/* Huy hiệu nổi */}
+                        <motion.div
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute -left-6 top-1/4 flex items-center gap-3 rounded-2xl border border-white bg-white/90 px-4 py-3 shadow-xl backdrop-blur md:-left-12"
+                        >
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500 text-white">
+                                <GraduationCap size={18} />
+                            </div>
+                            <div>
+                                <p className="text-xs font-black text-[#3a2420]">Á khoa CNTT</p>
+                                <p className="text-[10px] text-[#a88a80]">Khoa học Máy tính</p>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute -right-4 bottom-1/4 flex items-center gap-2 rounded-full border border-white bg-white/90 px-4 py-2.5 shadow-xl backdrop-blur md:-right-10"
+                        >
+                            <MapPin size={14} className="text-rose-500" />
+                            <span className="text-[11px] font-bold text-[#3a2420]">ĐH Khoa học Huế</span>
+                        </motion.div>
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                            className="absolute -top-4 right-6 text-rose-300"
+                        >
+                            <Sparkles size={36} />
+                        </motion.div>
                     </motion.div>
-
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="text-6xl md:text-9xl font-black tracking-tighter mb-10 leading-[0.85]"
-                    >
-                        Bạch Thị <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-amber-500 to-orange-500 italic font-light">Thiện Thanh</span>
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="max-w-2xl text-xl md:text-2xl text-[#6b584c] leading-relaxed font-light italic border-l-2 border-rose-200 pl-8"
-                    >
-                        "Một lập trình viên không chỉ nhìn vào những dòng code, mà còn nhìn thấy những giá trị nhân văn ẩn sau mỗi giải pháp công nghệ."
-                    </motion.p>
                 </div>
             </section>
 
-            <section className="px-6 max-w-7xl mx-auto">
+
+            {/* ================= 01. VỀ MÌNH ================= */}
+            <section id="ve-minh" className="relative z-10 mx-auto max-w-6xl scroll-mt-28 px-6 py-14">
+                <SectionHeader number="01" eyebrow="Về mình" title="Nền tảng" accent="& con người" subtitle="Học vấn, lý do theo đuổi ngành và những điều mình đang hoàn thiện." />
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-12 gap-6"
+                    className="grid grid-cols-1 gap-6 md:grid-cols-12"
                 >
-                    <motion.div variants={itemVariants}
-                        whileHover={{ y: -5 }} // Hiệu ứng nhấc nhẹ khi hover
-                        className="md:col-span-8 bg-white p-12 rounded-[3.5rem] border border-stone-100 shadow-[0_10px_50px_-10px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_-20px_rgba(244,63,94,0.08)] flex flex-col justify-between group transition-all duration-700 relative overflow-hidden">
-                        <motion.div
-                            animate={{
-                                y: [0, -15, 0],
-                                rotate: [0, 5, 0]
-                            }}
-                            transition={{
-                                duration: 6,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="absolute -bottom-10 -right-20 z-0 pointer-events-none drop-shadow-[0_20px_40px_rgba(244,63,94,0.15)] opacity-50 group-hover:opacity-100 transition-opacity duration-700"
-                        >
-                            <img
-                                src="/pictures/Plane2.png"
-                                alt="Paper Plane Background"
-                                className="w-[380px] h-auto grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
-                            />
-                        </motion.div>
-                        <div>
-                            <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 mb-8 group-hover:scale-110 transition-transform">
-                                <GraduationCap size={28} />
-                            </div>
-                            <h3 className="text-3xl font-black mb-6 tracking-tight">Nền tảng tri thức vững chắc</h3>
-                            <p className="text-lg text-[#5D4D44] leading-relaxed mb-6 text-justify">
-                                Với vai trò là sinh viên năm cuối chuyên ngành <strong> Khoa học Máy tính</strong> tại <strong>Khoa Công nghệ Thông tin, Trường Đại học Khoa học – Đại học Huế </strong>, mình luôn xem việc học là một hành trình bền bỉ và không ngừng hoàn thiện bản thân. Thành tích GPA 3.81/4.0 cùng danh hiệu Sinh viên Xuất sắc qua nhiều năm là minh chứng cho sự nỗ lực, tinh thần kỷ luật và niềm đam mê mà mình dành cho lĩnh vực Công nghệ Thông tin.                            </p>
-                        </div>
-                        <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                            {/* Thẻ Ngành học */}
-                            <motion.span
-                                whileHover={{ y: -3, scale: 1.02 }}
-                                className="px-5 py-2 bg-slate-100 border border-slate-200 rounded-full text-[13px] font-bold uppercase tracking-widest text-slate-600 shadow-sm cursor-default transition-colors hover:bg-slate-200 hover:text-slate-800"
-                            >
-                                KHKT & Công nghệ
-                            </motion.span>
-
-                            {/* Thẻ GPA */}
-                            <motion.span
-                                whileHover={{ y: -3, scale: 1.02 }}
-                                className="px-5 py-2 bg-rose-50 border border-rose-100 rounded-full text-[13px] font-bold uppercase tracking-widest text-rose-500 shadow-sm cursor-default transition-colors hover:bg-rose-500 hover:text-white hover:shadow-md hover:shadow-rose-200"
-                            >
-                                GPA: 3.81
-                            </motion.span>
-
-                            {/* Thẻ Chứng chỉ */}
-                            <motion.span
-                                whileHover={{ y: -3, scale: 1.02 }}
-                                className="px-5 py-2 bg-fuchsia-50 border border-fuchsia-100 rounded-full text-[13px] font-bold uppercase tracking-widest text-fuchsia-500 shadow-sm cursor-default transition-colors hover:bg-fuchsia-500 hover:text-white hover:shadow-md hover:shadow-fuchsia-200"
-                            >
-                                Chứng chỉ B1
-                            </motion.span>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        variants={itemVariants}
-                        className="md:col-span-4 bg-rose-100 rounded-[3rem] overflow-hidden relative aspect-[3/4] md:aspect-auto md:min-h-[500px] shadow-sm"
-                    >
-                        <img
-                            src="/pictures/Ảnh profile.jpg"
-                            alt="Bạch Thanh"
-                            className="absolute inset-0 w-full h-full object-cover object-top grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                    {/* Học vấn */}
+                    <motion.div variants={itemVariants} className={`group relative overflow-hidden p-8 md:col-span-7 md:p-10 ${cardBase}`}>
+                        <motion.img
+                            src="/pictures/Plane2.png"
+                            alt=""
+                            animate={{ y: [0, -12, 0], rotate: [0, 4, 0] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                            className="pointer-events-none absolute -bottom-12 -right-16 w-[260px] opacity-20 transition-opacity duration-700 group-hover:opacity-50"
                         />
-
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-                        <div className="absolute bottom-8 left-8 text-white">
-                            <p className="font-bold text-xl tracking-tight">Thanh Bach</p>
-                            <p className="text-[10px] opacity-70 uppercase tracking-widest font-medium">Developer & Leader</p>
-                        </div>
-                    </motion.div>
-
-                    {/* Card 3: Nghiên cứu khoa học */}
-                    <motion.div variants={itemVariants} className="md:col-span-12 bg-[#2D1E17] text-stone-200 rounded-[3rem] p-10 md:p-16 relative overflow-hidden">
-                        <div className="relative z-10 max-w-4xl">
-                            <Sparkles className="text-amber-400 mb-6 animate-pulse" />
-                            <h3 className="text-4xl md:text-5xl font-black text-white mb-8 leading-tight tracking-tighter">Nghiên cứu khoa học: <br /><span className="text-amber-300 italic font-light">Từ thuật toán đến thực tiễn</span></h3>
-                            <div className="space-y-6 text-stone-300 text-lg leading-relaxed text-justify">
-                                <p>
-                                    Năm 2025, mình hoàn thành đề tài <strong>NGHIÊN CỨU PHƯƠNG PHÁP KẾT HỢP PHÂN ĐOẠN VÀ PHÂN LỚP DỰ TRÊN HỌC SÂU CHO CHẨN ĐOÁN BỆNH VIÊM PHỔI TỪ ẢNH X-QUANG LỒNG NGỰC</strong>. Đây là cột mốc giúp mình làm chủ các kỹ thuật xử lý hình ảnh chuyên sâu và AI.
-                                </p>
-                                <p>
-                                    Tiếp nối đam mê, năm 2026, mình đang xây dựng <strong className="uppercase tracking-tight text-white">Xây dựng ứng dụng di động cung cấp tiện ích để phục vụ và hỗ trợ các nhu cầu</strong> dành riêng cho sinh viên HUSC. Dự án không chỉ là code, mà là giải pháp hỗ trợ thiết thực cho hàng nghìn sinh viên tại trường.
-                                </p>
-                            </div>
-                        </div>
-                        <Brain size={400} className="absolute -right-20 -bottom-20 text-white/5 pointer-events-none" />
-                    </motion.div>
-
-
-
-
-                    <motion.div variants={itemVariants} className="md:col-span-6 bg-blue-50 rounded-[3rem] p-10 border border-blue-100 group">
-                        <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white mb-8 group-hover:rotate-12 transition-transform">
-                            <Rocket size={24} />
-                        </div>
-                        <h4 className="text-2xl font-black mb-6 uppercase tracking-tighter">Kinh nghiệm Thực tập</h4>
-                        <div className="space-y-6">
-                            <div>
-                                <p className="text-[10px] font-black text-blue-600 mb-2 uppercase tracking-widest">DHY Solutions / Tester (4/2025 - 10/2025)</p>
-                                <p className="text-[#5D4D44] text-sm leading-relaxed text-justify">
-                                    Tham gia phát triển app giao hàng PANGO với vai trò Tester, mình được trải nghiệm quy trình làm việc thực tế và chuyên nghiệp.
-                                    Ứng dụng hiện đã hoàn thiện và đang triển khai tại Huế, giúp mình tích lũy nhiều kinh nghiệm thực tiễn.                                </p>
-                            </div>
-                            <div className="pt-4 border-t border-blue-200/50">
-                                <p className="text-[10px] font-black text-blue-600 mb-2 uppercase tracking-widest">Trung tâm Internet Việt Nam / Internship (4/2026 - 5/2026)</p>
-                                <p className="text-[#5D4D44] text-sm leading-relaxed">
-                                    Tham gia thực tập tại môi trường chuyên nghiệp, mình được tiếp cận quy trình làm việc thực tế, nâng cao kỹ năng chuyên môn và hiểu rõ hơn về cách vận hành các hệ thống trong thực tiễn.                                </p>
-                            </div>
-                        </div>
-                    </motion.div>
-
-
-                    <motion.div variants={itemVariants} className="md:col-span-6 bg-amber-50 rounded-[3rem] p-10 border border-amber-100 group">
-                        <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center text-white mb-8 group-hover:-rotate-12 transition-transform">
-                            <Award size={24} />
-                        </div>
-                        <h4 className="text-2xl font-black mb-6 uppercase tracking-tighter">Dấu ấn tại các kỳ thi</h4>
-                        <ul className="space-y-5 text-[#5D4D44]">
-                            <li className="flex items-start gap-3">
-                                <ChevronRight className="mt-1 text-amber-500 shrink-0" size={18} />
-                                <span className="text-sm"><strong>Giải Nhì SPIT Front-End 2024:</strong> Khẳng định kỹ năng xây dựng giao diện và trải nghiệm người dùng.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <ChevronRight className="mt-1 text-amber-500 shrink-0" size={18} />
-                                <span className="text-sm"><strong>Olympic Toán học Sinh viên toàn quốc 2024:</strong> Dù kết quả không như ý nhưng đã tôi luyện cho mình một tư duy logic sắt bén.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <ChevronRight className="mt-1 text-amber-500 shrink-0" size={18} />
-                                <span className="text-sm"><strong>ICPC HUSC 2025:</strong> Sân chơi lập trình đầy kịch tính giúp mình học cách làm việc nhóm dưới áp lực cao.</span>
-                            </li>
-                        </ul>
-                    </motion.div>
-
-                    <motion.div variants={itemVariants} className="md:col-span-12 bg-white rounded-[3rem] p-10 md:p-12 shadow-sm border border-stone-100 group overflow-hidden relative">
-                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                            <div className="md:max-w-2xl">
-                                <Users className="text-rose-500 mb-6" size={32} />
-                                <h4 className="text-3xl font-black mb-4 tracking-tight">Sứ mệnh tuổi trẻ</h4>
-                                <p className="text-[#5D4D44] leading-relaxed text-justify text-lg italic">
-                                    Với vai trò <strong>Phó Liên chi hội trưởng Khoa CNTT</strong> và <strong>Phó ban Kỹ năng CLB Hỗ trợ lập trình</strong>, mình luôn nỗ lực kết nối cộng đồng sinh viên, hỗ trợ tổ chức các sự kiện, hội thảo và phong trào của Khoa và Câu lạc bộ.
-                                </p>
-                            </div>
-                            <div className="flex flex-wrap gap-2 md:w-64 justify-end">
-                                {['Lãnh đạo', 'Thiết kế Poster', 'Văn nghệ', 'Training'].map(skill => (
-                                    <span key={skill} className="text-[10px] font-black uppercase px-4 py-2 bg-stone-50 rounded-xl border border-stone-200 text-stone-500 group-hover:bg-rose-50 group-hover:text-rose-500 group-hover:border-rose-100 transition-colors">
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                        <Decor />
-
-                    </motion.div>
-                </motion.div>
-            </section>
-            <section className="px-6 py-20 max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-
-                    {/* Cột trái: Ưu & Nhược điểm (Dạng Glassmorphism) */}
-                    <motion.div
-                        variants={itemVariants}
-                        className="md:col-span-5 space-y-6"
-                    >
-                        <div className="bg-white/70 backdrop-blur-md rounded-[3rem] p-10 border border-white shadow-xl">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl">
-                                    <Zap size={24} />
+                        <div className="relative z-10">
+                            <CardTitle icon={GraduationCap}>Học vấn</CardTitle>
+                            <div className="mb-6 flex items-center gap-4 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-400 p-4 text-white shadow-lg shadow-rose-200">
+                                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/20 ring-1 ring-white/30">
+                                    <Crown size={22} />
                                 </div>
-                                <h3 className="text-2xl font-black tracking-tight">Thế mạnh</h3>
+                                <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-100">Danh hiệu tốt nghiệp</p>
+                                    <p className="text-lg font-black leading-tight">Á khoa Công nghệ Thông tin</p>
+                                </div>
                             </div>
-                            <ul className="space-y-4">
-                                {['Tư duy thuật toán tốt', 'Khả năng tự học công nghệ mới nhanh', 'Làm việc nhóm & Điều phối tốt'].map((s, i) => (
-                                    <motion.li
-                                        key={i}
-                                        whileHover={{ x: 10 }}
-                                        className="flex items-center gap-3 text-[#5D4D44] font-medium"
-                                    >
-                                        <span className="w-2 h-2 bg-emerald-400 rounded-full" /> {s}
-                                    </motion.li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <div className="text-stone-600 rounded-[3rem] p-10 shadow-xl relative overflow-hidden group">
-                            <div className="relative z-10">
-                                <div className="flex items-center gap-4 mb-8">
-                                    <div className="p-3 bg-white/10 text-rose-400 rounded-2xl">
-                                        <ShieldAlert size={24} />
+                            <p className="mb-6 max-w-md text-[#6e5249]">
+                                Tốt nghiệp với danh hiệu <strong className="text-[#3a2420]">Á khoa Khoa Công nghệ Thông tin</strong>, nhiều năm liền đạt danh hiệu <strong className="text-[#3a2420]">Sinh viên Xuất sắc</strong>.
+                            </p>
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                {academicFacts.map(({ icon: Icon, label, value }) => (
+                                    <div key={label} className="flex items-center gap-3 rounded-2xl border border-rose-100/80 bg-[#fff8f5]/80 p-4 transition-colors hover:bg-white">
+                                        <Icon size={20} className="shrink-0 text-rose-400" />
+                                        <div>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-[#a88a80]">{label}</p>
+                                            <p className="text-sm font-black text-[#3a2420]">{value}</p>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-black text-white-500 tracking-tight">Điểm cần cải thiện</h3>
-                                </div>
-                                <p className="text-sm leading-relaxed italic opacity-80">
-                                    "Đôi khi quá cầu toàn trong chi tiết dẫn đến tốn thời gian. Đang học cách cân bằng giữa sự hoàn hảo và tiến độ dự án."
-                                </p>
-                            </div>
-                            <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform bg-white/10 text-rose-300">
-                                <Target size={120} />
+                                ))}
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Cột phải: Đam mê & Lý do chọn ngành (Dạng Storytelling) */}
+                    {/* Tại sao KHMT */}
                     <motion.div
                         variants={itemVariants}
-                        className="md:col-span-7 bg-gradient-to-br from-orange-50 to-rose-50 rounded-[3rem] p-10 md:p-14 border border-orange-200 flex flex-col justify-center relative overflow-hidden"
+                        className="relative overflow-hidden rounded-[2.5rem] border border-rose-100 bg-gradient-to-br from-[#fff8f5] via-[#fdeee9] to-rose-100 p-8 md:col-span-5"
+                    >
+                        <motion.div
+                            animate={{ rotate: [0, 10, 0] }}
+                            transition={{ repeat: Infinity, duration: 4 }}
+                            className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-rose-500 shadow-md"
+                        >
+                            <Lightbulb size={22} />
+                        </motion.div>
+                        <h3 className="mb-4 text-2xl font-black leading-tight tracking-tight">
+                            Vì sao chọn <span className="font-normal italic text-rose-500">Khoa học Máy tính?</span>
+                        </h3>
+                        <div className="space-y-4 leading-relaxed text-[#6e5249]">
+                            <p>
+                                Bắt đầu từ sự tò mò về cách thế giới vận hành qua những con số, mình nhận ra <strong className="text-[#3a2420]">lập trình không chỉ là gõ phím</strong>. Đó là công cụ mạnh mẽ để biến những ý tưởng trừu tượng thành giải pháp thiết thực cho cuộc sống.
+                            </p>
+                            <p className="rounded-2xl border-l-4 border-rose-300 bg-white/60 py-3 pl-5 pr-3 text-sm italic">
+                                &ldquo;Thử thách lớn nhất là khi thuật toán không chạy, nhưng hạnh phúc nhất là khi thấy sản phẩm của mình giúp ích được cho cộng đồng.&rdquo;
+                            </p>
+                        </div>
+                    </motion.div>
+
+                    {/* Thế mạnh */}
+                    <motion.div variants={itemVariants} className={`group p-8 md:col-span-7 ${cardBase}`}>
+                        <CardTitle icon={Zap}>Thế mạnh</CardTitle>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                            {strengths.map(({ icon: Icon, label }) => (
+                                <motion.div key={label} whileHover={{ y: -4 }} className="flex flex-col items-center gap-2 rounded-2xl bg-[#fff8f5] p-4 text-center text-sm font-semibold text-[#6e5249]">
+                                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-rose-500 shadow-sm">
+                                        <Icon size={18} />
+                                    </span>
+                                    {label}
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Điểm cần cải thiện */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-rose-400 to-pink-400 p-8 text-white shadow-[0_30px_60px_-30px_rgba(244,63,94,0.6)] md:col-span-5"
                     >
                         <div className="relative z-10">
-                            <motion.div
-                                animate={{ rotate: [0, 10, 0] }}
-                                transition={{ repeat: Infinity, duration: 4 }}
-                                className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center text-orange-500 shadow-sm mb-8"
-                            >
-                                <Lightbulb size={32} />
-                            </motion.div>
-                            <h3 className="text-4xl font-black mb-6 tracking-tighter leading-tight">
-                                Tại sao lại là <br /><span className="text-orange-600">Khoa học Máy tính?</span>
-                            </h3>
-                            <div className="space-y-6 text-[#5D4D44] text-lg leading-relaxed text-justify">
-                                <p>
-                                    Bắt đầu từ sự tò mò về cách thế giới vận hành qua những con số, mình nhận ra <strong>Lập trình không chỉ là gõ phím</strong>. Đó là công cụ mạnh mẽ nhất để biến những ý tưởng trừu tượng thành giải pháp thay đổi cuộc sống.
-                                </p>
-                                <p className="font-medium italic border-l-4 border-orange-300 pl-6">
-                                    "Thử thách lớn nhất là khi thuật toán không chạy, nhưng niềm hạnh phúc lớn nhất là khi thấy 'đứa con tinh thần' của mình giúp ích được cho cộng đồng."
-                                </p>
+                            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur">
+                                <Target size={22} />
+                            </div>
+                            <h3 className="mb-4 text-2xl font-black tracking-tight">Đang cải thiện</h3>
+                            <p className="italic text-white/90">
+                                Bớt cầu toàn, cân bằng giữa sự hoàn hảo và tiến độ.
+                            </p>
+                        </div>
+                        <Target size={150} className="pointer-events-none absolute -bottom-8 -right-8 text-white/10 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110" />
+                    </motion.div>
+
+                </motion.div>
+            </section>
+
+            {/* ================= 02. KINH NGHIỆM ================= */}
+            <section id="kinh-nghiem" className="relative z-10 mx-auto max-w-6xl scroll-mt-28 px-6 py-14">
+                <SectionHeader number="02" eyebrow="Kinh nghiệm" title="Thực tập" accent="& làm việc" subtitle="Môi trường thực tế giúp mình trưởng thành về kỹ năng và tư duy." />
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 gap-6 md:grid-cols-12"
+                >
+                    {/* Kinh nghiệm thực tập và làm việc */}
+                    <motion.div variants={itemVariants} className={`group p-8 md:col-span-12 md:p-10 ${cardBase}`}>
+                        <div className="flex items-start justify-between gap-4">
+                            <CardTitle icon={Rocket}>Kinh nghiệm</CardTitle>
+                            <span className="mt-3 rounded-full border border-rose-100 bg-rose-50 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-rose-500">
+                                {experiences.length} vị trí
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                            {experiences.map((exp) => (
+                                <motion.div
+                                    key={exp.company}
+                                    whileHover={{ y: -6 }}
+                                    className="group/card relative flex flex-col overflow-hidden rounded-[2rem] border border-rose-100/80 bg-gradient-to-b from-[#fff8f5] to-white p-6 transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgba(244,63,94,0.45)]"
+                                >
+                                    <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-rose-400 via-pink-400 to-[#e8a598] opacity-60 transition-opacity group-hover/card:opacity-100" />
+                                    <div className="mb-4 flex items-center gap-3">
+                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-500 text-white shadow-md shadow-rose-200 transition-transform duration-500 group-hover/card:-rotate-6">
+                                            <exp.icon size={20} />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h4 className="truncate font-black leading-tight text-[#3a2420]">{exp.company}</h4>
+                                            <p className="text-[11px] font-bold uppercase tracking-wider text-rose-500">{exp.role}</p>
+                                        </div>
+                                    </div>
+                                    <div className="mb-4 flex items-center gap-2 text-[11px] font-semibold text-[#a88a80]">
+                                        <Calendar size={12} />
+                                        <span>{exp.period || exp.type}</span>
+                                    </div>
+                                    <ul className="space-y-2 border-t border-rose-100 pt-4">
+                                        {exp.tasks.map((task) => (
+                                            <li key={task} className="flex items-start gap-2.5 text-sm text-[#6e5249]">
+                                                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 rounded-[1px] bg-rose-400" />
+                                                <span>{task}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                                        {exp.tech.map((t) => (
+                                            <span key={t} className="rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-bold text-rose-500">{t}</span>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                </motion.div>
+            </section>
+
+            {/* ================= 03. NGHIÊN CỨU & THÀNH TÍCH ================= */}
+            <section id="nghien-cuu" className="relative z-10 mx-auto max-w-6xl scroll-mt-28 px-6 py-14">
+                <SectionHeader number="03" eyebrow="Học thuật" title="Nghiên cứu" accent="& thành tích" subtitle="Những dấu ấn học thuật và giải thưởng nổi bật." />
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 gap-6 md:grid-cols-12"
+                >
+                    {/* Nghiên cứu khoa học - điểm nhấn rượu vang */}
+                    <motion.div
+                        variants={itemVariants}
+                        className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#4a1f2a] via-[#5c2633] to-[#3a1820] p-8 text-rose-50 shadow-[0_50px_100px_-40px_rgba(74,31,42,0.7)] md:col-span-12 md:p-12"
+                    >
+                        <div className="pointer-events-none absolute -left-20 -top-20 h-80 w-80 rounded-full bg-rose-400/25 blur-[100px]" />
+                        <div className="relative z-10 grid items-center gap-10 lg:grid-cols-12">
+                            <div className="lg:col-span-6">
+                                <Eyebrow light>Nghiên cứu</Eyebrow>
+                                <h3 className="mt-5 text-4xl font-black leading-tight tracking-tighter text-white md:text-5xl">
+                                    Từ thuật toán <br />
+                                    <span className="font-normal italic text-rose-200">đến thực tiễn</span>
+                                </h3>
+                                <div className="mt-8 space-y-4">
+                                    {[
+                                        { icon: Microscope, year: "2025", text: "NCKH: Kết hợp phân đoạn & phân lớp ảnh X-quang chẩn đoán viêm phổi" },
+                                        { icon: Smartphone, year: "2026", text: "Xây dựng ứng dụng di động tiện ích cho sinh viên HUSC" },
+                                    ].map(({ icon: Icon, year, text }) => (
+                                        <div key={year} className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur transition-colors hover:bg-white/10">
+                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-400/20 text-rose-200">
+                                                <Icon size={18} />
+                                            </div>
+                                            <div>
+                                                <span className="text-[10px] font-black tracking-widest text-rose-300">{year}</span>
+                                                <p className="text-sm leading-relaxed text-rose-50/90">{text}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="relative lg:col-span-6">
+                                <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-rose-400/40 to-transparent blur-2xl" />
+                                <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] ring-1 ring-white/20">
+                                    <img src="/pictures/NCKH_2.jpg" alt="Báo cáo nghiên cứu khoa học" className="h-full w-full object-cover" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#3a1820]/60 to-transparent" />
+                                    <span className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold text-[#4a1f2a]">
+                                        <Presentation size={13} /> Báo cáo NCKH cấp Trường
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Sở thích (Dạng Bento Tags) */}
-                    <motion.div
-                        variants={itemVariants}
-                        className="md:col-span-12 bg-white rounded-[3rem] p-10 border border-stone-100 shadow-sm overflow-hidden"
-                    >
-                        <div className="flex flex-col md:flex-row items-center gap-10">
-                            <div className="shrink-0">
-                                <h4 className="text-xl font-black uppercase tracking-widest text-stone-400 rotate-0 md:-rotate-90">Interests</h4>
+                    {/* Thành tích */}
+                    <motion.div variants={itemVariants} className="group rounded-[2.5rem] border border-rose-100/80 bg-gradient-to-br from-[#fff8f5] to-rose-50 p-8 md:col-span-12 md:p-10">
+                        <CardTitle icon={Trophy}>Thành tích & Nghiên cứu</CardTitle>
+                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                            {achievements.map(({ icon: Icon, tag, title, desc, image }) => (
+                                <motion.div
+                                    key={title}
+                                    whileHover={{ y: -6 }}
+                                    className="relative flex flex-col overflow-hidden rounded-[2rem] bg-white/80 p-6 transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgba(244,63,94,0.45)]"
+                                >
+                                    {image && (
+                                        <img src={encodeURI(image)} alt={title} className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rotate-6 rounded-2xl object-cover opacity-90 shadow-lg ring-4 ring-white" />
+                                    )}
+                                    <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 to-pink-400 text-white shadow-lg shadow-rose-200">
+                                        <Icon size={24} />
+                                    </div>
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-rose-400">{tag}</span>
+                                    <h4 className="mt-1 text-lg font-black leading-snug text-[#3a2420]">{title}</h4>
+                                    <p className="mt-2 text-sm leading-relaxed text-[#6e5249]">{desc}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </motion.div>
+            </section>
+
+            {/* ================= 04. HOẠT ĐỘNG & SỞ THÍCH ================= */}
+            <section id="hoat-dong" className="relative z-10 mx-auto max-w-6xl scroll-mt-28 px-6 py-14">
+                <SectionHeader number="04" eyebrow="Cộng đồng" title="Hoạt động" accent="& sở thích" subtitle="Kết nối cộng đồng và những điều mình yêu thích." />
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 gap-6 md:grid-cols-12"
+                >
+                    {/* Hoạt động & lãnh đạo - có ảnh nền CLB */}
+                    <motion.div variants={itemVariants} className="group relative min-h-[420px] overflow-hidden rounded-[2.5rem] md:col-span-7">
+                        <img
+                            src="/pictures/clb.jpg"
+                            alt="CLB Hỗ trợ lập trình"
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#4a1f2a] via-[#4a1f2a]/70 to-[#4a1f2a]/10" />
+                        <div className="relative z-10 flex h-full flex-col justify-end p-8 text-white md:p-10">
+                            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur">
+                                <Users size={22} />
                             </div>
-                            <div className="flex flex-wrap gap-4 justify-center">
-                                {[
-                                    { icon: <Coffee size={20} />, label: "Coffee Coding", color: "bg-orange-100 text-orange-700" },
-                                    { icon: <Music size={20} />, label: "Lo-fi Music", color: "bg-blue-100 text-blue-700" },
-                                    { icon: <Camera size={20} />, label: "Photography", color: "bg-rose-100 text-rose-700" },
-                                    { icon: <Gamepad2 size={20} />, label: "Logic Games", color: "bg-indigo-100 text-indigo-700" },
-                                    { icon: <BookOpen size={20} />, label: "Tech Blogs", color: "bg-emerald-100 text-emerald-700" },
-                                ].map((item, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        whileHover={{ y: -5, scale: 1.05 }}
-                                        className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-bold shadow-sm ${item.color}`}
-                                    >
-                                        {item.icon}
-                                        <span>{item.label}</span>
-                                    </motion.div>
+                            <h3 className="mb-4 text-2xl font-black tracking-tight">Sứ mệnh tuổi trẻ</h3>
+                            <ul className="mb-6 space-y-2 text-sm text-rose-50/90">
+                                <li className="flex items-center gap-2"><Crown size={14} className="text-rose-300" /> Phó Liên chi hội trưởng Khoa CNTT</li>
+                                <li className="flex items-center gap-2"><Code size={14} className="text-rose-300" /> Phó ban Kỹ năng CLB Hỗ trợ lập trình</li>
+                            </ul>
+                            <div className="flex flex-wrap gap-2">
+                                {leadershipSkills.map(({ icon: Icon, label }) => (
+                                    <span key={label} className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-bold ring-1 ring-white/25 backdrop-blur">
+                                        <Icon size={12} /> {label}
+                                    </span>
                                 ))}
                             </div>
                         </div>
                     </motion.div>
-                </div>
 
+                    {/* Sở thích */}
+                    <motion.div variants={itemVariants} className={`group flex flex-col p-8 md:col-span-5 md:p-10 ${cardBase}`}>
+                        <CardTitle icon={Heart}>Sở thích</CardTitle>
+                        <p className="mb-6 text-[#6e5249]">Những điều giúp mình cân bằng sau giờ làm việc.</p>
+                        <div className="mt-auto flex flex-wrap gap-3">
+                            {interests.map(({ icon: Icon, label }) => (
+                                <motion.div
+                                    key={label}
+                                    whileHover={{ y: -4 }}
+                                    className="group/chip flex cursor-default items-center gap-2.5 rounded-2xl border border-rose-100 bg-[#fff8f5] px-4 py-2.5 text-sm font-bold text-[#6e5249] transition-colors hover:border-rose-400 hover:bg-rose-500 hover:text-white hover:shadow-lg hover:shadow-rose-200"
+                                >
+                                    <Icon size={16} className="text-rose-400 transition-colors group-hover/chip:text-white" />
+                                    <span>{label}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </motion.div>
             </section>
 
-
-            {/* TIMELINE SECTION */}
-            <section className="py-30 px-6 max-w-4xl mx-auto">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center mb-24">
-                    <h2 className="text-4xl font-black uppercase tracking-tighter mb-4">Hành trình trưởng thành</h2>
-                    <p className="text-[#8d7b6d] italic text-lg">Từng cột mốc là một bài học vô giá</p>
-                </motion.div>
+            {/* ================= 05. HÀNH TRÌNH ================= */}
+            <section id="hanh-trinh" className="relative z-10 mx-auto max-w-5xl scroll-mt-28 px-6 py-14">
+                <SectionHeader number="05" eyebrow="Cột mốc" title="Hành trình" accent="trưởng thành" subtitle="Từ năm nhất đến hôm nay, qua từng cột mốc đáng nhớ." center />
 
                 <div className="relative">
-                    <div className="absolute left-[19px] top-0 bottom-0 w-[1px] bg-stone-200" />
-                    <div className="space-y-16">
-                        {timelineData.map((step, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ x: -20, opacity: 0 }}
-                                whileInView={{ x: 0, opacity: 1 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="relative pl-16 group"
-                            >
-                                <div className="absolute left-0 top-0 w-10 h-10 rounded-2xl bg-white border border-stone-200 flex items-center justify-center shadow-sm z-10 group-hover:scale-110 transition-transform">
-                                    {step.icon}
-                                </div>
-                                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-2">
-                                    <span className="text-lg font-black text-rose-500 tabular-nums">{step.year}</span>
-                                    <span className="hidden md:block w-1.5 h-1.5 rounded-full bg-stone-300" />
-                                    <h4 className="text-xl font-bold tracking-tight text-[#432818]">{step.title}</h4>
-                                </div>
-                                <div className="bg-white/50 p-6 rounded-[2rem] border border-stone-100 group-hover:bg-white transition-all duration-500">
-                                    <p className="text-[#6b584c] font-light leading-relaxed text-sm">{step.desc}</p>
-                                    <span className="inline-block mt-4 text-[9px] font-black uppercase tracking-widest text-stone-400 bg-stone-50 px-3 py-1 rounded-full group-hover:bg-rose-50 group-hover:text-rose-400">
-                                        {step.tag}
-                                    </span>
-                                </div>
-                            </motion.div>
-                        ))}
+                    <div className="absolute bottom-0 left-5 top-0 w-px bg-gradient-to-b from-rose-300 via-rose-200 to-transparent md:left-1/2" />
+
+                    <div className="space-y-8 md:space-y-10">
+                        {timelineData.map((step, index) => {
+                            const Icon = step.icon;
+                            const isLeft = index % 2 === 0;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ y: 30, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    viewport={{ once: true, margin: "-60px" }}
+                                    transition={{ duration: 0.7, ease }}
+                                    className={`group relative pl-16 md:w-1/2 md:pl-0 ${isLeft ? 'md:pr-14' : 'md:ml-auto md:pl-14'}`}
+                                >
+                                    <div className={`absolute left-0 top-0 z-10 flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-rose-500 shadow-[0_8px_20px_-6px_rgba(244,63,94,0.45)] ring-4 ring-[#fbf5f1] transition-all duration-500 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white ${isLeft ? 'md:left-auto md:-right-5' : 'md:-left-5'}`}>
+                                        <Icon size={18} />
+                                    </div>
+                                    <div className="rounded-[1.75rem] border border-white bg-white/70 p-5 shadow-[0_20px_50px_-30px_rgba(190,80,100,0.3)] backdrop-blur transition-all duration-500 group-hover:-translate-y-1 group-hover:bg-white">
+                                        <div className="mb-2 flex items-center gap-3">
+                                            <span className="rounded-full bg-rose-500 px-3 py-0.5 text-xs font-black tabular-nums text-white">{step.year}</span>
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-rose-400">{step.tag}</span>
+                                        </div>
+                                        <h4 className="text-lg font-bold tracking-tight text-[#3a2420]">{step.title}</h4>
+                                        <p className="mt-1 text-sm text-[#6e5249]">{step.desc}</p>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -446,110 +677,65 @@ const Introduction = () => {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="flex justify-center items-center py-20"
+                    className="flex items-center justify-center pt-16"
                 >
                     <Link href="/journey" className="group relative">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 via-rose-500 to-orange-400 rounded-full blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-500 via-rose-400 to-[#e8a598] opacity-30 blur transition duration-1000 group-hover:opacity-90 group-hover:duration-200" />
                         <motion.div
-                            whileHover={{ scale: 1.05 }}
+                            whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.98 }}
-                            className="relative flex items-center gap-3 px-10 py-5 bg-white border border-gray-100 rounded-full shadow-2xl transition-all duration-300 group-hover:border-transparent"
+                            className="relative flex items-center gap-3 rounded-full border border-white bg-white px-8 py-4 shadow-2xl"
                         >
-                            <span className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 group-hover:from-pink-600 group-hover:to-rose-500 transition-all duration-300">
-                                Tìm hiểu thêm về hành trình của Thanh
+                            <span className="font-bold text-[#3a2420] transition-colors group-hover:text-rose-500 md:text-lg">
+                                Xem toàn bộ hành trình
                             </span>
-
-                            <div className="relative overflow-hidden w-6 h-6">
-                                <motion.div
-                                    className="flex flex-col"
-                                    animate={{ y: [0, -24, 0] }}
-                                    transition={{
-                                        duration: 3,
-                                        repeat: Infinity,
-                                        ease: "easeInOut",
-                                        times: [0, 0.2, 1]
-                                    }}
-                                >
-                                    <ArrowRight className="text-pink-500" size={24} />
-                                    <ArrowRight className="text-pink-500 translate-y-6" size={24} />
-                                </motion.div>
-                            </div>
-
-                            <motion.div
-                                className="absolute bottom-4 left-10 right-16 h-[2px] bg-pink-500/20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                            />
+                            <ArrowRight className="text-rose-500 transition-transform duration-300 group-hover:translate-x-1" size={20} />
                         </motion.div>
                     </Link>
                 </motion.div>
             </section>
 
-            {/* CALL TO ACTION */}
-            <section className="px-6 relative overflow-hidden -mt-16 md:-mt-24">
-                {/* Background Decor nhẹ nhàng bên ngoài */}
-                <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-rose-100/40 blur-[120px] rounded-full pointer-events-none" />
+            {/* ================= 06. TẦM NHÌN ================= */}
+            <FutureVision />
 
+            {/* ================= CALL TO ACTION ================= */}
+            <section className="relative z-10 px-6 pt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    whileHover={{ y: -8 }}
-                    transition={{ duration: 0.5 }}
-                    className="max-w-5xl mx-auto bg-white border border-stone-100 rounded-[4rem] p-10 md:p-16 text-center relative overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]"
+                    transition={{ duration: 0.6, ease }}
+                    className="relative mx-auto max-w-5xl overflow-hidden rounded-[3.5rem] bg-gradient-to-br from-rose-100 via-[#fdeee9] to-pink-100 p-10 text-center shadow-[0_40px_80px_-40px_rgba(190,80,100,0.5)] md:p-14"
                 >
-                    {/* Overlay Gradient cực nhẹ để tạo chiều sâu */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-rose-50/50 via-transparent to-amber-50/30 pointer-events-none" />
+                    <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white/70 blur-3xl" />
+                    <Rocket size={340} className="pointer-events-none absolute -bottom-16 -right-16 -rotate-12 text-rose-500/[0.06]" />
 
                     <div className="relative z-10 flex flex-col items-center">
-                        {/* Badge nhỏ phía trên đầu */}
-                        <motion.div
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ repeat: Infinity, duration: 3 }}
-                            className="mb-6 flex items-center gap-2 px-4 py-1.5 bg-rose-50 rounded-full text-rose-500 font-bold text-[10px] uppercase tracking-[0.2em]"
-                        >
-                            <Sparkles size={14} /> Let's Work Together
-                        </motion.div>
-
-                        <h3 className="text-3xl md:text-5xl font-black text-[#2D1E17] mb-8 leading-[1.15] tracking-tight">
-                            Bạn muốn tìm hiểu thêm về <br />
-                            <span className="text-rose-500 italic font-serif font-light">các dự án của mình?</span>
-                        </h3>
-
-                        <p className="text-stone-500 max-w-xl mb-10 text-lg font-light leading-relaxed">
-                            Mỗi dự án là một hành trình kết nối giữa kỹ thuật và cảm xúc.
-                            Đừng ngần ngại khám phá và chia sẻ cùng mình nhé.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row justify-center gap-5 w-full sm:w-auto">
-                            <Link href="/projects">
-                                <button className="group px-10 py-5 bg-[#2D1E17] text-white rounded-full font-bold hover:bg-rose-600 transition-all duration-300 flex items-center justify-center gap-3 text-sm uppercase tracking-widest shadow-xl shadow-stone-200">
-                                    Khám phá dự án
-                                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                                </button>
-                            </Link>
-
-                            <Link href="/connect">
-                                <button className="px-10 py-5 bg-white text-stone-600 border border-stone-200 rounded-full font-bold hover:bg-stone-50 hover:border-stone-300 transition-all duration-300 flex items-center justify-center gap-3 text-sm uppercase tracking-widest">
-                                    <MessageCircle size={18} /> Liên hệ ngay
-                                </button>
-                            </Link>
-
+                        <div className="mb-6 flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-rose-500 shadow-sm">
+                            <Sparkles size={14} /> Cùng nhau kết nối
                         </div>
-                    </div>
-
-                    {/* Rocket Decor - Thay bằng kích thước vừa phải và Opacity thấp */}
-                    <div className="absolute -bottom-10 -right-10 opacity-[0.03] text-stone-900 pointer-events-none -rotate-12">
-                        <Rocket size={400} />
+                        <h3 className="mb-10 text-3xl font-black leading-[1.15] tracking-tight text-[#3a2420] md:text-5xl">
+                            Cùng khám phá <br />
+                            <span className="font-normal italic text-rose-500">các dự án của mình?</span>
+                        </h3>
+                        <div className="flex w-full flex-col justify-center gap-4 sm:w-auto sm:flex-row">
+                            <Link
+                                href="/projects"
+                                className="group flex items-center justify-center gap-3 rounded-full bg-rose-500 px-9 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-xl shadow-rose-300/50 transition-all duration-300 hover:bg-[#4a1f2a]"
+                            >
+                                Khám phá dự án
+                                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                            </Link>
+                            <Link
+                                href="/connect"
+                                className="flex items-center justify-center gap-3 rounded-full border border-white bg-white/80 px-9 py-4 text-sm font-bold uppercase tracking-widest text-[#6e5249] backdrop-blur transition-all duration-300 hover:bg-white hover:text-rose-500"
+                            >
+                                <MessageCircle size={18} /> Liên hệ ngay
+                            </Link>
+                        </div>
                     </div>
                 </motion.div>
             </section>
-
-
-
-
-
-
-
         </div>
     );
 };
