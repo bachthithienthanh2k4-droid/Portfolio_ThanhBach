@@ -31,3 +31,12 @@ body {
   scrollbar-color: #fecdd3 transparent;
 }
 
+
+/* Đoạn văn căn đều hai bên trên toàn trang.
+   Đặt trong lớp base nên các class như text-center / text-right vẫn được ưu tiên. */
+@layer base {
+  p {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+}

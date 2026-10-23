@@ -191,7 +191,7 @@ const FutureVision = () => {
                   <Heart size={14} fill="currentColor" />
                   <span>{t("Tâm hồn trong công nghệ", "The soul of technology")}</span>
                 </div>
-                <h3 className="text-4xl md:text-6xl font-serif italic leading-[1.1] text-[#3a2420]">
+                <h3 className="text-4xl md:text-6xl italic leading-[1.1] text-[#3a2420]">
                   &ldquo;{t(
                     <>Công nghệ chỉ là xác, cảm xúc mới là <span className="text-rose-500">linh hồn</span>.</>,
                     <>Technology is the body; emotion is the <span className="text-rose-500">soul</span>.</>
@@ -199,8 +199,8 @@ const FutureVision = () => {
                 </h3>
                 <p className="text-stone-500 text-lg max-w-xl leading-relaxed font-medium">
                   {t(
-                    "Thiện Thanh tin rằng một sản phẩm AI tốt phải khiến người dùng cảm thấy được thấu hiểu chứ không phải bị điều khiển.",
-                    "Thiện Thanh believes a great AI product should make people feel understood, not controlled."
+                    "Tôi tin rằng một sản phẩm AI tốt phải khiến người dùng cảm thấy được thấu hiểu chứ không phải bị điều khiển.",
+                    "I believe a great AI product should make people feel understood, not controlled."
                   )}
                 </p>
               </div>

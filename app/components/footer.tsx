@@ -93,7 +93,7 @@ const Footer = () => {
                         <div className="space-y-6">
                             <h3 className="text-4xl font-black text-[#2D1E17] tracking-tight leading-none">
                                 Bạch Thị <br />
-                                <span className="text-rose-500 italic font-serif font-light">Thiện Thanh</span>
+                                <span className="text-rose-500 italic font-light">Thiện Thanh</span>
                             </h3>
                             <p className="text-[#5D4D44] text-lg leading-relaxed max-w-md font-light">
                                 {t(

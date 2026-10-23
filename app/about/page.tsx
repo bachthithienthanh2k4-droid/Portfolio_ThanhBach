@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, useScroll, useTransform, useSpring, Variants } from 'framer-motion';
 import {
-    Award, Zap, ArrowUpRight, Sparkles, Star, Quote, FileText, Mail, ArrowRight,
+    Zap, ArrowUpRight, Sparkles, Star, Quote, FileText, Mail, ArrowRight,
     Crown, GraduationCap, MapPin, Brain, Smartphone, Code, Bug, Trophy, Users,
 } from 'lucide-react';
 import { FacebookIcon, GithubIcon, LinkedinIcon, YoutubeIcon } from '../components/icons';
@@ -72,7 +72,7 @@ const About = () => {
     const quickStats = [
         { value: "3.83", label: "GPA / 4.0" },
         { value: t("Á khoa", "Runner-up"), label: t("Khoa CNTT", "Valedictorian, IT") },
-        { value: "03", label: t("Kinh nghiệm", "Experiences") },
+        { value: "07", label: t("Dự án", "Projects") },
         { value: "02", label: t("Giải Nhì", "Second Prizes") },
     ];
 
@@ -113,14 +113,14 @@ const About = () => {
             image: "/pictures/Sao tháng giêng-2024.jpg"
         },
         {
-            title: t("Sinh viên Xuất sắc", "Excellent Student"),
+            title: t("Giải Nhì Hue-ICT Challenge", "Hue-ICT Challenge – Second Prize"),
             desc: t(
-                "Duy trì phong độ học tập xuất sắc trong suốt 4 năm đại học.",
-                "Maintained outstanding academic performance throughout four years of university."
+                "Phần thi Sản phẩm sáng tạo Công nghệ thông tin với đề tài Gated Fusion chẩn đoán viêm phổi từ ảnh X-quang.",
+                "Creative IT Product category, with a Gated Fusion approach to diagnosing pneumonia from chest X-rays."
             ),
-            date: t("4 năm", "4 years"),
-            icon: Award,
-            image: "/pictures/z7706777109007_23a5f5f8d29e646288fc635d8458cc7c.jpg"
+            date: "2026",
+            icon: Trophy,
+            image: "/pictures/hueict.jpg"
         }
     ];
 
@@ -509,7 +509,7 @@ const About = () => {
                 >
                     <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white/70 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-8 -left-4 select-none text-[8rem] italic leading-none text-white/60 md:text-[11rem]">
-                        Thanh
+                        ThanhBach
                     </div>
 
                     <div className="relative z-10 flex flex-col items-center">
